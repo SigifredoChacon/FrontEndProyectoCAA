@@ -1,23 +1,30 @@
 import { useState } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom'; // Importa Routes y Route de react-router-dom
 import UserList from '../components/User/UserList';
 import UserFormCreate from '../components/User/UserFormCreate.jsx';
-import UserFormEdit from '../components/User/UserFormEdit.jsx'; // Componente para editar
-import { useUserEdit } from '../hooks/useUserEdit.js'; // Importa el hook personalizado
+import UserFormEdit from '../components/User/UserFormEdit.jsx';
+import { useUserEdit } from '../hooks/useUserEdit.js';
 
 function UsersPage() {
-    const { selectedUser, handleEditUser, handleUserUpdated } = useUserEdit(); // Usa el hook personalizado
-    const [isCreating, setIsCreating] = useState(false); // Estado para controlar el modo de creación
+    const { selectedUser, handleEditUser, handleUserUpdated } = useUserEdit();
+    const [isCreating, setIsCreating] = useState(false);
+    const navigate = useNavigate(); // Hook para navegar entre rutas
 
     const handleUserCreated = () => {
-        // Actualiza la lista de usuarios o cualquier otra acción después de crear un usuario
-        handleUserUpdated(); // Llama a la función de limpieza de usuario seleccionado
-        setIsCreating(false); // Oculta el formulario de creación después de agregar un usuario
+        handleUserUpdated();
+        setIsCreating(false);
+        navigate('/users'); // Navegar de vuelta a la lista de usuarios
     };
 
-    // Función para manejar la apertura del formulario de creación
     const handleAddUser = () => {
-        setIsCreating(true); // Cambia el estado para mostrar el formulario de creación
-        handleEditUser(null); // Limpia el usuario seleccionado
+        setIsCreating(true);
+        handleEditUser(null);
+        navigate('/users/create'); // Navegar a la ruta de creación de usuario
+    };
+
+    const handleEdit = (user) => {
+        handleEditUser(user);
+        navigate(`/users/edit/${user.id}`); // Navegar a la ruta de edición de usuario
     };
 
     return (
@@ -27,18 +34,19 @@ function UsersPage() {
             {/* Botón para agregar un nuevo usuario */}
             <button onClick={handleAddUser}>Agregar Usuario</button>
 
-            {/* Mostrar solo el formulario de creación si estamos en modo de creación */}
-            {isCreating && !selectedUser && (
-                <UserFormCreate onUserCreated={handleUserCreated} />
-            )}
+            <Routes>
+                {/* Ruta para mostrar la lista de usuarios */}
+                <Route path="/" element={<UserList onEdit={handleEdit} />} />
 
-            {/* Mostrar solo el formulario de edición si hay un usuario seleccionado y no estamos en modo de creación */}
-            {selectedUser && !isCreating && (
-                <UserFormEdit selectedUser={selectedUser} onUserUpdated={handleUserUpdated} />
-            )}
+                {/* Ruta para crear un usuario */}
+                <Route path="create" element={<UserFormCreate onUserCreated={handleUserCreated} />} />
 
-            {/* Lista de usuarios */}
-            <UserList onEdit={handleEditUser} /> {/* Pasa la función handleEditUser como onEdit */}
+                {/* Ruta para editar un usuario */}
+                <Route
+                    path="edit/:id"
+                    element={<UserFormEdit selectedUser={selectedUser} onUserUpdated={handleUserUpdated} />}
+                />
+            </Routes>
         </div>
     );
 }
