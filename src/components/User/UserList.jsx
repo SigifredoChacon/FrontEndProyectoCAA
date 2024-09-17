@@ -102,7 +102,7 @@ function UserList({ onEdit }) {
                             <TableCell>{user.Telefono}</TableCell>
                             <TableCell>{user.Telefono2}</TableCell>
                             <TableCell>{user.Direccion}</TableCell>
-                            <TableCell className="text-left">{user.idRol}</TableCell>
+                            <TableCell>{user.idRol}</TableCell>
                             <TableCell className="text-left">
                                 <button onClick={() => onEdit(user)} >
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
