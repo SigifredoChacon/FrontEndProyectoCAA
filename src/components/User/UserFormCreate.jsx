@@ -44,14 +44,14 @@ function UserFormCreate({onUserCreated}) {
     // Maneja la creación de un nuevo usuario
     const handleCreateUser = async () => {
         try {
+
             const userToCreate = {
                 ...user,
                 cedulaCarnet: parseInt(user.cedulaCarnet, 10),
-
                 idRol: parseInt(user.idRol, 10),
             };
 
-            console.log(user);
+            //console.log(userToCreate);
             await createUser(userToCreate); // Crea un nuevo usuario
             onUserCreated(); // Notifica al componente padre que el usuario ha sido creado
             setUser(initialUserState); // Limpia el formulario

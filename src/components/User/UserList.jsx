@@ -45,7 +45,7 @@ function UserList({ onEdit }) {
 
 
     return (
-        <Card style={{ border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px' }}>
+        <Card style={{ border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px'}}>
             <Title>
                 Usuarios
                 <Badge style={{
@@ -102,7 +102,7 @@ function UserList({ onEdit }) {
                             <TableCell>{user.Telefono}</TableCell>
                             <TableCell>{user.Telefono2}</TableCell>
                             <TableCell>{user.Direccion}</TableCell>
-                            <TableCell>{user.idRol}</TableCell>
+                            <TableCell>{user.NombreRol}</TableCell>
                             <TableCell className="text-left">
                                 <button onClick={() => onEdit(user)} >
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
