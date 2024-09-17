@@ -1,33 +1,58 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import PropTypes from 'prop-types'; // Importa PropTypes
-import { createUser } from '../../services/userService'; // Servicio para crear usuarios
+import {createUser} from '../../services/userService';
+import {getRoles} from "../../services/roleService.jsx"; // Servicio para crear usuarios
 
 // Define el estado inicial del usuario
 const initialUserState = {
-    CedulaCarnet: 0,
-    Nombre: '',
-    CorreoEmail: '',
-    Contrasena: '',
-    Telefono: '',
-    Telefono2: '',
-    Direccion: '',
+    cedulaCarnet: 0,
+    nombre: '',
+    correoEmail: '',
+    contrasena: '',
+    telefono: '',
+    telefono2: '',
+    direccion: '',
     idRol: 0,
-    CorreoInstitucional: ''
+    correoInstitucional: ''
 };
 
-function UserFormCreate({ onUserCreated }) {
+function UserFormCreate({onUserCreated}) {
     const [user, setUser] = useState(initialUserState); // Estado para el formulario del usuario
+    const [roles, setRoles] = useState([]); // Estado para almacenar la lista de roles
 
     // Maneja los cambios en los campos del formulario
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setUser((prevUser) => ({ ...prevUser, [name]: value }));
+        const {name, value} = e.target;
+        setUser((prevUser) => ({...prevUser, [name]: value}));
     };
+
+    useEffect(() => {
+        fetchRoles(); // Llama a la función para obtener roles al montar el componente
+    }, []);
+
+
+    // Función para obtener la lista de roles desde el backend
+    const fetchRoles = async () => {
+        try {
+            const data = await getRoles(); // Llama al servicio para obtener la lista de roles
+            setRoles(data); // Actualiza el estado con los datos obtenidos
+        } catch (error) {
+            console.error('Error al obtener roles:', error);
+        }
+    }
 
     // Maneja la creación de un nuevo usuario
     const handleCreateUser = async () => {
         try {
-            await createUser(user); // Crea un nuevo usuario
+            const userToCreate = {
+                ...user,
+                cedulaCarnet: parseInt(user.cedulaCarnet, 10),
+
+                idRol: parseInt(user.idRol, 10),
+            };
+
+            console.log(user);
+            await createUser(userToCreate); // Crea un nuevo usuario
             onUserCreated(); // Notifica al componente padre que el usuario ha sido creado
             setUser(initialUserState); // Limpia el formulario
         } catch (error) {
@@ -48,15 +73,15 @@ function UserFormCreate({ onUserCreated }) {
 
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div className="sm:col-span-3">
-                        <label htmlFor="CedulaCarnet" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label htmlFor="cedulaCarnet" className="block text-sm font-medium leading-6 text-gray-900">
                             Cédula/Carnet
                         </label>
                         <div className="mt-2">
                             <input
-                                type="text"
-                                name="CedulaCarnet"
-                                id="CedulaCarnet"
-                                value={user.CedulaCarnet}
+                                type="number"
+                                name="cedulaCarnet"
+                                id="cedulaCarnet"
+                                value={user.cedulaCarnet}
                                 onChange={handleChange}
                                 placeholder="Cédula/Carnet"
                                 required
@@ -64,17 +89,16 @@ function UserFormCreate({ onUserCreated }) {
                             />
                         </div>
                     </div>
-
                     <div className="sm:col-span-3">
-                        <label htmlFor="Nombre" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label htmlFor="nombre" className="block text-sm font-medium leading-6 text-gray-900">
                             Nombre
                         </label>
                         <div className="mt-2">
                             <input
                                 type="text"
-                                name="Nombre"
-                                id="Nombre"
-                                value={user.Nombre}
+                                name="nombre"
+                                id="nombre"
+                                value={user.nombre}
                                 onChange={handleChange}
                                 placeholder="Nombre"
                                 required
@@ -84,15 +108,15 @@ function UserFormCreate({ onUserCreated }) {
                     </div>
 
                     <div className="sm:col-span-4">
-                        <label htmlFor="CorreoEmail" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label htmlFor="correoEmail" className="block text-sm font-medium leading-6 text-gray-900">
                             Correo Personal
                         </label>
                         <div className="mt-2">
                             <input
                                 type="email"
-                                name="CorreoEmail"
-                                id="CorreoEmail"
-                                value={user.CorreoEmail}
+                                name="correoEmail"
+                                id="correoEmail"
+                                value={user.correoEmail}
                                 onChange={handleChange}
                                 placeholder="Correo Personal"
                                 required
@@ -102,15 +126,16 @@ function UserFormCreate({ onUserCreated }) {
                     </div>
 
                     <div className="sm:col-span-4">
-                        <label htmlFor="CorreoInstitucional" className="block text-sm font-medium leading-6 text-gray-900">
-                            Correo Institucional
+                        <label htmlFor="correoInstitucional"
+                               className="block text-sm font-medium leading-6 text-gray-900">
+                            orreo Institucional
                         </label>
                         <div className="mt-2">
                             <input
                                 type="email"
-                                name="CorreoInstitucional"
-                                id="CorreoInstitucional"
-                                value={user.CorreoInstitucional}
+                                name="correoInstitucional"
+                                id="correoInstitucional"
+                                value={user.correoInstitucional}
                                 onChange={handleChange}
                                 placeholder="Correo Institucional"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -119,15 +144,15 @@ function UserFormCreate({ onUserCreated }) {
                     </div>
 
                     <div className="sm:col-span-3">
-                        <label htmlFor="Contrasena" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label htmlFor="contrasena" className="block text-sm font-medium leading-6 text-gray-900">
                             Contraseña
                         </label>
                         <div className="mt-2">
                             <input
                                 type="password"
-                                name="Contrasena"
-                                id="Contrasena"
-                                value={user.Contrasena}
+                                name="contrasena"
+                                id="contrasena"
+                                value={user.contrasena}
                                 onChange={handleChange}
                                 placeholder="Contraseña"
                                 required
@@ -135,17 +160,16 @@ function UserFormCreate({ onUserCreated }) {
                             />
                         </div>
                     </div>
-
                     <div className="sm:col-span-3">
-                        <label htmlFor="Telefono" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label htmlFor="telefono" className="block text-sm font-medium leading-6 text-gray-900">
                             Teléfono
                         </label>
                         <div className="mt-2">
                             <input
-                                type="text"
-                                name="Telefono"
-                                id="Telefono"
-                                value={user.Telefono}
+                                type="number"
+                                name="telefono"
+                                id="telefono"
+                                value={user.telefono}
                                 onChange={handleChange}
                                 placeholder="Teléfono"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -154,15 +178,15 @@ function UserFormCreate({ onUserCreated }) {
                     </div>
 
                     <div className="sm:col-span-3">
-                        <label htmlFor="Telefono2" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label htmlFor="telefono2" className="block text-sm font-medium leading-6 text-gray-900">
                             Teléfono Alternativo
                         </label>
                         <div className="mt-2">
                             <input
-                                type="text"
-                                name="Telefono2"
-                                id="Telefono2"
-                                value={user.Telefono2}
+                                type="number"
+                                name="telefono2"
+                                id="telefono2"
+                                value={user.telefono2}
                                 onChange={handleChange}
                                 placeholder="Teléfono Alternativo"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -171,15 +195,15 @@ function UserFormCreate({ onUserCreated }) {
                     </div>
 
                     <div className="sm:col-span-4">
-                        <label htmlFor="Direccion" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label htmlFor="direccion" className="block text-sm font-medium leading-6 text-gray-900">
                             Dirección
                         </label>
                         <div className="mt-2">
                             <input
                                 type="text"
-                                name="Direccion"
-                                id="Direccion"
-                                value={user.Direccion}
+                                name="direccion"
+                                id="direccion"
+                                value={user.direccion}
                                 onChange={handleChange}
                                 placeholder="Dirección"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -192,16 +216,22 @@ function UserFormCreate({ onUserCreated }) {
                             ID Rol
                         </label>
                         <div className="mt-2">
-                            <input
-                                type="number"
+                            <select
+
                                 name="idRol"
                                 id="idRol"
                                 value={user.idRol}
                                 onChange={handleChange}
-                                placeholder="ID Rol"
                                 required
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
+                            >
+                                <option value="">Seleccione un Rol</option>
+                                {roles.map((rol) => (
+                                    <option key={rol.idRol} value={rol.idRol}>
+                                        {rol.nombre}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                     </div>
                 </div>

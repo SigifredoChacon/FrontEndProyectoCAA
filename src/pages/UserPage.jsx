@@ -24,8 +24,9 @@ function UsersPage() {
 
     const handleEdit = (user) => {
         handleEditUser(user);
-        navigate(`/users/edit/${user.id}`); // Navegar a la ruta de edición de usuario
+        navigate(`/users/edit/${user.CedulaCarnet}`); // Navegar a la ruta de edición de usuario
     };
+
 
     return (
         <div>
@@ -44,7 +45,7 @@ function UsersPage() {
                 {/* Ruta para editar un usuario */}
                 <Route
                     path="edit/:id"
-                    element={<UserFormEdit selectedUser={selectedUser} onUserUpdated={handleUserUpdated} />}
+                    element={<UserFormEdit selectedUser={selectedUser} onUserUpdated={handleUserCreated}  />}
                 />
             </Routes>
         </div>
