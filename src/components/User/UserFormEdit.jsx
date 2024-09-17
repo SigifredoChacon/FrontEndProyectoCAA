@@ -49,7 +49,9 @@ function UserFormEdit({ selectedUser, onUserUpdated}) {
                 return acc;
             }, {});
 
+
             if (Object.keys(updatedFields).length > 0) {
+
                 console.log('Updating user with data:', updatedFields);
                 console.log('User to update:', userToUpdate.CedulaCarnet);
                 await updateUser(selectedUser.CedulaCarnet, updatedFields); // Actualiza solo los campos que han cambiado
