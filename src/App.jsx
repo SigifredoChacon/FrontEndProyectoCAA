@@ -16,6 +16,7 @@ function App() {
                 {/* Rutas de la aplicación */}
                 <Routes>
                     <Route path="/users/*" element={<UsersPage />} /> {/* El asterisco permite que las rutas anidadas coincidan */}
+
                 </Routes>
             </div>
         </Router>
