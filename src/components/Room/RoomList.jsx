@@ -89,7 +89,9 @@ function RoomList({ onEdit }) {
                             <TableCell>{room.Nombre}</TableCell>
                             <TableCell>{room.Descripcion}</TableCell>
                             <TableCell>{room.Restricciones}</TableCell>
-                            <TableCell>{room.Estado}</TableCell>
+                            <TableCell>
+                                {room.Estado === 1 ? 'Activado' : 'Desactivado'}
+                            </TableCell>
                             <TableCell className="text-left">
                                 <button onClick={() => onEdit(room)} >
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
