@@ -3,6 +3,7 @@ import './App.css'
 import UsersPage from "./pages/UserPage.jsx";
 import React from 'react';
 import {BrowserRouter as Router, Routes, Route, useNavigate} from 'react-router-dom';
+import Calendar from "./components/Calendar/Calendar.jsx";
 
 
 
@@ -12,7 +13,7 @@ function App() {
             <div>
                 {/* Botón para navegar a la lista de usuarios */}
                 <NavigationButton />
-
+                <Calendar />
                 {/* Rutas de la aplicación */}
                 <Routes>
                     <Route path="/users/*" element={<UsersPage />} /> {/* El asterisco permite que las rutas anidadas coincidan */}
