@@ -6,7 +6,7 @@ import UserFormEdit from '../components/User/UserFormEdit.jsx';
 import { useUserEdit } from '../hooks/useUserEdit.js';
 
 function UsersPage() {
-    const { selectedUser, handleEditUser, handleUserUpdated } = useUserEdit();
+    const {selectedUser, handleEditUser, handleUserUpdated} = useUserEdit();
     const [isCreating, setIsCreating] = useState(false);
     const navigate = useNavigate(); // Hook para navegar entre rutas
 
@@ -29,23 +29,43 @@ function UsersPage() {
 
 
     return (
-        <div>
-            <h1>Gestión de Usuarios</h1>
+        <div style={{ maxWidth: '1800px', margin: '0 auto', padding: '0 20px' }}>
+            <h1 style={{textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px'}}>
+                Gestión de Usuarios
+            </h1>
 
-            {/* Botón para agregar un nuevo usuario */}
-            <button onClick={handleAddUser}>Agregar Usuario</button>
+            {/* Contenedor del botón para alinearlo a la derecha */}
+            <div style={{display: 'flex', justifyContent: 'flex-end', marginBottom: '20px'}}>
+                <button
+                    onClick={handleAddUser}
+                    style={{
+                        backgroundColor: '#002855',
+                        color: 'white',
+                        border: 'none',
+                        padding: '10px 20px',
+                        fontSize: '16px',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        transition: 'background-color 0.3s ease'
+                    }}
+                    onMouseOver={(e) => e.target.style.backgroundColor = '#004080'}
+                    onMouseOut={(e) => e.target.style.backgroundColor = '#002855'}
+                >
+                    Agregar Usuario
+                </button>
+            </div>
 
             <Routes>
                 {/* Ruta para mostrar la lista de usuarios */}
-                <Route path="/" element={<UserList onEdit={handleEdit} />} />
+                <Route path="/" element={<UserList onEdit={handleEdit}/>}/>
 
                 {/* Ruta para crear un usuario */}
-                <Route path="create" element={<UserFormCreate onUserCreated={handleUserCreated} />} />
+                <Route path="create" element={<UserFormCreate onUserCreated={handleUserCreated}/>}/>
 
                 {/* Ruta para editar un usuario */}
                 <Route
                     path="edit/:id"
-                    element={<UserFormEdit selectedUser={selectedUser} onUserUpdated={handleUserCreated}  />}
+                    element={<UserFormEdit selectedUser={selectedUser} onUserUpdated={handleUserCreated}/>}
                 />
             </Routes>
         </div>

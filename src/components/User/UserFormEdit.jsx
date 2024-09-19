@@ -75,193 +75,174 @@ function UserFormEdit({ selectedUser, onUserUpdated}) {
 
     // Aquí está el return para UserFormEdit
     return (
-        <form onSubmit={handleSubmit} className="space-y-12">
-            <div className="border-b border-gray-900/10 pb-12">
-                <h2 className="text-base font-semibold leading-7 text-gray-900">Editar Usuario</h2>
+        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+                <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mb-6">Editar Usuario</h2>
 
-                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <div className="sm:col-span-3">
-                        <label htmlFor="CedulaCarnet" className="block text-sm font-medium leading-6 text-gray-900">
+                <div className="grid grid-cols-1 gap-y-6">
+                    <div>
+                        <label htmlFor="CedulaCarnet" className="block text-sm font-medium text-gray-700">
                             Cédula/Carnet
                         </label>
-                        <div className="mt-2">
-                            <input
-                                type="text"
-                                name="CedulaCarnet"
-                                id="CedulaCarnet"
-                                value={user.CedulaCarnet}
-                                onChange={handleChange}
-                                placeholder="Cédula/Carnet"
-                                required
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
+                        <input
+                            type="text"
+                            name="CedulaCarnet"
+                            id="CedulaCarnet"
+                            value={user.CedulaCarnet}
+                            onChange={handleChange}
+                            placeholder="Cédula/Carnet"
+                            required
+                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
                     </div>
 
-                    <div className="sm:col-span-3">
-                        <label htmlFor="Nombre" className="block text-sm font-medium leading-6 text-gray-900">
+                    <div>
+                        <label htmlFor="Nombre" className="block text-sm font-medium text-gray-700">
                             Nombre
                         </label>
-                        <div className="mt-2">
-                            <input
-                                type="text"
-                                name="Nombre"
-                                id="Nombre"
-                                value={user.Nombre}
-                                onChange={handleChange}
-                                placeholder="Nombre"
-                                required
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
+                        <input
+                            type="text"
+                            name="Nombre"
+                            id="Nombre"
+                            value={user.Nombre}
+                            onChange={handleChange}
+                            placeholder="Nombre"
+                            required
+                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
                     </div>
 
-                    <div className="sm:col-span-4">
-                        <label htmlFor="CorreoEmail" className="block text-sm font-medium leading-6 text-gray-900">
+                    <div>
+                        <label htmlFor="CorreoEmail" className="block text-sm font-medium text-gray-700">
                             Correo Personal
                         </label>
-                        <div className="mt-2">
-                            <input
-                                type="email"
-                                name="CorreoEmail"
-                                id="CorreoEmail"
-                                value={user.CorreoEmail}
-                                onChange={handleChange}
-                                placeholder="Correo Personal"
-                                required
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
+                        <input
+                            type="email"
+                            name="CorreoEmail"
+                            id="CorreoEmail"
+                            value={user.CorreoEmail}
+                            onChange={handleChange}
+                            placeholder="Correo Personal"
+                            required
+                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
                     </div>
 
-                    <div className="sm:col-span-4">
-                        <label htmlFor="CorreoInstitucional" className="block text-sm font-medium leading-6 text-gray-900">
+                    <div>
+                        <label htmlFor="CorreoInstitucional" className="block text-sm font-medium text-gray-700">
                             Correo Institucional
                         </label>
-                        <div className="mt-2">
-                            <input
-                                type="email"
-                                name="CorreoInstitucional"
-                                id="CorreoInstitucional"
-                                value={user.CorreoInstitucional}
-                                onChange={handleChange}
-                                placeholder="Correo Institucional"
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
+                        <input
+                            type="email"
+                            name="CorreoInstitucional"
+                            id="CorreoInstitucional"
+                            value={user.CorreoInstitucional}
+                            onChange={handleChange}
+                            placeholder="Correo Institucional"
+                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
                     </div>
 
-                    <div className="sm:col-span-3">
-                        <label htmlFor="Contrasena" className="block text-sm font-medium leading-6 text-gray-900">
+                    <div>
+                        <label htmlFor="Contrasena" className="block text-sm font-medium text-gray-700">
                             Contraseña
                         </label>
-                        <div className="mt-2">
-                            <input
-                                type="password"
-                                name="Contrasena"
-                                id="Contrasena"
-                                value={user.Contrasena}
-                                onChange={handleChange}
-                                placeholder="Contraseña"
-                                required
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
+                        <input
+                            type="password"
+                            name="Contrasena"
+                            id="Contrasena"
+                            value={user.Contrasena}
+                            onChange={handleChange}
+                            placeholder="Contraseña"
+                            required
+                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
                     </div>
 
-                    <div className="sm:col-span-3">
-                        <label htmlFor="Telefono" className="block text-sm font-medium leading-6 text-gray-900">
+                    <div>
+                        <label htmlFor="Telefono" className="block text-sm font-medium text-gray-700">
                             Teléfono
                         </label>
-                        <div className="mt-2">
-                            <input
-                                type="text"
-                                name="Telefono"
-                                id="Telefono"
-                                value={user.Telefono}
-                                onChange={handleChange}
-                                placeholder="Teléfono"
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
+                        <input
+                            type="text"
+                            name="Telefono"
+                            id="Telefono"
+                            value={user.Telefono}
+                            onChange={handleChange}
+                            placeholder="Teléfono"
+                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
                     </div>
 
-                    <div className="sm:col-span-3">
-                        <label htmlFor="Telefono2" className="block text-sm font-medium leading-6 text-gray-900">
+                    <div>
+                        <label htmlFor="Telefono2" className="block text-sm font-medium text-gray-700">
                             Teléfono Alternativo
                         </label>
-                        <div className="mt-2">
-                            <input
-                                type="text"
-                                name="Telefono2"
-                                id="Telefono2"
-                                value={user.Telefono2}
-                                onChange={handleChange}
-                                placeholder="Teléfono Alternativo"
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
+                        <input
+                            type="text"
+                            name="Telefono2"
+                            id="Telefono2"
+                            value={user.Telefono2}
+                            onChange={handleChange}
+                            placeholder="Teléfono Alternativo"
+                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
                     </div>
 
-                    <div className="sm:col-span-4">
-                        <label htmlFor="Direccion" className="block text-sm font-medium leading-6 text-gray-900">
+                    <div>
+                        <label htmlFor="Direccion" className="block text-sm font-medium text-gray-700">
                             Dirección
                         </label>
-                        <div className="mt-2">
-                            <input
-                                type="text"
-                                name="Direccion"
-                                id="Direccion"
-                                value={user.Direccion}
-                                onChange={handleChange}
-                                placeholder="Dirección"
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
+                        <input
+                            type="text"
+                            name="Direccion"
+                            id="Direccion"
+                            value={user.Direccion}
+                            onChange={handleChange}
+                            placeholder="Dirección"
+                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
                     </div>
 
-                    <div className="sm:col-span-2">
-                        <label htmlFor="idRol" className="block text-sm font-medium leading-6 text-gray-900">
+                    <div>
+                        <label htmlFor="idRol" className="block text-sm font-medium text-gray-700">
                             ID Rol
                         </label>
-                        <div className="mt-2">
-                            <select
-
-                                name="idRol"
-                                id="idRol"
-                                value={user.idRol}
-                                onChange={handleChange}
-                                required
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            >
-                                <option value="">Seleccione un Rol</option>
-                                {roles.map((rol) => (
-                                    <option key={rol.idRol} value={rol.idRol}>
-                                        {rol.nombre}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                        <select
+                            name="idRol"
+                            id="idRol"
+                            value={user.idRol}
+                            onChange={handleChange}
+                            required
+                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        >
+                            <option value="">Seleccione un Rol</option>
+                            {roles.map((rol) => (
+                                <option key={rol.idRol} value={rol.idRol}>
+                                    {rol.nombre}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                 </div>
-            </div>
 
-            <div className="mt-6 flex items-center justify-end gap-x-6">
-                <button
-                    type="button"
-                    className="text-sm font-semibold leading-6 text-gray-900"
-                    onClick={() => onUserUpdated()}
-                >
-                    Cancelar
-                </button>
-                <button
-                    type="submit"
-                    className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                    Actualizar
-                </button>
-            </div>
-        </form>
+                <div className="mt-8 flex justify-end space-x-4">
+                    <button
+                        type="button"
+                        className="text-sm font-semibold text-gray-700 hover:text-gray-900"
+                        onClick={() => onUserUpdated()}
+                    >
+                        Cancelar
+                    </button>
+                    <button
+                        type="submit"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    >
+                        Actualizar
+                    </button>
+                </div>
+            </form>
+        </div>
 
 
     );

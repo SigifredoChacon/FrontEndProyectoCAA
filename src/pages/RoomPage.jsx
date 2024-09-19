@@ -29,23 +29,42 @@ function RoomsPage() {
 
 
     return (
-        <div>
-            <h1>Gestión de Salas</h1>
+        <div style={{maxWidth: '1800px', margin: '0 auto', padding: '0 20px'}}>
+            <h1 style={{textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px'}}>
+                Gestión de Salas
+            </h1>
 
-            {/* Botón para agregar un nuevo usuario */}
-            <button onClick={handleAddRoom}>Agregar Salas</button>
-
+            {/* Contenedor del botón para alinearlo a la derecha */}
+            <div style={{display: 'flex', justifyContent: 'flex-end', marginBottom: '20px'}}>
+                <button
+                    onClick={handleAddRoom}
+                    style={{
+                        backgroundColor: '#002855',
+                        color: 'white',
+                        border: 'none',
+                        padding: '10px 20px',
+                        fontSize: '16px',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        transition: 'background-color 0.3s ease'
+                    }}
+                    onMouseOver={(e) => e.target.style.backgroundColor = '#004080'}
+                    onMouseOut={(e) => e.target.style.backgroundColor = '#002855'}
+                >
+                    Agregar Sala
+                </button>
+            </div>
             <Routes>
                 {/* Ruta para mostrar la lista de usuarios */}
-                <Route path="/" element={<RoomList onEdit={handleEdit} />} />
+                <Route path="/" element={<RoomList onEdit={handleEdit}/>}/>
 
                 {/* Ruta para crear un usuario */}
-                <Route path="create" element={<RoomFormCreate onRoomCreated={handleRoomCreated} />} />
+                <Route path="create" element={<RoomFormCreate onRoomCreated={handleRoomCreated}/>}/>
 
                 {/* Ruta para editar un usuario */}
                 <Route
                     path="edit/:id"
-                    element={<RoomFormEdit selectedRoom={selectedRoom} onRoomUpdated={handleRoomCreated}  />}
+                    element={<RoomFormEdit selectedRoom={selectedRoom} onRoomUpdated={handleRoomCreated}/>}
                 />
             </Routes>
         </div>
