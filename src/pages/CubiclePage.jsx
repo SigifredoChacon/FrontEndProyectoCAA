@@ -1,36 +1,36 @@
 import { useState } from 'react';
 import {Routes, Route, useNavigate, useLocation} from 'react-router-dom'; // Importa Routes y Route de react-router-dom
-import UserList from '../components/User/UserList';
-import UserFormCreate from '../components/User/UserFormCreate.jsx';
-import UserFormEdit from '../components/User/UserFormEdit.jsx';
-import { useUserEdit } from '../hooks/useUserEdit.js';
+import CubicleList from '../components/Cubicle/CubicleList.jsx';
+import CubicleFormCreate from '../components/Cubicle/CubicleFormCreate.jsx';
+import CubicleFormEdit from '../components/Cubicle/CubicleFormEdit.jsx';
+import { useCubicleEdit } from '../hooks/useCubicleEdit.js';
 
-function UsersPage() {
-    const {selectedUser, handleEditUser, handleUserUpdated} = useUserEdit();
+function CubiclesPage() {
+    const { selectedCubicle, handleEditCubicle, handleCubicleUpdated } = useCubicleEdit();
     const [isCreating, setIsCreating] = useState(false);
     const navigate = useNavigate(); // Hook para navegar entre rutas
 
-    const handleUserCreated = () => {
-        handleUserUpdated();
+    const handleCubicleCreated = () => {
+        handleCubicleUpdated();
         setIsCreating(false);
-        navigate('/users'); // Navegar de vuelta a la lista de usuarios
+        navigate('/cubicles'); // Navegar de vuelta a la lista de usuarios
     };
 
-    const handleAddUser = () => {
+    const handleAddCubicle = () => {
         setIsCreating(true);
-        handleEditUser(null);
-        navigate('/users/create'); // Navegar a la ruta de creación de usuario
+        handleEditCubicle(null);
+        navigate('/cubicles/create'); // Navegar a la ruta de creación de usuario
     };
 
-    const handleEdit = (user) => {
-        handleEditUser(user);
-        navigate(`/users/edit/${user.CedulaCarnet}`); // Navegar a la ruta de edición de usuario
+    const handleEdit = (cubicle) => {
+        handleEditCubicle(cubicle);
+        navigate(`/cubicles/edit/${cubicle.idCubiculo}`); // Navegar a la ruta de edición de usuario
     };
 
     const location = useLocation();
 
     // Verifica si la ruta actual es '/create' o empieza con '/edit'
-    const isOnCreateOrEditPage = location.pathname === "/users/create" || location.pathname.startsWith("/users/edit");
+    const isOnCreateOrEditPage = location.pathname === "/cubicles/create" || location.pathname.startsWith("/cubicles/edit");
 
     return (
         <div style={{ maxWidth: '1800px', margin: '0 auto', padding: '0 20px' }}>
@@ -38,12 +38,12 @@ function UsersPage() {
             {!isOnCreateOrEditPage && (
                 <>
                     <h1 style={{ textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px' }}>
-                        Gestión de Usuarios
+                        Gestión de Cubiculos
                     </h1>
 
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
                         <button
-                            onClick={handleAddUser}
+                            onClick={handleAddCubicle}
                             style={{
                                 backgroundColor: '#002855',
                                 color: 'white',
@@ -57,27 +57,27 @@ function UsersPage() {
                             onMouseOver={(e) => e.target.style.backgroundColor = '#004080'}
                             onMouseOut={(e) => e.target.style.backgroundColor = '#002855'}
                         >
-                            Agregar Usuario
+                            Agregar Cubiculo
                         </button>
                     </div>
                 </>
             )}
-
             <Routes>
                 {/* Ruta para mostrar la lista de usuarios */}
-                <Route path="/" element={<UserList onEdit={handleEdit} />} />
+                <Route path="/" element={<CubicleList onEdit={handleEdit}/>}/>
 
                 {/* Ruta para crear un usuario */}
-                <Route path="create" element={<UserFormCreate onUserCreated={handleUserCreated} />} />
+                <Route path="create" element={<CubicleFormCreate onCubicleCreated={handleCubicleCreated}/>}/>
 
                 {/* Ruta para editar un usuario */}
                 <Route
                     path="edit/:id"
-                    element={<UserFormEdit selectedUser={selectedUser} onUserUpdated={handleUserCreated} />}
+                    element={<CubicleFormEdit selectedCubicle={selectedCubicle}
+                                              onCubicleUpdated={handleCubicleCreated}/>}
                 />
             </Routes>
         </div>
     );
 }
 
-export default UsersPage;
+export default CubiclesPage;

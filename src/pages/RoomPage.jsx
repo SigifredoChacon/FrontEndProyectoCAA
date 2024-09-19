@@ -1,36 +1,36 @@
 import { useState } from 'react';
 import {Routes, Route, useNavigate, useLocation} from 'react-router-dom'; // Importa Routes y Route de react-router-dom
-import UserList from '../components/User/UserList';
-import UserFormCreate from '../components/User/UserFormCreate.jsx';
-import UserFormEdit from '../components/User/UserFormEdit.jsx';
-import { useUserEdit } from '../hooks/useUserEdit.js';
+import RoomList from '../components/Room/RoomList.jsx';
+import RoomFormCreate from '../components/Room/RoomFormCreate.jsx';
+import RoomFormEdit from '../components/Room/RoomFormEdit.jsx';
+import { useRoomEdit } from '../hooks/useRoomEdit.js';
 
-function UsersPage() {
-    const {selectedUser, handleEditUser, handleUserUpdated} = useUserEdit();
+function RoomsPage() {
+    const { selectedRoom, handleEditRoom, handleRoomUpdated } = useRoomEdit();
     const [isCreating, setIsCreating] = useState(false);
     const navigate = useNavigate(); // Hook para navegar entre rutas
 
-    const handleUserCreated = () => {
-        handleUserUpdated();
+    const handleRoomCreated = () => {
+        handleRoomUpdated();
         setIsCreating(false);
-        navigate('/users'); // Navegar de vuelta a la lista de usuarios
+        navigate('/rooms'); // Navegar de vuelta a la lista de usuarios
     };
 
-    const handleAddUser = () => {
+    const handleAddRoom = () => {
         setIsCreating(true);
-        handleEditUser(null);
-        navigate('/users/create'); // Navegar a la ruta de creación de usuario
+        handleEditRoom(null);
+        navigate('/rooms/create'); // Navegar a la ruta de creación de usuario
     };
 
-    const handleEdit = (user) => {
-        handleEditUser(user);
-        navigate(`/users/edit/${user.CedulaCarnet}`); // Navegar a la ruta de edición de usuario
+    const handleEdit = (room) => {
+        handleEditRoom(room);
+        navigate(`/rooms/edit/${room.idSala}`); // Navegar a la ruta de edición de usuario
     };
 
     const location = useLocation();
 
     // Verifica si la ruta actual es '/create' o empieza con '/edit'
-    const isOnCreateOrEditPage = location.pathname === "/users/create" || location.pathname.startsWith("/users/edit");
+    const isOnCreateOrEditPage = location.pathname === "/rooms/create" || location.pathname.startsWith("/rooms/edit");
 
     return (
         <div style={{ maxWidth: '1800px', margin: '0 auto', padding: '0 20px' }}>
@@ -38,12 +38,12 @@ function UsersPage() {
             {!isOnCreateOrEditPage && (
                 <>
                     <h1 style={{ textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px' }}>
-                        Gestión de Usuarios
+                        Gestión de Salas
                     </h1>
 
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
                         <button
-                            onClick={handleAddUser}
+                            onClick={handleAddRoom}
                             style={{
                                 backgroundColor: '#002855',
                                 color: 'white',
@@ -57,7 +57,7 @@ function UsersPage() {
                             onMouseOver={(e) => e.target.style.backgroundColor = '#004080'}
                             onMouseOut={(e) => e.target.style.backgroundColor = '#002855'}
                         >
-                            Agregar Usuario
+                            Agregar Sala
                         </button>
                     </div>
                 </>
@@ -65,19 +65,19 @@ function UsersPage() {
 
             <Routes>
                 {/* Ruta para mostrar la lista de usuarios */}
-                <Route path="/" element={<UserList onEdit={handleEdit} />} />
+                <Route path="/" element={<RoomList onEdit={handleEdit}/>}/>
 
                 {/* Ruta para crear un usuario */}
-                <Route path="create" element={<UserFormCreate onUserCreated={handleUserCreated} />} />
+                <Route path="create" element={<RoomFormCreate onRoomCreated={handleRoomCreated}/>}/>
 
                 {/* Ruta para editar un usuario */}
                 <Route
                     path="edit/:id"
-                    element={<UserFormEdit selectedUser={selectedUser} onUserUpdated={handleUserCreated} />}
+                    element={<RoomFormEdit selectedRoom={selectedRoom} onRoomUpdated={handleRoomCreated}/>}
                 />
             </Routes>
         </div>
     );
 }
 
-export default UsersPage;
+export default RoomsPage;
