@@ -6,8 +6,6 @@ export const getRooms = async () => {
 };
 
 export const createRoom = async (formData) => {
-
-
     const response = await api.post('/rooms', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -18,10 +16,28 @@ export const createRoom = async (formData) => {
 };
 
 
-export const updateRoom = async (id, room) => {
-    const response = await api.patch(`/rooms/${id}`, room); // Llama a la API para actualizar un usuario por ID
+export const updateRoom = async (id, formData) => {
+    let response;
+
+    if (formData instanceof FormData) {
+        // Si el objeto room es un FormData, se trata como multipart/form-data
+        response = await api.patch(`/rooms/${id}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    } else {
+        // Si room es un objeto normal, se trata como application/json
+        response = await api.patch(`/rooms/${id}`, formData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+    }
+
     return response.data;
 };
+
 
 export const deleteRoom = async (id) => {
     const response = await api.delete(`/rooms/${id}`); // Llama a la API para eliminar un usuario por ID
