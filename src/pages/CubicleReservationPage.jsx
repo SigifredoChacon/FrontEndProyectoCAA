@@ -97,10 +97,16 @@ function CubiclesReservationPage() {
             const horaFinIncremented = `${String(parseInt(hour, 10) + 1).padStart(2, '0')}:${minute}`;
 
             try {
+                const selectedDay = reservations[0].day;
+                const fechaReserva = new Date(selectedDay).toLocaleDateString('en-CA', {
+                    timeZone: 'America/Costa_Rica',
+                });
+                console.log('Fecha de la reserva:', fechaReserva);
+                // Formatear la fecha ajustada a YYYY-MM-DD
                 const cubicleReservationToCreate = {
                     ...reservation,
                     idCubiculo: selectedCubicleR.idCubiculo,
-                    fecha: reservations[0].day.toISOString().split('T')[0], // Convertir la fecha a formato YYYY-MM-DD
+                    fecha: fechaReserva, // Convertir la fecha a formato YYYY-MM-DD
                     horaInicio: horaInicio, // Guardar como string 'HH:mm'
                     horaFin: horaFinIncremented, // Guardar como string 'HH:mm'
                 };
@@ -208,7 +214,9 @@ function CubiclesReservationPage() {
                             {selectedCubicleR ? `Reservar Cubículo: ${selectedCubicleR.Nombre}` : 'Seleccionar Cubículo'}
                         </h2>
                         <div>
-                            <button style={{
+                            <button
+                                onClick={handleCubicleReservationCreated}
+                                style={{
                                 padding: '10px 20px',
                                 marginRight: '10px',
                                 backgroundColor: '#ff4d4d',
