@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { updateRoom } from '../../services/roomService.jsx';
+
 
 function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
     const [room, setRoom] = useState(selectedRoom);
@@ -13,15 +14,15 @@ function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
         }, {});
     };
 
+    console.log(room.Nombre);
+
     // Maneja los cambios en los campos del formulario
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        if (name === 'Estado') {
-            setRoom((prevRoom) => ({
-                ...prevRoom,
-                [name]: value === '1' ? true : false // Convertir a booleano
-            }));
-        } else {
+        const { name, value, files } = e.target;
+        if (name === 'imagen') {
+            setRoom((prevRoom) => ({ ...prevRoom, Imagen: files[0] })); // Almacena el archivo
+        }
+        else {
             setRoom((prevRoom) => ({ ...prevRoom, [name]: value }));
         }
     };
@@ -39,10 +40,22 @@ function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
                 return acc;
             }, {});
 
+            const formData = new FormData();
             if (Object.keys(updatedFields).length > 0) {
                 console.log('Updating room with data:', updatedFields);
+
+                // Agrega solo los campos que han cambiado al FormData
+                Object.keys(updatedFields).forEach(key => {
+                    formData.append(key, updatedFields[key]);
+                });
+
+                // Si hay una imagen seleccionada, agregarla al FormData
+                if (room.Imagen) {
+                    formData.append('Imagen', room.imagen);
+                }
+
                 console.log('Room to update:', roomToUpdate.idSala);
-                await updateRoom(selectedRoom.idSala, updatedFields); // Actualiza solo los campos que han cambiado
+                await updateRoom(selectedRoom.idSala, formData); // Enviar FormData
                 onRoomUpdated(); // Notifica al componente padre que la sala ha sido actualizada
             } else {
                 console.log('No changes detected, update not required.');
@@ -51,6 +64,7 @@ function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
             console.error('Error al actualizar sala:', error);
         }
     };
+
 
     // Maneja el envío del formulario
     const handleSubmit = (e) => {
@@ -65,33 +79,14 @@ function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
 
                 <div className="grid grid-cols-1 gap-y-6">
                     <div>
-                        <label htmlFor="idSala" className="block text-sm font-medium text-gray-700">
-                            idSala
-                        </label>
-                        <input
-                            type="text"
-                            name="idSala"
-                            id="idSala"
-                            value={room.idSala}
-                            onChange={handleChange}
-                            placeholder="idSala"
-                            required
-                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        />
-                    </div>
-
-                    <div>
                         <label htmlFor="Imagen" className="block text-sm font-medium text-gray-700">
                             Imagen
                         </label>
                         <input
-                            type="text"
-                            name="Imagen"
-                            id="Imagen"
-                            value={room.Imagen}
+                            type="file"
+                            name="imagen"
+                            id="imagen"
                             onChange={handleChange}
-                            placeholder="URL de la imagen"
-                            required
                             className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                     </div>
@@ -157,6 +152,8 @@ function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
                             <option value="0">Desactivado</option>
                         </select>
                     </div>
+
+
                 </div>
 
                 <div className="mt-8 flex justify-end space-x-4">

@@ -1,10 +1,9 @@
-import {useEffect, useState} from 'react';
-import PropTypes from 'prop-types'; // Importa PropTypes
+import {useState} from 'react';
+import PropTypes from 'prop-types';
 import {createRoom} from '../../services/roomService.jsx';
 
-// Define el estado inicial del usuario
 const initialRoomState = {
-    imagen: '',
+    imagen: null, // Cambiado de '' a null para almacenar el archivo
     nombre: '',
     descripcion: '',
     restricciones: '',
@@ -12,36 +11,37 @@ const initialRoomState = {
 };
 
 function RoomFormCreate({onRoomCreated}) {
-    const [room, setRoom] = useState(initialRoomState); // Estado para el formulario del usuario
+    const [room, setRoom] = useState(initialRoomState);
 
-    // Maneja los cambios en los campos del formulario
     const handleChange = (e) => {
-        const {name, value} = e.target;
-        setRoom((prevRoom) => ({...prevRoom, [name]: value}));
+        const {name, value, files} = e.target;
+        if (name === 'imagen') {
+            setRoom((prevRoom) => ({...prevRoom, imagen: files[0]})); // Almacena el archivo
+        } else {
+            setRoom((prevRoom) => ({...prevRoom, [name]: value}));
+        }
     };
 
-
-    // Maneja la creación de un nuevo usuario
     const handleCreateRoom = async () => {
         try {
-            const roomToCreate = {
-                ...room,
-                idSala: parseInt(room.idSala, 10),
-                estado: Boolean(parseInt(room.estado, 10)),
-            };
+            const formData = new FormData();
+            formData.append('imagen', room.imagen); // Agrega la imagen al FormData
+            formData.append('nombre', room.nombre);
+            formData.append('descripcion', room.descripcion);
+            formData.append('restricciones', room.restricciones);
+            formData.append('estado', room.estado);
 
-            await createRoom(roomToCreate); // Crea un nuevo usuario
-            onRoomCreated(); // Notifica al componente padre que el usuario ha sido creado
+            await createRoom(formData); // Enviar FormData
+            onRoomCreated();
             setRoom(initialRoomState); // Limpia el formulario
         } catch (error) {
             console.error('Error al crear sala:', error);
         }
     };
 
-    // Maneja el envío del formulario
     const handleSubmit = (e) => {
         e.preventDefault();
-        handleCreateRoom(); // Siempre llama a la función de creación
+        handleCreateRoom();
     };
 
     return (
@@ -55,12 +55,10 @@ function RoomFormCreate({onRoomCreated}) {
                             Imagen
                         </label>
                         <input
-                            type="text"
+                            type="file"
                             name="imagen"
                             id="imagen"
-                            value={room.imagen}
                             onChange={handleChange}
-                            placeholder="URL de la imagen"
                             required
                             className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
@@ -153,7 +151,6 @@ function RoomFormCreate({onRoomCreated}) {
 
 }
 
-// Validación de PropTypes para el componente
 RoomFormCreate.propTypes = {
     onRoomCreated: PropTypes.func.isRequired,
 };
