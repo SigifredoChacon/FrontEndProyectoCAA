@@ -5,10 +5,18 @@ export const getRooms = async () => {
     return response.data;
 };
 
-export const createRoom = async (room) => {
-    const response = await api.post('/rooms', room); // Llama a la API para crear un nuevo usuario
+export const createRoom = async (formData) => {
+
+
+    const response = await api.post('/rooms', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+
     return response.data;
 };
+
 
 export const updateRoom = async (id, room) => {
     const response = await api.patch(`/rooms/${id}`, room); // Llama a la API para actualizar un usuario por ID
