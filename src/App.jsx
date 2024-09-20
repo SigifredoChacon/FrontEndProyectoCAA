@@ -3,10 +3,14 @@ import UsersPage from "./pages/UserPage.jsx";
 import RoomsPage from "./pages/RoomPage.jsx";
 import CubiclesPage from "./pages/CubiclePage.jsx";
 import CalendarPage from "./pages/CalendarPage.jsx";  // Importar la nueva página
+import LogIn from "./pages/LogIn.jsx";
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import {AuthContextProvider} from "./components/Context/AuthContext.jsx";
+import {useLogout} from "./hooks/useLogout.js";
+import {useAuthContext} from "./hooks/useAuthContext.js";
 
 const navigation = [
     { name: 'Usuarios', href: '/users', current: false },
@@ -15,11 +19,18 @@ const navigation = [
     { name: 'Calendario', href: '/calendar', current: false }, // Añadir el enlace al calendario
 ];
 
+
+
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
 }
 
 function Navbar() {
+    const {logout} = useLogout()
+    const {user} = useAuthContext()
+    const handleClick = () => {
+        logout()
+    }
     return (
         <Disclosure as="nav" style={{ backgroundColor: '#002855' }}>
             {({ open }) => (
@@ -99,42 +110,32 @@ function Navbar() {
                                     >
                                         <Menu.Items
                                             className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                            {!user && (
                                             <Menu.Item>
                                                 {({active}) => (
                                                     <a
-                                                        href="#"
+                                                        href="/login"
                                                         className={classNames(
                                                             active ? 'bg-gray-100' : '',
                                                             'block px-4 py-2 text-sm text-gray-700'
                                                         )}
                                                     >
-                                                        Your Profile
+                                                        Iniciar Sesión
                                                     </a>
                                                 )}
                                             </Menu.Item>
+                                            )}
                                             <Menu.Item>
                                                 {({active}) => (
                                                     <a
                                                         href="#"
+                                                        onClick={handleClick}
                                                         className={classNames(
                                                             active ? 'bg-gray-100' : '',
                                                             'block px-4 py-2 text-sm text-gray-700'
                                                         )}
                                                     >
-                                                        Settings
-                                                    </a>
-                                                )}
-                                            </Menu.Item>
-                                            <Menu.Item>
-                                                {({active}) => (
-                                                    <a
-                                                        href="#"
-                                                        className={classNames(
-                                                            active ? 'bg-gray-100' : '',
-                                                            'block px-4 py-2 text-sm text-gray-700'
-                                                        )}
-                                                    >
-                                                        Sign out
+                                                        Cerrar Sesión
                                                     </a>
                                                 )}
                                             </Menu.Item>
@@ -159,7 +160,7 @@ function Navbar() {
                                     aria-current={item.current ? 'page' : undefined}
                                 >
                                     {item.name}
-                                </Disclosure.Button>
+                              s  </Disclosure.Button>
                             ))}
                         </div>
                     </Disclosure.Panel>
@@ -172,20 +173,24 @@ function Navbar() {
 
 function App() {
     return (
+        <AuthContextProvider>
         <Router>
 
             {/* Navbar que estará visible en todas las vistas */}
             <Navbar/>
 
             {/* Definición de las rutas de la aplicación */}
+
             <Routes>
                 <Route path="/users/*" element={<UsersPage/>}/>
                 <Route path="/rooms/*" element={<RoomsPage/>}/>
                 <Route path="/cubicles/*" element={<CubiclesPage/>}/>
                 <Route path="/calendar" element={<CalendarPage/>}/> {/* Nueva ruta para el calendario */}
+                <Route path="/login" element={<LogIn/>}/> {/* Nueva ruta para el calendario */}
             </Routes>
 
         </Router>
+</AuthContextProvider>
     );
 }
 
