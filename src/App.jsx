@@ -7,12 +7,14 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import CubicleReservationPage from "./pages/CubicleReservationPage.jsx";
 
 const navigation = [
     { name: 'Usuarios', href: '/users', current: false },
     { name: 'Salas', href: '/rooms', current: false },
     { name: 'Cubiculos', href: '/cubicles', current: false },
     { name: 'Calendario', href: '/calendar', current: false }, // Añadir el enlace al calendario
+    { name: 'Reservaciones', href: '/reservationsCubicle', current: false }, // Añadir el enlace a las reservaciones
 ];
 
 function classNames(...classes) {
@@ -183,6 +185,7 @@ function App() {
                 <Route path="/rooms/*" element={<RoomsPage/>}/>
                 <Route path="/cubicles/*" element={<CubiclesPage/>}/>
                 <Route path="/calendar" element={<CalendarPage/>}/> {/* Nueva ruta para el calendario */}
+                <Route path="/reservationsCubicle/*" element={<CubicleReservationPage/>}/>
             </Routes>
 
         </Router>
