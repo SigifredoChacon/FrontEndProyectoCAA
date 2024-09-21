@@ -7,11 +7,14 @@ import {
     Badge
 } from '@tremor/react';
 
+
+
+
 function RoomList({ onEdit }) {
     const [rooms, setRooms] = useState([]);
 
     useEffect(() => {
-        fetchRooms();
+        fetchRooms(); // Llama a la función para obtener usuarios al montar el componente
     }, []);
 
     const fetchRooms = async () => {
@@ -29,6 +32,7 @@ function RoomList({ onEdit }) {
         }
     };
 
+    // Función para manejar la eliminación de un usuario
     const handleDelete = async (id) => {
         try {
             await deleteRoom(id);
@@ -37,6 +41,7 @@ function RoomList({ onEdit }) {
             console.error('Error al eliminar la sala:', error);
         }
     };
+
 
     return (
         <div>
@@ -57,7 +62,8 @@ function RoomList({ onEdit }) {
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
                 {rooms.map((room) => (
                     <Card key={room.idSala} style={{
-                        width: '300px',
+                        height: '500px',
+                        width: '380px',
                         padding: '16px',
                         border: '1px solid #ccc',
                         borderRadius: '12px',
@@ -66,7 +72,7 @@ function RoomList({ onEdit }) {
                         alignItems: 'center'
                     }}>
                         <img src={room.imageUrl} alt={room.Nombre}
-                             style={{width: '100%', height: '200px', objectFit: 'cover', borderRadius: '12px'}}/>
+                             style={{width: '100%', height: '400px', objectFit: 'cover', borderRadius: '12px'}}/>
                         <h3 style={{marginTop: '12px', marginBottom: '8px', fontSize: '1.25rem'}}>{room.Nombre}</h3>
                         <p style={{marginBottom: '12px', color: '#666', textAlign: 'center'}}>
                             {room.Estado === 1 ? 'Activa' : 'Desactivada'}
