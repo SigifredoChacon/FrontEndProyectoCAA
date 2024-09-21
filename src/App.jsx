@@ -21,8 +21,6 @@ const navigation = [
     { name: 'Usuarios', href: '/users', current: false },
     { name: 'Salas', href: '/rooms', current: false },
     { name: 'Cubiculos', href: '/cubicles', current: false },
-    { name: 'Calendario', href: '/calendar', current: false }, // Añadir el enlace al calendario
-    { name: 'Reservacion de cubiculos', href: '/reservationsCubicle', current: false }, // Añadir el enlace a las reservaciones
     {name: 'Enviar Correo' , href: '/generalEmails', current: false},
     //{ name: 'Reservacion de salas', href: '/reservationsRoom', current: false }, // Añadir el enlace a las reservaciones
 ];
