@@ -1,4 +1,3 @@
-// src/components/TimeSlot.js
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -17,14 +16,12 @@ const TimeSlot = ({ day, time, isReserved, onReserve, disabled }) => {
         borderRadius: '4px',
         cursor: disabled ? 'not-allowed' : 'pointer',
         backgroundColor:
-            disabled
-                ? '#e0e0e0' // Gris claro si está deshabilitado
-                : isReserved === 'reserved'
-                    ? '#ff4d4d' // Rojo si está reservado
-                    : isReserved === 'available'
-                        ? '#e0e0e0' // Gris si está disponible
-                        : '#4caf50', // Verde si lo selecciona
-        color: isReserved === 'selected' ? '#ffffff' : 'grey',
+            isReserved === 'reserved'
+                ? '#ff4d4d' // Rojo si está reservado
+                : isReserved === 'selected'
+                    ? '#4caf50' // Verde si está seleccionado
+                    : '#e0e0e0', // Gris si está disponible o deshabilitado
+        color: '#ffffff',
         fontWeight: 'bold',
         transition: 'background-color 0.3s ease',
     };
@@ -33,7 +30,7 @@ const TimeSlot = ({ day, time, isReserved, onReserve, disabled }) => {
         <button
             style={buttonStyle}
             onClick={handleClick}
-            disabled={disabled}
+            disabled={disabled || isReserved === 'reserved'} // Deshabilitado si está reservado o disabled es true
         >
             {isReserved === 'reserved' ? 'Reservado' : isReserved === 'selected' ? 'Seleccionado' : 'Disponible'}
         </button>

@@ -1,13 +1,20 @@
 import {createContext , useReducer, useEffect} from "react";
 
+
+import {jwtDecode} from "jwt-decode";
+
 export const AuthContext = createContext();
 
 const authReducer = (state, action) => {
+    const decodedToken = jwtDecode(action.payload)
     switch (action.type) {
         case 'LOGIN':
+
+
             return {
                 ...state,
-                user: action.payload
+                user: decodedToken.id,
+                role: decodedToken.role
             }
         case 'LOGOUT':
             return {
