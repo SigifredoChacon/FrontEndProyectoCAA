@@ -2,6 +2,47 @@ import React, {useEffect, useState} from "react";
 import CalendarRooms from "../components/Calendar/CalendarRooms.jsx";
 
 
+const initialRoomReservationState = {
+    fecha: '',
+    horaInicio: '',
+    horaFin: '',
+    idSala: 0,
+    idUsuario: 0,
+    observaciones: '',
+    refrigerio: false,
+    recursos: [],
+};
+
+function groupConsecutiveTimes(timeSlots) {
+    const grouped = [];
+    let currentGroup = [];
+
+    for (let i = 0; i < timeSlots.length; i++) {
+        if (currentGroup.length === 0) {
+            currentGroup.push(timeSlots[i]);
+        } else {
+            const lastTime = currentGroup[currentGroup.length - 1];
+            const currentTime = timeSlots[i];
+
+            const lastDate = new Date(`1970-01-01T${lastTime}:00`);
+            const currentDate = new Date(`1970-01-01T${currentTime}:00`);
+
+            if (currentDate - lastDate === 3600000) { // Diferencia de 1 hora
+                currentGroup.push(currentTime);
+            } else {
+                grouped.push(currentGroup);
+                currentGroup = [currentTime];
+            }
+        }
+    }
+
+    if (currentGroup.length > 0) {
+        grouped.push(currentGroup);
+    }
+
+    return grouped;
+}
+
 
 export function RoomReservationPage(){
 
