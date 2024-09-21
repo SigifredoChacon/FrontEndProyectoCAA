@@ -5,6 +5,8 @@ import { useCubicleEdit } from "../hooks/useCubicleEdit.js";
 import Calendar from '../components/Calendar/Calendar.jsx';
 import { getCubicles } from '../services/cubicleService.jsx';
 import { createReservation } from "../services/reservationService.jsx";
+import {useAuthContext} from "../hooks/useAuthContext.js";
+
 
 const initialCubicleReservationState = {
     fecha: '',
@@ -47,6 +49,8 @@ function groupConsecutiveTimes(timeSlots) {
 }
 
 function CubiclesReservationPage() {
+    const {user}=useAuthContext();
+    initialCubicleReservationState.idUsuario=user;
     const { handleEditCubicle, handleCubicleUpdated } = useCubicleEdit();
     const [isCreating, setIsCreating] = useState(false);
     const { handleEditCubicleReservation, handleCubicleReservationUpdated } = useCubicleReservationEdit();
@@ -57,6 +61,8 @@ function CubiclesReservationPage() {
     const [calendarKey, setCalendarKey] = useState(0); // Clave para forzar la recarga del calendario
 
     const navigate = useNavigate();
+
+
 
     useEffect(() => {
         fetchCubicles();
