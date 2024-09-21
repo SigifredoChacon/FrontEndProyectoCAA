@@ -29,4 +29,8 @@ export const deleteUser = async (id) => {
 export const getUserById = async (id) => {
     const response = await api.get(`/users/${id}`); // Llama a la API para obtener un usuario por ID
     return response.data;
+};
+export const sendAllEmail = async (email) => {
+    const response = await api.post('/users/generalEmails', email); // Llama a la API para enviar un correo a todos los usuarios
+    return response.data;
 }

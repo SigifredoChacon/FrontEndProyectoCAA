@@ -2,7 +2,6 @@ import './App.css';
 import UsersPage from "./pages/UserPage.jsx";
 import RoomsPage from "./pages/RoomPage.jsx";
 import CubiclesPage from "./pages/CubiclePage.jsx";
-import CalendarPage from "./pages/CalendarPage.jsx";  // Importar la nueva página
 import LogIn from "./pages/LogIn.jsx";
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
@@ -12,6 +11,10 @@ import {AuthContextProvider} from "./components/Context/AuthContext.jsx";
 import {useLogout} from "./hooks/useLogout.js";
 import {useAuthContext} from "./hooks/useAuthContext.js";
 import CubicleReservationPage from "./pages/CubicleReservationPage.jsx";
+import EmailPage from "./pages/EmailPage.jsx";
+import AllRoomReservationPage from "./pages/AllRoomReservationPage.jsx";
+import SalaDeReunion from './assets/SalaDeReunion.jpeg';
+import cubiculos from './assets/cubiculos.jpg';
 import {RoomReservationPage} from "./pages/RoomReservationPage.jsx";
 // {RoomReservationPage} from "./pages/RoomReservationPage.jsx";
 
@@ -19,9 +22,8 @@ const navigation = [
     { name: 'Usuarios', href: '/users', current: false },
     { name: 'Salas', href: '/rooms', current: false },
     { name: 'Cubiculos', href: '/cubicles', current: false },
-    { name: 'Calendario', href: '/calendar', current: false }, // Añadir el enlace al calendario
-    { name: 'Reservacion de cubiculos', href: '/reservationsCubicle', current: false }, // Añadir el enlace a las reservaciones
-    { name: 'Reservacion de salas', href: '/reservationsRoom', current: false }, // Añadir el enlace a las reservaciones
+    {name: 'Enviar Correo' , href: '/generalEmails', current: false},
+    //{ name: 'Reservacion de salas', href: '/reservationsRoom', current: false }, // Añadir el enlace a las reservaciones
 ];
 
 
@@ -68,6 +70,7 @@ function Navbar() {
                                     </svg>
 
                                 </div>
+
                                 <div className="hidden sm:ml-6 sm:block">
                                     <div className="flex space-x-4">
                                         {navigation.map((item) => (
@@ -116,19 +119,19 @@ function Navbar() {
                                         <Menu.Items
                                             className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                             {!user && (
-                                            <Menu.Item>
-                                                {({active}) => (
-                                                    <a
-                                                        href="/login"
-                                                        className={classNames(
-                                                            active ? 'bg-gray-100' : '',
-                                                            'block px-4 py-2 text-sm text-gray-700'
-                                                        )}
-                                                    >
-                                                        Iniciar Sesión
-                                                    </a>
-                                                )}
-                                            </Menu.Item>
+                                                <Menu.Item>
+                                                    {({active}) => (
+                                                        <a
+                                                            href="/login"
+                                                            className={classNames(
+                                                                active ? 'bg-gray-100' : '',
+                                                                'block px-4 py-2 text-sm text-gray-700'
+                                                            )}
+                                                        >
+                                                            Iniciar Sesión
+                                                        </a>
+                                                    )}
+                                                </Menu.Item>
                                             )}
                                             <Menu.Item>
                                                 {({active}) => (
@@ -165,7 +168,7 @@ function Navbar() {
                                     aria-current={item.current ? 'page' : undefined}
                                 >
                                     {item.name}
-                               </Disclosure.Button>
+                                </Disclosure.Button>
                             ))}
                         </div>
                     </Disclosure.Panel>
@@ -175,6 +178,76 @@ function Navbar() {
     );
 }
 
+
+function HomePage() {
+    const navigate = useNavigate();
+
+    return (
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+            <button
+                onClick={() => navigate('/allRoomReservation')}
+                className="mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none"
+                style={{
+                    position: 'relative',
+                    width: '1200px',    // Ajusta el ancho del botón
+                    height: '350px',   // Ajusta la altura del botón
+                    fontSize: '150px',  // Ajusta el tamaño del texto
+                    color: 'white',
+                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
+                    borderRadius: '50px', // Aumenta el radio para un borde más redondeado
+                }}
+            >
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundImage: `url(${SalaDeReunion})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        filter: 'brightness(50%)', // Reduce el brillo para oscurecer la imagen
+                        borderRadius: 'inherit', // Hereda el borde redondeado del botón
+                    }}
+                ></div>
+                <span style={{position: 'relative', zIndex: 1}}>Salas</span>
+            </button>
+
+            <button
+                onClick={() => navigate('/reservationsCubicle')}
+                className="mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none"
+                style={{
+                    position: 'relative',
+                    width: '1200px',    // Ajusta el ancho del botón
+                    height: '350px',   // Ajusta la altura del botón
+                    fontSize: '150px',  // Ajusta el tamaño del texto
+                    color: 'white',
+                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
+                    borderRadius: '50px', // Aumenta el radio para un borde más redondeado
+                }}
+            >
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundImage: `url(${cubiculos})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        filter: 'brightness(50%)', // Reduce el brillo para oscurecer la imagen
+                        borderRadius: 'inherit', // Hereda el borde redondeado del botón
+                    }}
+                ></div>
+                <span style={{position: 'relative', zIndex: 1}}>Cubículos</span>
+            </button>
+
+
+        </div>
+    );
+}
 
 function App() {
     return (
@@ -186,18 +259,20 @@ function App() {
 
             {/* Definición de las rutas de la aplicación */}
 
-            <Routes>
-                <Route path="/users/*" element={<UsersPage/>}/>
-                <Route path="/rooms/*" element={<RoomsPage/>}/>
-                <Route path="/cubicles/*" element={<CubiclesPage/>}/>
-                <Route path="/calendar" element={<CalendarPage/>}/> {/* Nueva ruta para el calendario */}
-                <Route path="/login" element={<LogIn/>}/> {/* Nueva ruta para el calendario */}
-                <Route path="/reservationsCubicle/*" element={<CubicleReservationPage/>}/>
-                <Route path="/reservationsRoom/*" element={<RoomReservationPage/>}/>
-            </Routes>
+                <Routes>
+                    <Route path="/" element={<HomePage/>}/>
+                    <Route path="/users/*" element={<UsersPage/>}/>
+                    <Route path="/rooms/*" element={<RoomsPage/>}/>
+                    <Route path="/cubicles/*" element={<CubiclesPage/>}/>
+                    <Route path="/login" element={<LogIn/>}/> {/* Nueva ruta para el calendario */}
+                    <Route path="/reservationsCubicle/*" element={<CubicleReservationPage/>}/>
+                    <Route path="/generalEmails" element={<EmailPage/>}/>
+                    <Route path="/allRoomReservation/*" element={<AllRoomReservationPage/>}/>
+                    {/*<Route path="/reservationsRoom/*" element={<RoomReservationPage/>}/>*/}
+                </Routes>
 
-        </Router>
-</AuthContextProvider>
+            </Router>
+        </AuthContextProvider>
     );
 }
 
