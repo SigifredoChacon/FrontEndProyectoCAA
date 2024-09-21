@@ -12,6 +12,7 @@ import {AuthContextProvider} from "./components/Context/AuthContext.jsx";
 import {useLogout} from "./hooks/useLogout.js";
 import {useAuthContext} from "./hooks/useAuthContext.js";
 import CubicleReservationPage from "./pages/CubicleReservationPage.jsx";
+import EmailPage from "./pages/EmailPage.jsx";
 // {RoomReservationPage} from "./pages/RoomReservationPage.jsx";
 
 const navigation = [
@@ -20,6 +21,7 @@ const navigation = [
     { name: 'Cubiculos', href: '/cubicles', current: false },
     { name: 'Calendario', href: '/calendar', current: false }, // Añadir el enlace al calendario
     { name: 'Reservacion de cubiculos', href: '/reservationsCubicle', current: false }, // Añadir el enlace a las reservaciones
+    {name: 'Enviar Correo' , href: '/generalEmails', current: false},
     //{ name: 'Reservacion de salas', href: '/reservationsRoom', current: false }, // Añadir el enlace a las reservaciones
 ];
 
@@ -192,6 +194,7 @@ function App() {
                 <Route path="/calendar" element={<CalendarPage/>}/> {/* Nueva ruta para el calendario */}
                 <Route path="/login" element={<LogIn/>}/> {/* Nueva ruta para el calendario */}
                 <Route path="/reservationsCubicle/*" element={<CubicleReservationPage/>}/>
+                <Route path="/generalEmails" element={<EmailPage/>}/>
                 {/*<Route path="/reservationsRoom/*" element={<RoomReservationPage/>}/>*/}
             </Routes>
 
