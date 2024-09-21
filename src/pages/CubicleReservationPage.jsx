@@ -11,7 +11,7 @@ const initialCubicleReservationState = {
     horaInicio: '',
     horaFin: '',
     idCubiculo: 0,
-    idUsuario: 208440805,
+    idUsuario: 1235432,
     observaciones: '',
     refrigerio: false,
 };
@@ -73,8 +73,6 @@ function CubiclesReservationPage() {
 
     const handleReservationsChange = (newReservations) => {
         setReservations(newReservations);
-        console.log('Lista de reservas actualizada:', newReservations);
-        console.log(reservations);
     };
 
     const handleCreateCubicleReservation = async () => {
@@ -98,11 +96,20 @@ function CubiclesReservationPage() {
 
             try {
                 const selectedDay = reservations[0].day;
-                const fechaReserva = new Date(selectedDay).toLocaleDateString('en-CA', {
-                    timeZone: 'America/Costa_Rica',
-                });
-                console.log('Fecha de la reserva:', fechaReserva);
-                // Formatear la fecha ajustada a YYYY-MM-DD
+
+                selectedDay.setDate(selectedDay.getDate() + 1);
+
+                // Construir la fecha en formato 'YYYY-MM-DD'
+                const year = selectedDay.getFullYear();
+                const month = String(selectedDay.getMonth() + 1).padStart(2, '0'); // Los meses son 0-indexados
+                const day = String(selectedDay.getDate()).padStart(2, '0');
+                const fechaReserva = `${year}-${month}-${day}`;
+
+                console.log("Fecha a enviar:", fechaReserva); // Verificar la fecha que se va a enviar
+                console.log("Hora inicio:", horaInicio); // Verificar la hora de inicio
+                console.log("Hora fin:", horaFinIncremented); // Verificar la hora de fin
+
+
                 const cubicleReservationToCreate = {
                     ...reservation,
                     idCubiculo: selectedCubicleR.idCubiculo,
@@ -217,17 +224,17 @@ function CubiclesReservationPage() {
                             <button
                                 onClick={handleCubicleReservationCreated}
                                 style={{
-                                padding: '10px 20px',
-                                marginRight: '10px',
-                                backgroundColor: '#ff4d4d',
-                                color: '#fff',
-                                border: 'none',
-                                borderRadius: '4px',
-                                cursor: 'pointer'
-                            }}>Cancelar
+                                    padding: '10px 20px',
+                                    marginRight: '10px',
+                                    backgroundColor: '#ff4d4d',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer'
+                                }}>Cancelar
                             </button>
                             <button
-                                onClick={handleCreateCubicleReservation}
+                                onClick={handleSubmit}
                                 style={{
                                     padding: '10px 20px',
                                     backgroundColor: '#4caf50',
@@ -243,6 +250,7 @@ function CubiclesReservationPage() {
                         <Calendar
                             key={calendarKey} // Forzar recarga del calendario
                             onReservationsChange={handleReservationsChange}
+                            selectedCubicleId={selectedCubicleR.idCubiculo} // Pasar cubículo seleccionado al calendario
                         />
                     ) : (
                         <p>Por favor, selecciona un cubículo para continuar.</p>

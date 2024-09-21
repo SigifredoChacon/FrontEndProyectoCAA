@@ -1,22 +1,52 @@
-import React, { useState } from 'react';
-import { format, startOfWeek, addDays, isSameWeek } from 'date-fns';
+import React, { useState, useEffect } from 'react';
+import { format, startOfWeek, addDays, isSameWeek, startOfDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 import TimeSlot from './TimeSlot';
 import PropTypes from 'prop-types';
+import { getReservationByCubicleId } from "../../services/reservationService.jsx";
 
 const timeSlots = ['07:30', '08:30', '09:30', '10:30', '11:30', '12:30', '13:30', '14:30', '15:30', '16:30'];
 
-const Calendar = ({ onReservationsChange }) => {
+const Calendar = ({ selectedCubicleId, onReservationsChange }) => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [reservations, setReservations] = useState([]);
+    const [existingReservations, setExistingReservations] = useState([]);
     const [selectedDay, setSelectedDay] = useState(null);
 
     const startOfSelectedWeek = startOfWeek(selectedDate, { weekStartsOn: 1 });
     const daysOfWeek = Array.from({ length: 6 }, (_, i) => addDays(startOfSelectedWeek, i));
 
+    useEffect(() => {
+        const fetchReservations = async () => {
+            try {
+                const response = await getReservationByCubicleId(selectedCubicleId);
+
+                // Filtrar las reservas para la semana seleccionada
+                const filteredReservations = response.filter(reservation => {
+                    const reservationDate = new Date(reservation.Fecha);
+                    return isSameWeek(reservationDate, startOfSelectedWeek, { weekStartsOn: 1 });
+                });
+
+                // Asegúrate de que las fechas estén en formato Date
+                const formattedReservations = filteredReservations.map(reservation => ({
+                    ...reservation,
+                    day: new Date(reservation.Fecha),  // Asegúrate de que 'day' es un objeto Date
+                }));
+
+                setExistingReservations(formattedReservations);
+            } catch (error) {
+                console.error("Error fetching reservations:", error);
+            }
+        };
+
+        if (selectedCubicleId) {
+            fetchReservations();
+        }
+
+    }, [selectedCubicleId, startOfSelectedWeek]);
+
     const handleDateChange = (event) => {
         const newDate = new Date(event.target.value);
-        const newWeekStart = startOfWeek(newDate, { weekStartsOn: 1 });
 
         if (reservations.length > 0) {
             if (isSameWeek(newDate, selectedDate, { weekStartsOn: 1 })) {
@@ -64,20 +94,35 @@ const Calendar = ({ onReservationsChange }) => {
     };
 
     const isReserved = (day, time) => {
+        // Convertimos el 'time' actual en un objeto Date para facilitar la comparación
+        const currentTime = new Date(`1970-01-01T${time}:00`);
+
+        const existingReservation = existingReservations.find((reservation) => {
+            const reservationDay = new Date(reservation.Fecha);
+            if (startOfDay(reservationDay).getTime() === startOfDay(day).getTime()) {
+                const startTime = new Date(`1970-01-01T${reservation.HoraInicio}:00`);
+                const endTime = new Date(`1970-01-01T${reservation.HoraFin}:00`);
+
+                // Si 'currentTime' está entre 'startTime' y 'endTime', se considera reservado
+                return currentTime >= startTime && currentTime < endTime;
+            }
+            return false;
+        });
+
+        if (existingReservation) {
+            return 'reserved';
+        }
+
         const reservation = reservations.find(
             (reservation) => reservation.day.getTime() === day.getTime() && reservation.time === time
         );
+
         return reservation ? reservation.status : 'available';
     };
 
     return (
         <div className="calendar">
-            <div style={{
-                marginBottom: '20px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center'
-            }}>
+            <div style={{ marginBottom: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <label style={{
                     fontSize: '18px',
                     marginBottom: '10px',
@@ -151,16 +196,14 @@ const Calendar = ({ onReservationsChange }) => {
                                 padding: '12px',
                                 border: '1px solid #ddd',
                                 textAlign: 'center',
-                                backgroundColor: '#fff',
-                                transition: 'background-color 0.3s ease',
-                                width: '100px',
+                                width: '100px', // Aquí no cambias el fondo de la celda
                             }}>
                                 <TimeSlot
                                     day={day}
                                     time={time}
                                     isReserved={isReserved(day, time)}
                                     onReserve={handleReserve}
-                                    disabled={selectedDay && selectedDay.getTime() !== day.getTime()}
+                                    disabled={isReserved(day, time) === 'reserved' || (selectedDay && selectedDay.getTime() !== day.getTime())}
                                 />
                             </td>
                         ))}
@@ -173,6 +216,7 @@ const Calendar = ({ onReservationsChange }) => {
 };
 
 Calendar.propTypes = {
+    selectedCubicleId: PropTypes.number.isRequired,
     onReservationsChange: PropTypes.func.isRequired,
 };
 
