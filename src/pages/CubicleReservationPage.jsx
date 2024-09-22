@@ -52,8 +52,8 @@ function CubiclesReservationPage() {
     const {user}=useAuthContext();
     initialCubicleReservationState.idUsuario=user;
     const { handleEditCubicle, handleCubicleUpdated } = useCubicleEdit();
-    const [isCreating, setIsCreating] = useState(false);
     const { handleEditCubicleReservation, handleCubicleReservationUpdated } = useCubicleReservationEdit();
+    const [isCreating, setIsCreating] = useState(false);
     const [reservation, setReservation] = useState(initialCubicleReservationState);
     const [reservations, setReservations] = useState([]);
     const [cubicles, setCubicles] = useState([]);

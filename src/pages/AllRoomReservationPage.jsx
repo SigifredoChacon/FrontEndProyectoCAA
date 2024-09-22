@@ -46,9 +46,15 @@ function AllRoomReservationPage() {
             </Title>
             <div style={{display: 'flex', flexWrap: 'wrap', gap: '16px'}}>
                 {rooms.map((room) => (
-                    <Link to="/rooms">
+                    <Link
+                        to={{
+                            pathname: "/reservationsRoom",
+
+                        }}
+                        state = {{ selectedRoom: room }}
+                        key={room.id}
+                    >
                         <Card style={{
-                            height: '500px',
                             width: '380px',
                             padding: '16px',
                             border: '1px solid #ccc',
@@ -56,14 +62,20 @@ function AllRoomReservationPage() {
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            cursor: 'pointer', // Cambia el cursor al pasar sobre la tarjeta
+                            cursor: 'pointer',
                         }}>
                             <img src={room.imageUrl} alt={room.Nombre}
-                                 style={{width: '100%', height: '400px', objectFit: 'cover', borderRadius: '12px'}}/>
-                            <h3 style={{marginTop: '12px', marginBottom: '8px', fontSize: '1.25rem'}}>{room.Nombre}</h3>
-                            <p style={{marginBottom: '12px', color: '#666', textAlign: 'center'}}>
-                                {room.Estado === 1 ? 'Activa' : 'Desactivada'}
-                            </p>
+                                 style={{ width: '100%', height: '400px', objectFit: 'cover', borderRadius: '12px' }} />
+                            <h3 style={{ marginTop: '12px', marginBottom: '8px', fontSize: '1.25rem' }}>{room.Nombre}</h3>
+                            <p style={{
+                                marginTop: '12px',
+                                marginBottom: '8px',
+                                fontSize: '1.25rem',
+                                textAlign: 'center',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'normal',
+                            }}>{room.Descripcion}</p>
                         </Card>
                     </Link>
                 ))}

@@ -3,11 +3,11 @@ import { format, startOfWeek, addDays, isSameWeek, startOfDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 import TimeSlot from './TimeSlot';
 import PropTypes from 'prop-types';
-import { getReservationByCubicleId } from "../../services/reservationService.jsx";
+import {getReservationByRoomId} from "../../services/reservationService.jsx";
 
 const timeSlots = ['07:30', '08:30', '09:30', '10:30', '11:30', '12:30', '13:30', '14:30', '15:30', '16:30'];
 
-const CalendarRooms = ({ selectedCubicleId, onReservationsChange }) => {
+const CalendarRooms = ({ selectedRoomId, onReservationsChange }) => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [reservations, setReservations] = useState([]);
     const [existingReservations, setExistingReservations] = useState([]);
@@ -19,7 +19,7 @@ const CalendarRooms = ({ selectedCubicleId, onReservationsChange }) => {
     useEffect(() => {
         const fetchReservations = async () => {
             try {
-                const response = await getReservationByCubicleId(selectedCubicleId);
+                const response = await getReservationByRoomId(selectedRoomId);
 
                 // Filtrar las reservas para la semana seleccionada
                 const filteredReservations = response.filter(reservation => {
@@ -39,11 +39,11 @@ const CalendarRooms = ({ selectedCubicleId, onReservationsChange }) => {
             }
         };
 
-        if (selectedCubicleId) {
+        if (selectedRoomId) {
             fetchReservations();
         }
-
-    }, [selectedCubicleId, startOfSelectedWeek]);
+0
+    }, [selectedRoomId, startOfSelectedWeek]);
 
     const handleDateChange = (event) => {
         const newDate = new Date(event.target.value);
@@ -175,7 +175,7 @@ const CalendarRooms = ({ selectedCubicleId, onReservationsChange }) => {
 };
 
 CalendarRooms.propTypes = {
-    selectedCubicleId: PropTypes.number.isRequired,
+    selectedRoomId: PropTypes.number.isRequired,
     onReservationsChange: PropTypes.func.isRequired,
 };
 
