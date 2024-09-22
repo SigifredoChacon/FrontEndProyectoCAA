@@ -59,10 +59,9 @@ function RoomList({ onEdit }) {
                     fontSize: '1rem',
                 }}>{rooms.length}</Badge>
             </Title>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' , justifyContent: 'center' }}>
                 {rooms.map((room) => (
                     <Card key={room.idSala} style={{
-                        height: '500px',
                         width: '380px',
                         padding: '16px',
                         border: '1px solid #ccc',

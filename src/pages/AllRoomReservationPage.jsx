@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import {getRooms} from "../services/roomService.jsx";
-import {Badge, Card, Title} from "@tremor/react";
-import {Link} from 'react-router-dom';
+import { getRooms } from "../services/roomService.jsx";
+import { Badge, Card, Title } from "@tremor/react";
+import { Link } from 'react-router-dom';
 
 function AllRoomReservationPage() {
     const [rooms, setRooms] = useState([]);
@@ -30,25 +30,20 @@ function AllRoomReservationPage() {
 
     return (
         <div>
-            <Title>
+            <Title style={{ textAlign: 'center', fontSize: '2.5rem', margin: '20px 0' }}>
                 Salas
-                <Badge style={{
-                    marginTop: '16px',
-                    marginBottom: '16px',
-                    marginLeft: '8px',
-                    backgroundColor: '#00000010',
-                    color: '#327aff',
-                    borderRadius: '17px',
-                    padding: '3px 7px',
-                    fontWeight: 'bold',
-                    fontSize: '1rem',
-                }}>{rooms.length}</Badge>
             </Title>
-            <div style={{display: 'flex', flexWrap: 'wrap', gap: '16px'}}>
+
+            <div style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '16px',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
                 {rooms.map((room) => (
-                    <Link to="/rooms">
+                    <Link to="/rooms" key={room.id}>
                         <Card style={{
-                            height: '500px',
                             width: '380px',
                             padding: '16px',
                             border: '1px solid #ccc',
@@ -56,14 +51,20 @@ function AllRoomReservationPage() {
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            cursor: 'pointer', // Cambia el cursor al pasar sobre la tarjeta
+                            cursor: 'pointer',
                         }}>
                             <img src={room.imageUrl} alt={room.Nombre}
-                                 style={{width: '100%', height: '400px', objectFit: 'cover', borderRadius: '12px'}}/>
-                            <h3 style={{marginTop: '12px', marginBottom: '8px', fontSize: '1.25rem'}}>{room.Nombre}</h3>
-                            <p style={{marginBottom: '12px', color: '#666', textAlign: 'center'}}>
-                                {room.Estado === 1 ? 'Activa' : 'Desactivada'}
-                            </p>
+                                 style={{ width: '100%', height: '400px', objectFit: 'cover', borderRadius: '12px' }} />
+                            <h3 style={{ marginTop: '12px', marginBottom: '8px', fontSize: '1.25rem' }}>{room.Nombre}</h3>
+                            <p style={{
+                                marginTop: '12px',
+                                marginBottom: '8px',
+                                fontSize: '1.25rem',
+                                textAlign: 'center',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'normal',
+                            }}>{room.Descripcion}</p>
                         </Card>
                     </Link>
                 ))}

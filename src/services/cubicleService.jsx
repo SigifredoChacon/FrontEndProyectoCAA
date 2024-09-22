@@ -5,13 +5,13 @@ export const getCubicles = async () => {
     return response.data;
 };
 
-export const createCubicle = async (room) => {
-    const response = await api.post('/cubicles', room); // Llama a la API para crear un nuevo usuario
+export const createCubicle = async (cubicle) => {
+    const response = await api.post('/cubicles', cubicle); // Llama a la API para crear un nuevo usuario
     return response.data;
 };
 
-export const updateCubicle = async (id, room) => {
-    const response = await api.patch(`/cubicles/${id}`, room); // Llama a la API para actualizar un usuario por ID
+export const updateCubicle = async (id, cubicle) => {
+    const response = await api.patch(`/cubicles/${id}`, cubicle); // Llama a la API para actualizar un usuario por ID
     return response.data;
 };
 
