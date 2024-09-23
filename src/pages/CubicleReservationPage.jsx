@@ -13,7 +13,7 @@ const initialCubicleReservationState = {
     horaInicio: '',
     horaFin: '',
     idCubiculo: 0,
-    idUsuario: 1235432,
+    idUsuario: 0,
     observaciones: '',
     refrigerio: false,
 };

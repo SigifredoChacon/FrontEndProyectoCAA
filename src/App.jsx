@@ -16,6 +16,7 @@ import AllRoomReservationPage from "./pages/AllRoomReservationPage.jsx";
 import SalaDeReunion from './assets/SalaDeReunion.jpeg';
 import cubiculos from './assets/cubiculos.jpg';
 import {RoomReservationPage} from "./pages/RoomReservationPage.jsx";
+import AllPersonalReservationPage from "./pages/AllPersonalReservationPage.jsx";
 // {RoomReservationPage} from "./pages/RoomReservationPage.jsx";
 
 const navigation = [
@@ -23,6 +24,7 @@ const navigation = [
     { name: 'Salas', href: '/rooms', current: false },
     { name: 'Cubiculos', href: '/cubicles', current: false },
     {name: 'Enviar Correo' , href: '/generalEmails', current: false},
+    {name: 'Mis reservaciones', href: '/personalReservations', current: false},
     //{ name: 'Reservacion de salas', href: '/reservationsRoom', current: false }, // Añadir el enlace a las reservaciones
 ];
 
@@ -270,6 +272,7 @@ function App() {
                     <Route path="/generalEmails" element={<EmailPage/>}/>
                     <Route path="/allRoomReservation/*" element={<AllRoomReservationPage/>}/>
                     <Route path="/reservationsRoom" element={<RoomReservationPage/>}/>
+                    <Route path="/personalReservations/*" element={<AllPersonalReservationPage/>}/>
                 </Routes>
 
             </Router>
