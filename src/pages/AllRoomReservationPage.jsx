@@ -30,21 +30,17 @@ function AllRoomReservationPage() {
 
     return (
         <div>
-            <Title>
+            <Title style={{ textAlign: 'center', fontSize: '2.5rem', margin: '20px 0' }}>
                 Salas
-                <Badge style={{
-                    marginTop: '16px',
-                    marginBottom: '16px',
-                    marginLeft: '8px',
-                    backgroundColor: '#00000010',
-                    color: '#327aff',
-                    borderRadius: '17px',
-                    padding: '3px 7px',
-                    fontWeight: 'bold',
-                    fontSize: '1rem',
-                }}>{rooms.length}</Badge>
             </Title>
-            <div style={{display: 'flex', flexWrap: 'wrap', gap: '16px'}}>
+
+            <div style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '16px',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
                 {rooms.map((room) => (
                     <Link
                         to={{

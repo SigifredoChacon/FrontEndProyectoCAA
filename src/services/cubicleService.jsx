@@ -11,7 +11,7 @@ export const createCubicle = async (cubicle) => {
 };
 
 export const updateCubicle = async (id, cubicle) => {
-    const response = await api.patch(`/cubicles/${id}`, cubicle);
+    const response = await api.patch(`/cubicles/${id}`, cubicle); // Llama a la API para actualizar un usuario por ID
     return response.data;
 };
 
