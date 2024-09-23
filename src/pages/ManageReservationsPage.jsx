@@ -30,46 +30,20 @@ export function ManageReservationsPage() {
     ];
 
     return (
-        <div>
-            <div style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '24px',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '24px',
-            }}>
+        <div className="flex items-center justify-center min-h-screen p-6">
+            <div className="grid grid-cols-4 gap-6">
                 {navigation.map((item) => (
                     <Link
                         key={item.name}
                         to={item.href}
-                        style={{ textDecoration: 'none' }}
+                        className="text-none"
                     >
-                        <Card style={{
-                            width: '250px',
-                            height: '200px',
-                            padding: '16px',
-                            border: '1px solid #ccc',
-                            borderRadius: '12px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            backgroundColor: '#f7f7f7',
-                            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-                        }}>
-                            {/* Incrustar SVG */}
-                            {/* Mostrar el SVG */}
-                            <img src={item.svg} alt={`${item.name} icon`} style={{ marginBottom: '16px', width: '40px', height: '40px' }} />
-                            <Title style={{
-                                fontSize: '18px',
-                                textAlign: 'center',
-                                color: '#333',
-                            }}>
+                        <div className="w-64 h-48 p-4 border border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer bg-gray-100 shadow-md hover:bg-gray-200 transition-colors duration-200">
+                            <img src={item.svg} alt={`${item.name} icon`} className="mb-4 w-10 h-10" />
+                            <div className="text-lg text-center text-gray-800">
                                 {item.name}
-                            </Title>
-                        </Card>
+                            </div>
+                        </div>
                     </Link>
                 ))}
             </div>

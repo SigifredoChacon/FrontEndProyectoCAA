@@ -302,7 +302,7 @@ export function RoomReservationPage() {
 
                     {/* Botones */}
                     <div className="flex justify-end space-x-4">
-                        <button className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
+                        <button onClick={handleRoomReservationCreated} className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
                             Cancelar
                         </button>
                         <button onClick={handleCreateRoomReservation}
