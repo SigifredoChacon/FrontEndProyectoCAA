@@ -10,19 +10,19 @@ export const useLogIn = () => {
     const logIn = async (email, password) => {
         setLoading(true);
         setError(null);
-
         const response = await login(JSON.stringify({email, password}));
-
 
         if (!response) {
             setLoading(false)
             setError(response.message)
+
 
         }
         if(response) {
             localStorage.setItem('token', JSON.stringify(response))
             dispatch({type: 'LOGIN', payload: response})
             setLoading(false)
+
 
         }
 

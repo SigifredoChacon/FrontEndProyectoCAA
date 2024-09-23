@@ -1,17 +1,27 @@
 import {useContext, useState} from "react";
 import {useLogIn} from "../hooks/useLogIn.js";
 import {useAuthContext} from "../hooks/useAuthContext.js";
+import {useNavigate} from "react-router-dom";
 
 
 function SignUp() {
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
     const {logIn, error, loading} = useLogIn();
+    const navigate = useNavigate();
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         await logIn(email, password);
+
+        if(error){
+
+        }
+        else{
+            navigate('/');
+
+        }
 
     }
 

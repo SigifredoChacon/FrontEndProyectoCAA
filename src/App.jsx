@@ -18,16 +18,13 @@ import cubiculos from './assets/cubiculos.jpg';
 import ResourcesPage from "./pages/ResourcePage.jsx";
 import {RoomReservationPage} from "./pages/RoomReservationPage.jsx";
 import AllPersonalReservationPage from "./pages/AllPersonalReservationPage.jsx";
-// {RoomReservationPage} from "./pages/RoomReservationPage.jsx";
+import {ManageReservationsPage} from "./pages/ManageReservationsPage.jsx";
+
 
 const navigation = [
-    { name: 'Usuarios', href: '/users', current: false },
-    { name: 'Salas', href: '/rooms', current: false },
-    { name: 'Cubiculos', href: '/cubicles', current: false },
-    {name: 'Enviar Correo' , href: '/generalEmails', current: false},
-    { name: 'Recursos', href: '/resources', current: false },
     {name: 'Mis reservaciones', href: '/personalReservations', current: false},
-    //{ name: 'Reservacion de salas', href: '/reservationsRoom', current: false }, // Añadir el enlace a las reservaciones
+    {name: 'Administrar Reservas', href: '/manageReservations', current: false},
+
 ];
 
 
@@ -141,7 +138,7 @@ function Navbar() {
                                             <Menu.Item>
                                                 {({active}) => (
                                                     <a
-                                                        href="#"
+                                                        href="/"
                                                         onClick={handleClick}
                                                         className={classNames(
                                                             active ? 'bg-gray-100' : '',
@@ -276,7 +273,8 @@ function App() {
                     <Route path="/reservationsRoom" element={<RoomReservationPage/>}/>
                     <Route path="/personalReservations/*" element={<AllPersonalReservationPage/>}/>
                     <Route path="/resources/*" element={<ResourcesPage/>}/>
-                    {/*<Route path="/reservationsRoom/*" element={<RoomReservationPage/>}/>*/}
+                    <Route path="/manageReservations/*" element={<ManageReservationsPage/>}/>
+
                 </Routes>
 
             </Router>
