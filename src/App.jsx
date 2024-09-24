@@ -3,8 +3,8 @@ import UsersPage from "./pages/UserPage.jsx";
 import RoomsPage from "./pages/RoomPage.jsx";
 import CubiclesPage from "./pages/CubiclePage.jsx";
 import LogIn from "./pages/LogIn.jsx";
-import React from 'react';
-import {BrowserRouter as Router, Routes, Route, Link, useNavigate} from 'react-router-dom';
+import React, {useEffect} from 'react';
+import {BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation} from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import {AuthContextProvider} from "./components/Context/AuthContext.jsx";
@@ -19,6 +19,7 @@ import ResourcesPage from "./pages/ResourcePage.jsx";
 import {RoomReservationPage} from "./pages/RoomReservationPage.jsx";
 import AllPersonalReservationPage from "./pages/AllPersonalReservationPage.jsx";
 import {ManageReservationsPage} from "./pages/ManageReservationsPage.jsx";
+import Swal from 'sweetalert2';
 
 
 const navigation = [
@@ -252,6 +253,8 @@ function HomePage() {
 }
 
 function App() {
+
+
     return (
         <AuthContextProvider>
         <Router>
