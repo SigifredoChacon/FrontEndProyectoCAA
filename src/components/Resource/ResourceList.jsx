@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types'; // Importa PropTypes
-import { getResources, deleteResource } from '../../services/resourceService.jsx'; // Servicio para obtener recursos y eliminar
+import PropTypes from 'prop-types';
+import { getResources, deleteResource } from '../../services/resourceService.jsx';
 import {
     Card,
     Table,
@@ -15,27 +15,27 @@ import {
 
 
 function ResourceList({ onEdit }) {
-    const [resources, setResources] = useState([]); // Ventana para almacenar la lista de recursos
+    const [resources, setResources] = useState([]);
 
     useEffect(() => {
-        fetchResources(); // Llama a la función para obtener recursos al montar el componente
+        fetchResources();
     }, []);
 
-    // Función para obtener la lista de recursos desde el backend
+
     const fetchResources = async () => {
         try {
-            const data = await getResources(); // Llama al servicio para obtener la lista de recursos
-            setResources(data); // Actualiza el ventana con los datos obtenidos
+            const data = await getResources();
+            setResources(data);
         } catch (error) {
             console.error('Error al obtener las recursos:', error);
         }
     };
 
-    // Función para manejar la eliminación de un recurso
+
     const handleDelete = async (id) => {
         try {
-            await deleteResource(id); // Llama al servicio para eliminar un recurso por ID
-            setResources(resources.filter((resource) => resource.idRecursos !== id)); // Actualiza la lista de recursos eliminando el recurso borrado
+            await deleteResource(id);
+            setResources(resources.filter((resource) => resource.idRecursos !== id));
         } catch (error) {
             console.error('Error al eliminar la recurso:', error);
         }
@@ -48,12 +48,12 @@ function ResourceList({ onEdit }) {
                 Recursos
                 <Badge style={{
                     marginLeft: '8px',
-                    backgroundColor: '#00000010',   // Fondo suave
-                    color: '#327aff ',             // Color de texto
-                    borderRadius: '17px',         // Bordes redondeados
-                    padding: '3px 7px',           // Relleno más pronunciado
-                    fontWeight: 'bold',           // Texto en negrita
-                    fontSize: '1rem',          // Tamaño de fuente más pequeño
+                    backgroundColor: '#00000010',
+                    color: '#327aff ',
+                    borderRadius: '17px',
+                    padding: '3px 7px',
+                    fontWeight: 'bold',
+                    fontSize: '1rem',
                 }}>{resources.length}</Badge>
             </Title>
             <Table className="mt-8">
@@ -93,9 +93,9 @@ function ResourceList({ onEdit }) {
     );
 }
 
-// Validación de PropTypes para el componente
+
 ResourceList.propTypes = {
-    onEdit: PropTypes.func.isRequired, // `onEdit` es una función requerida
+    onEdit: PropTypes.func.isRequired,
 };
 
 export default ResourceList;

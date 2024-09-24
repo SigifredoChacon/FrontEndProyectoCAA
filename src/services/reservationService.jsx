@@ -1,4 +1,4 @@
-import api from '../utils/api'; // Configuración base de Axios
+import api from '../utils/api';
 
 export const getReservation = async () => {
     const response = await api.get('/reservations');

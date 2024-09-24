@@ -29,12 +29,12 @@ function RoomsPage() {
 
     const location = useLocation();
 
-    // Verifica si la ruta actual es '/create' o empieza con '/edit'
+
     const isOnCreateOrEditPage = location.pathname === "/rooms/create" || location.pathname.startsWith("/rooms/edit");
 
     return (
         <div style={{ maxWidth: '1800px', margin: '0 auto', padding: '0 20px' }}>
-            {/* Mostrar el título y el botón solo si no estás en la página de creación o edición */}
+
             {!isOnCreateOrEditPage && (
                 <>
                     <h1 style={{ textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px' }}>
@@ -64,13 +64,8 @@ function RoomsPage() {
             )}
 
             <Routes>
-                {/* Ruta para mostrar la lista de usuarios */}
                 <Route path="/" element={<RoomList onEdit={handleEdit}/>}/>
-
-                {/* Ruta para crear un usuario */}
                 <Route path="create" element={<RoomFormCreate onRoomCreated={handleRoomCreated}/>}/>
-
-                {/* Ruta para editar un usuario */}
                 <Route
                     path="edit/:id"
                     element={<RoomFormEdit selectedRoom={selectedRoom} onRoomUpdated={handleRoomCreated}/>}

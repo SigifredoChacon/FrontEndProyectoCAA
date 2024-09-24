@@ -32,7 +32,7 @@ function groupConsecutiveTimes(timeSlots) {
             const lastDate = new Date(`1970-01-01T${lastTime}:00`);
             const currentDate = new Date(`1970-01-01T${currentTime}:00`);
 
-            if (currentDate - lastDate === 3600000) { // Diferencia de 1 hora
+            if (currentDate - lastDate === 3600000) {
                 currentGroup.push(currentTime);
             } else {
                 grouped.push(currentGroup);
@@ -51,7 +51,7 @@ function groupConsecutiveTimes(timeSlots) {
 
 export function RoomReservationPage() {
     const location = useLocation();
-    const {selectedRoom} = location.state || {}; // Recupera la sala desde el estado
+    const {selectedRoom} = location.state || {};
     const {user} = useAuthContext();
     initialRoomReservationState.idUsuario = user;
     initialRoomReservationState.idSala = selectedRoom.idSala;
@@ -86,10 +86,8 @@ export function RoomReservationPage() {
                 (recurso) => recurso.idRecursos === selectedRecursoId
             );
 
-            // Agregar el recurso seleccionado a selectedResources
             setSelectedResources([...selectedResources, selectedRecurso]);
 
-            // Filtrar el recurso seleccionado de la lista de resources
             const updatedResources = resources.filter(
                 (recurso) => recurso.idRecursos !== selectedRecursoId
             );
@@ -98,23 +96,21 @@ export function RoomReservationPage() {
     }
 
     const handleRemoveResource = (recurso) => {
-        // Eliminar el recurso de selectedResources
         const updatedSelectedResources = selectedResources.filter(
             (r) => r.idRecursos !== recurso.idRecursos
         );
         setSelectedResources(updatedSelectedResources);
 
-        // Agregar el recurso de vuelta a resources
         setResources([...resources, recurso]);
     }
 
     const handleSnackChange = (event) => {
         const value = event.target.value === "si";
-        setSnack(value); // true si el usuario selecciona "Sí", false si selecciona "No"
+        setSnack(value);
     }
 
     const handleObservationsChange = (event) => {
-        setObservations(event.target.value); // Actualiza el estado con el texto de observaciones
+        setObservations(event.target.value);
     }
 
     const handleReservationsChange = (newReservations) => {
@@ -146,6 +142,10 @@ export function RoomReservationPage() {
 
         const groupedTimes = groupConsecutiveTimes(timeSlots);
 
+        const selectedDay = reservations[0].day;
+
+        selectedDay.setDate(selectedDay.getDate() + 1);
+
         for (let group of groupedTimes) {
             const horaInicio = group[0];
             const horaFin = group[group.length - 1];
@@ -153,31 +153,26 @@ export function RoomReservationPage() {
             const horaFinIncremented = `${String(parseInt(hour, 10) + 1).padStart(2, '0')}:${minute}`;
 
             try {
-                const selectedDay = reservations[0].day;
-
-                selectedDay.setDate(selectedDay.getDate() + 1);
-
-                // Construir la fecha en formato 'YYYY-MM-DD'
                 const year = selectedDay.getFullYear();
-                const month = String(selectedDay.getMonth() + 1).padStart(2, '0'); // Los meses son 0-indexados
+                const month = String(selectedDay.getMonth() + 1).padStart(2, '0');
                 const day = String(selectedDay.getDate()).padStart(2, '0');
                 const fechaReserva = `${year}-${month}-${day}`;
 
-                console.log("Fecha a enviar:", fechaReserva); // Verificar la fecha que se va a enviar
-                console.log("Hora inicio:", horaInicio); // Verificar la hora de inicio
-                console.log("Hora fin:", horaFinIncremented); // Verificar la hora de fin
+                console.log("Fecha a enviar:", fechaReserva);
+                console.log("Hora inicio:", horaInicio);
+                console.log("Hora fin:", horaFinIncremented);
 
                 const RoomReservationToCreate = {
                     ...reservation,
-                    fecha: fechaReserva, // Convertir la fecha a formato YYYY-MM-DD
-                    horaInicio: horaInicio, // Guardar como string 'HH:mm'
-                    horaFin: horaFinIncremented, // Guardar como string 'HH:mm'
-                    idRecursos: selectedResources.map((recurso) => recurso.idRecursos), // Añadir recursos seleccionados
-                    refrigerio: snack, // Guardar el estado de refrigerio
-                    observaciones: observations, // Guardar las observaciones ingresadas
+                    fecha: fechaReserva,
+                    horaInicio: horaInicio,
+                    horaFin: horaFinIncremented,
+                    idRecursos: selectedResources.map((recurso) => recurso.idRecursos),
+                    refrigerio: snack,
+                    observaciones: observations,
                 };
 
-                console.log(RoomReservationToCreate); // Verificar la información a enviar
+                console.log(RoomReservationToCreate);
 
                 await createReservation(RoomReservationToCreate);
             } catch (error) {
@@ -191,15 +186,15 @@ export function RoomReservationPage() {
 
     return (
         <div className="p-8 max-w-full mx-auto">
-            {/* Contenedor Principal */}
+
             <div className="flex flex-col md:flex-row items-start justify-start">
-                {/* Imagen y Descripción */}
+
                 <div className="flex-shrink-0 md:w-5/12 p-4 mt-8">
-                    {/* Título de la Sala */}
+
                     <div className="text-center text-2xl font-bold mb-4 md:mb-2">
                         {selectedRoom.Nombre}
                     </div>
-                    <div className="w-full h-full overflow-hidden"> {/* Contenedor de la imagen con tamaño fijo */}
+                    <div className="w-full h-full overflow-hidden">
                         <img
                             src={selectedRoom.imageUrl}
                             alt={selectedRoom.Nombre}
@@ -207,13 +202,13 @@ export function RoomReservationPage() {
                         />
                     </div>
 
-                    {/* Descripción */}
+
                     <strong className="mt-8 mb-4 block">Descripción de la sala:</strong> {/* Ajuste de márgenes */}
                     <div className="mt-4 text-justify text-sm text-gray-700 w-full max-w-md max-h-32 overflow-y-auto">
                         {selectedRoom.Descripcion}
                     </div>
 
-                    {/* Restricciones */}
+
                     {selectedRoom.Restricciones && (
                         <>
                             <strong className="mt-8 mb-4 block">Restricciones:</strong> {/* Ajuste de márgenes */}
@@ -225,14 +220,13 @@ export function RoomReservationPage() {
                     )}
                 </div>
 
-                {/* Calendario y Controles */}
+
                 <div className="flex-grow md:w-6/10 p-4">
-                    {/* Calendario */}
+
                     <div className="bg-white w-full shadow-md rounded-lg p-4 mb-4 h-full">
                         <CalendarRooms selectedRoomId={selectedRoom.idSala} onReservationsChange={handleReservationsChange}/>
                     </div>
 
-                    {/* Refrigerio y Recursos */}
                     <div className="flex flex-col md:flex-row mb-4">
                         <div className="md:w-1/2 bg-gray-200 p-4 rounded-lg mb-4 md:mb-0 md:mr-2">
                             <label className="block mb-2 font-bold">Refrigerio</label>
@@ -269,7 +263,7 @@ export function RoomReservationPage() {
                         </div>
                     </div>
 
-                    {/* Mostrar Recursos Seleccionados */}
+
                     <div className="bg-gray-100 p-4 rounded-lg mb-4">
                         <h4 className="font-semibold mb-2">Recursos Seleccionados:</h4>
                         {selectedResources.length > 0 ? (
@@ -290,7 +284,7 @@ export function RoomReservationPage() {
                         )}
                     </div>
 
-                    {/* Observaciones */}
+
                     <div className="bg-gray-200 p-4 rounded-lg mb-4">
                         <textarea
                             className="w-full p-2 rounded-md border border-gray-300"
@@ -300,7 +294,7 @@ export function RoomReservationPage() {
                         />
                     </div>
 
-                    {/* Botones */}
+
                     <div className="flex justify-end space-x-4">
                         <button onClick={handleRoomReservationCreated} className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
                             Cancelar

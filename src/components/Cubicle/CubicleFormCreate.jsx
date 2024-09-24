@@ -2,23 +2,23 @@ import {useEffect, useState} from 'react';
 import PropTypes from 'prop-types'; // Importa PropTypes
 import {createCubicle} from '../../services/cubicleService.jsx';
 
-// Define el ventana inicial del usuario
+
 const initialCubicleState = {
     nombre: '',
     ventana: 0,
 };
 
 function CubicleFormCreate({onCubicleCreated}) {
-    const [cubicle, setCubicle] = useState(initialCubicleState); // Ventana para el formulario del usuario
+    const [cubicle, setCubicle] = useState(initialCubicleState);
 
-    // Maneja los cambios en los campos del formulario
+
     const handleChange = (e) => {
         const {name, value} = e.target;
         setCubicle((prevCubicle) => ({...prevCubicle, [name]: value}));
     };
 
 
-    // Maneja la creación de un nuevo usuario
+
     const handleCreateCubicle = async () => {
         try {
             const cubicleToCreate = {
@@ -27,18 +27,17 @@ function CubicleFormCreate({onCubicleCreated}) {
                 ventana: Boolean(parseInt(cubicle.ventana, 10)),
             };
 
-            await createCubicle(cubicleToCreate); // Crea un nuevo usuario
-            onCubicleCreated(); // Notifica al componente padre que el usuario ha sido creado
-            setCubicle(initialCubicleState); // Limpia el formulario
+            await createCubicle(cubicleToCreate);
+            onCubicleCreated();
+            setCubicle(initialCubicleState);
         } catch (error) {
             console.error('Error al crear cubiculo:', error);
         }
     };
 
-    // Maneja el envío del formulario
     const handleSubmit = (e) => {
         e.preventDefault();
-        handleCreateCubicle(); // Siempre llama a la función de creación
+        handleCreateCubicle();
     };
 
     return (
@@ -103,7 +102,6 @@ function CubicleFormCreate({onCubicleCreated}) {
 
 }
 
-// Validación de PropTypes para el componente
 CubicleFormCreate.propTypes = {
     onCubicleCreated: PropTypes.func.isRequired,
 };

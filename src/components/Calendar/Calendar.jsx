@@ -21,13 +21,13 @@ const Calendar = ({ selectedCubicleId, onReservationsChange }) => {
             try {
                 const response = await getReservationByCubicleId(selectedCubicleId);
 
-                // Filtrar las reservas para la semana seleccionada
+
                 const filteredReservations = response.filter(reservation => {
                     const reservationDate = new Date(reservation.Fecha);
                     return isSameWeek(reservationDate, startOfSelectedWeek, { weekStartsOn: 1 });
                 });
 
-                // Asegúrate de que las fechas estén en formato Date
+
                 const formattedReservations = filteredReservations.map(reservation => ({
                     ...reservation,
                     day: new Date(reservation.Fecha),  // Asegúrate de que 'day' es un objeto Date
@@ -94,7 +94,7 @@ const Calendar = ({ selectedCubicleId, onReservationsChange }) => {
     };
 
     const isReserved = (day, time) => {
-        // Convertimos el 'time' actual en un objeto Date para facilitar la comparación
+
         const currentTime = new Date(`1970-01-01T${time}:00`);
 
         const existingReservation = existingReservations.find((reservation) => {
@@ -103,7 +103,6 @@ const Calendar = ({ selectedCubicleId, onReservationsChange }) => {
                 const startTime = new Date(`1970-01-01T${reservation.HoraInicio}:00`);
                 const endTime = new Date(`1970-01-01T${reservation.HoraFin}:00`);
 
-                // Si 'currentTime' está entre 'startTime' y 'endTime', se considera reservado
                 return currentTime >= startTime && currentTime < endTime;
             }
             return false;
@@ -149,7 +148,7 @@ const Calendar = ({ selectedCubicleId, onReservationsChange }) => {
                     }}
                     onFocus={(e) => e.target.style.border = '1px solid #4CAF50'}
                     onBlur={(e) => e.target.style.border = '1px solid #ccc'}
-                    disabled={reservations.length > 0 && selectedDay !== null} // Deshabilita si hay selección
+                    disabled={reservations.length > 0 && selectedDay !== null}
                 />
             </div>
 
@@ -196,7 +195,7 @@ const Calendar = ({ selectedCubicleId, onReservationsChange }) => {
                                 padding: '12px',
                                 border: '1px solid #ddd',
                                 textAlign: 'center',
-                                width: '100px', // Aquí no cambias el fondo de la celda
+                                width: '100px',
                             }}>
                                 <TimeSlot
                                     day={day}

@@ -8,7 +8,6 @@ const TimeSlot = ({ day, time, isReserved, onReserve, disabled }) => {
         }
     };
 
-    // Estilos del botón basado en el estado de reserva
     const buttonStyle = {
         width: '100%',
         height: '40px',
@@ -17,12 +16,12 @@ const TimeSlot = ({ day, time, isReserved, onReserve, disabled }) => {
         cursor: disabled ? 'not-allowed' : 'pointer',
         backgroundColor:
             isReserved === 'reserved'
-                ? '#ff4d4d' // Rojo si está reservado por otro usuario
+                ? '#ff4d4d'
                 : isReserved === 'userReserved'
-                    ? '#1E90FF' // Azul si está reservado por el usuario
+                    ? '#1E90FF'
                     : isReserved === 'selected'
-                        ? '#4caf50' // Verde si está seleccionado por el usuario en la sesión actual
-                        : '#e0e0e0', // Gris si está disponible o deshabilitado
+                        ? '#4caf50'
+                        : '#e0e0e0',
         color: '#ffffff',
         fontWeight: 'bold',
         transition: 'background-color 0.3s ease',
@@ -32,7 +31,7 @@ const TimeSlot = ({ day, time, isReserved, onReserve, disabled }) => {
         <button
             style={buttonStyle}
             onClick={handleClick}
-            disabled={disabled || isReserved === 'reserved'} // Deshabilitado si está reservado o disabled es true
+            disabled={disabled || isReserved === 'reserved'}
         >
             {isReserved === 'reserved'
                 ? 'Reservado'
@@ -48,7 +47,7 @@ const TimeSlot = ({ day, time, isReserved, onReserve, disabled }) => {
 TimeSlot.propTypes = {
     day: PropTypes.instanceOf(Date).isRequired,
     time: PropTypes.string.isRequired,
-    isReserved: PropTypes.oneOf(['reserved', 'available', 'selected', 'userReserved']), // Añadimos 'userReserved'
+    isReserved: PropTypes.oneOf(['reserved', 'available', 'selected', 'userReserved']),
     onReserve: PropTypes.func.isRequired,
     disabled: PropTypes.bool,
 };

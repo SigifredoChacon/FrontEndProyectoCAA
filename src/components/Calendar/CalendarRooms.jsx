@@ -21,16 +21,14 @@ const CalendarRooms = ({ selectedRoomId, onReservationsChange }) => {
             try {
                 const response = await getReservationByRoomId(selectedRoomId);
 
-                // Filtrar las reservas para la semana seleccionada
                 const filteredReservations = response.filter(reservation => {
                     const reservationDate = new Date(reservation.Fecha);
                     return isSameWeek(reservationDate, startOfSelectedWeek, { weekStartsOn: 1 });
                 });
 
-                // Asegúrate de que las fechas estén en formato Date
                 const formattedReservations = filteredReservations.map(reservation => ({
                     ...reservation,
-                    day: new Date(reservation.Fecha),  // Asegúrate de que 'day' es un objeto Date
+                    day: new Date(reservation.Fecha),
                 }));
 
                 setExistingReservations(formattedReservations);
@@ -94,7 +92,7 @@ const CalendarRooms = ({ selectedRoomId, onReservationsChange }) => {
     };
 
     const isReserved = (day, time) => {
-        // Convertimos el 'time' actual en un objeto Date para facilitar la comparación
+
         const currentTime = new Date(`1970-01-01T${time}:00`);
 
         const existingReservation = existingReservations.find((reservation) => {
@@ -103,7 +101,7 @@ const CalendarRooms = ({ selectedRoomId, onReservationsChange }) => {
                 const startTime = new Date(`1970-01-01T${reservation.HoraInicio}:00`);
                 const endTime = new Date(`1970-01-01T${reservation.HoraFin}:00`);
 
-                // Si 'currentTime' está entre 'startTime' y 'endTime', se considera reservado
+
                 return currentTime >= startTime && currentTime < endTime;
             }
             return false;
@@ -130,7 +128,7 @@ const CalendarRooms = ({ selectedRoomId, onReservationsChange }) => {
                     value={format(selectedDate, 'yyyy-MM-dd')}
                     onChange={handleDateChange}
                     className="p-2 text-base rounded-md border border-gray-300 bg-white text-gray-800 focus:border-green-500 focus:outline-none transition duration-300 ease-in-out max-w-full"
-                    disabled={reservations.length > 0 && selectedDay !== null} // Deshabilita si hay selección
+                    disabled={reservations.length > 0 && selectedDay !== null}
                 />
             </div>
 

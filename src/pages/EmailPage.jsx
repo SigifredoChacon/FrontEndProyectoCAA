@@ -5,13 +5,13 @@ import { useNavigate } from 'react-router-dom';
 function EmailPage() {
     const [asunto, setAsunto] = useState('');
     const [descripcion, setDescripcion] = useState('');
-    const navigate = useNavigate(); // Inicializamos el hook useNavigate
+    const navigate = useNavigate();
 
     const handleSendEmail = async () => {
         try {
             await sendAllEmail({ asunto, descripcion });
             alert('Email enviado correctamente');
-            navigate('/'); // Redirige a la página principal después de enviar el correo
+            navigate('/');
         } catch (error) {
             console.error('Error al enviar email:', error);
             alert('Error al enviar email');
@@ -24,7 +24,7 @@ function EmailPage() {
                 Enviar Email
             </h1>
 
-            <div style={{marginBottom: '30px'}}> {/* Mayor separación entre los campos */}
+            <div style={{marginBottom: '30px'}}>
                 <label style={{display: 'block', marginBottom: '5px', fontWeight: 'bold'}}>Asunto:</label>
                 <input
                     type="text"
@@ -34,11 +34,11 @@ function EmailPage() {
                         width: '100%',
                         padding: '10px',
                         fontSize: '16px',
-                        border: '1px solid #ccc',  /* Borde agregado */
-                        borderRadius: '4px', /* Bordes redondeados */
+                        border: '1px solid #ccc',
+                        borderRadius: '4px',
                         transition: 'border-color 0.3s ease',
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#004080'} /* Resaltar al escribir */
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#004080'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#ccc'}
                 />
             </div>
@@ -52,13 +52,13 @@ function EmailPage() {
                         width: '100%',
                         padding: '10px',
                         fontSize: '16px',
-                        height: '150px', /* Aumentar la altura del textarea */
+                        height: '150px',
                         resize: 'vertical',
-                        border: '1px solid #ccc',  /* Borde agregado */
-                        borderRadius: '4px', /* Bordes redondeados */
+                        border: '1px solid #ccc',
+                        borderRadius: '4px',
                         transition: 'border-color 0.3s ease',
                     }}
-                    onFocus={(e) => e.currentTarget.style.borderColor = '#004080'} /* Resaltar al escribir */
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#004080'}
                     onBlur={(e) => e.currentTarget.style.borderColor = '#ccc'}
                 />
             </div>

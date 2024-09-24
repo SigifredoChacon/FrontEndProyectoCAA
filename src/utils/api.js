@@ -9,7 +9,6 @@ const api = axios.create({
 
 api.interceptors.request.use(
     (config) => {
-        // Aquí puedes agregar lógica para añadir tokens de autenticación a las solicitudes
         return config;
     },
     (error) => Promise.reject(error)

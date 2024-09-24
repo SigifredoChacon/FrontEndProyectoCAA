@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types'; // Importa PropTypes
-import { getCubicles, deleteCubicle } from '../../services/cubicleService.jsx'; // Servicio para obtener cubiculos y eliminar
+import PropTypes from 'prop-types';
+import { getCubicles, deleteCubicle } from '../../services/cubicleService.jsx';
 import {
     Card,
     Table,
@@ -15,27 +15,27 @@ import {
 
 
 function CubicleList({ onEdit }) {
-    const [cubicles, setCubicles] = useState([]); // Ventana para almacenar la lista de cubiculos
+    const [cubicles, setCubicles] = useState([]);
 
     useEffect(() => {
-        fetchCubicles(); // Llama a la función para obtener cubiculos al montar el componente
+        fetchCubicles();
     }, []);
 
-    // Función para obtener la lista de cubiculos desde el backend
+
     const fetchCubicles = async () => {
         try {
-            const data = await getCubicles(); // Llama al servicio para obtener la lista de cubiculos
-            setCubicles(data); // Actualiza el ventana con los datos obtenidos
+            const data = await getCubicles();
+            setCubicles(data);
         } catch (error) {
             console.error('Error al obtener las cubiculos:', error);
         }
     };
 
-    // Función para manejar la eliminación de un cubiculo
+
     const handleDelete = async (id) => {
         try {
-            await deleteCubicle(id); // Llama al servicio para eliminar un cubiculo por ID
-            setCubicles(cubicles.filter((cubicle) => cubicle.idCubiculo !== id)); // Actualiza la lista de cubiculos eliminando el cubiculo borrado
+            await deleteCubicle(id);
+            setCubicles(cubicles.filter((cubicle) => cubicle.idCubiculo !== id));
         } catch (error) {
             console.error('Error al eliminar la cubiculo:', error);
         }
@@ -48,12 +48,12 @@ function CubicleList({ onEdit }) {
                 Cubiculos
                 <Badge style={{
                     marginLeft: '8px',
-                    backgroundColor: '#00000010',   // Fondo suave
-                    color: '#327aff ',             // Color de texto
-                    borderRadius: '17px',         // Bordes redondeados
-                    padding: '3px 7px',           // Relleno más pronunciado
-                    fontWeight: 'bold',           // Texto en negrita
-                    fontSize: '1rem',          // Tamaño de fuente más pequeño
+                    backgroundColor: '#00000010',
+                    color: '#327aff ',
+                    borderRadius: '17px',
+                    padding: '3px 7px',
+                    fontWeight: 'bold',
+                    fontSize: '1rem',
                 }}>{cubicles.length}</Badge>
             </Title>
             <Table className="mt-8">
@@ -100,9 +100,9 @@ function CubicleList({ onEdit }) {
     );
 }
 
-// Validación de PropTypes para el componente
+
 CubicleList.propTypes = {
-    onEdit: PropTypes.func.isRequired, // `onEdit` es una función requerida
+    onEdit: PropTypes.func.isRequired,
 };
 
 export default CubicleList;

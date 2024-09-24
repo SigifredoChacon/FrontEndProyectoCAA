@@ -1,36 +1,34 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { updateUser } from '../../services/userService';
-import {getRoles} from "../../services/roleService.jsx"; // Servicio para actualizar usuarios
+import {getRoles} from "../../services/roleService.jsx";
 
 function UserFormEdit({ selectedUser, onUserUpdated}) {
-    const [user, setUser] = useState(selectedUser); // Estado inicial con el usuario seleccionado
-    const [roles, setRoles] = useState([]); // Estado para almacenar la lista de roles
+    const [user, setUser] = useState(selectedUser);
+    const [roles, setRoles] = useState([]);
 
     useEffect(() => {
-        setUser(selectedUser); // Actualiza el estado si cambia el usuario seleccionado
-        fetchRoles(); // Actualiza el estado si cambia el usuario seleccionado
+        setUser(selectedUser);
+        fetchRoles();
     }, [selectedUser]);
 
-    // Función para obtener la lista de roles desde el backend
+
     const fetchRoles = async () => {
         try {
-            const data = await getRoles(); // Llama al servicio para obtener la lista de roles
-            setRoles(data); // Actualiza el estado con los datos obtenidos
+            const data = await getRoles();
+            setRoles(data);
         } catch (error) {
             console.error('Error al obtener roles:', error);
         }
     }
     const convertFirstLetterToLowerCase = (obj) => {
         return Object.keys(obj).reduce((acc, key) => {
-            // Convierte solo la primera letra a minúscula y concatena el resto de la clave
             const newKey = key.charAt(0).toLowerCase() + key.slice(1);
-            acc[newKey] = obj[key]; // Asigna el valor al nuevo nombre de clave
+            acc[newKey] = obj[key];
             return acc;
         }, {});
     };
 
-    // Maneja los cambios en los campos del formulario
     const handleChange = (e) => {
         const { name, value } = e.target;
         setUser((prevUser) => ({ ...prevUser, [name]: value }));
@@ -38,10 +36,10 @@ function UserFormEdit({ selectedUser, onUserUpdated}) {
 
     const handleUpdateUser = async () => {
         try {
-            const userToUpdate = convertFirstLetterToLowerCase(user); // Convierte las claves a minúsculas
-            const initialUserLowerCase = convertFirstLetterToLowerCase(selectedUser); // Convierte las claves del usuario inicial a minúsculas
+            const userToUpdate = convertFirstLetterToLowerCase(user);
+            const initialUserLowerCase = convertFirstLetterToLowerCase(selectedUser);
 
-            // Filtra solo los campos que han cambiado
+
             const updatedFields = Object.keys(userToUpdate).reduce((acc, key) => {
                 if (userToUpdate[key] !== initialUserLowerCase[key]) {
                     acc[key] = userToUpdate[key];
@@ -49,14 +47,14 @@ function UserFormEdit({ selectedUser, onUserUpdated}) {
                 return acc;
             }, {});
             if (updatedFields.idRol) {
-                updatedFields.idRol = parseInt(updatedFields.idRol, 10); // Convierte idRol a entero
+                updatedFields.idRol = parseInt(updatedFields.idRol, 10);
             }
 
             if (Object.keys(updatedFields).length > 0) {
                 console.log('Updating user with data:', updatedFields);
                 console.log('User to update:', userToUpdate.CedulaCarnet);
-                await updateUser(selectedUser.CedulaCarnet, updatedFields); // Actualiza solo los campos que han cambiado
-                onUserUpdated(); // Notifica al componente padre que el usuario ha sido actualizado
+                await updateUser(selectedUser.CedulaCarnet, updatedFields);
+                onUserUpdated();
 
             } else {
                 console.log('No changes detected, update not required.');
@@ -66,14 +64,12 @@ function UserFormEdit({ selectedUser, onUserUpdated}) {
         }
     };
 
-    // Maneja el envío del formulario
     const handleSubmit = (e) => {
         e.preventDefault();
-        handleUpdateUser(); // Llama a la función de actualización
+        handleUpdateUser();
     };
 
 
-    // Aquí está el return para UserFormEdit
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">

@@ -1,26 +1,26 @@
-import api from '../utils/api'; // Configuración base de Axios
+import api from '../utils/api';
 
 export const getResources = async () => {
-    const response = await api.get('/resources'); // Llama a la API para obtener usuarios
+    const response = await api.get('/resources');
     return response.data;
 };
 
 export const createResource = async (resource) => {
-    const response = await api.post('/resources', resource); // Llama a la API para crear un nuevo usuario
+    const response = await api.post('/resources', resource);
     return response.data;
 };
 
 export const updateResource = async (id, resource) => {
-    const response = await api.patch(`/resources/${id}`, resource); // Llama a la API para actualizar un usuario por ID
+    const response = await api.patch(`/resources/${id}`, resource);
     return response.data;
 };
 
 export const deleteResource = async (id) => {
-    const response = await api.delete(`/resources/${id}`); // Llama a la API para eliminar un usuario por ID
+    const response = await api.delete(`/resources/${id}`);
     return response.data;
 };
 
 export const getResourceById = async (id) => {
-    const response = await api.get(`/resources/${id}`); // Llama a la API para obtener un usuario por ID
+    const response = await api.get(`/resources/${id}`);
     return response.data;
 }

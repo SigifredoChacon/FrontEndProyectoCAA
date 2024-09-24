@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLogIn } from "../hooks/useLogIn.js";
 import { useNavigate } from "react-router-dom";
-import Swal from 'sweetalert2'; // Importar SweetAlert2
+import Swal from 'sweetalert2';
 
 function LogIn() {
     const [email, setEmail] = useState('');
@@ -27,7 +27,7 @@ function LogIn() {
                 timerProgressBar: true,
                 showConfirmButton: false,
                 willClose: () => {
-                    navigate('/');  // Navegar a la página de inicio después de la alerta
+                    navigate('/');
                 }
             });
         }
