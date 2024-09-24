@@ -12,7 +12,7 @@ export const createUser = async (user) => {
 
 export const login = async (user) => {
     const response = await api.post('/users/login', user); // Llama a la API para crear un nuevo usuario
-    return response.data;
+    return response;
 };
 
 
