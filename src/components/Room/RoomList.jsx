@@ -7,14 +7,11 @@ import {
     Badge
 } from '@tremor/react';
 
-
-
-
 function RoomList({ onEdit }) {
     const [rooms, setRooms] = useState([]);
 
     useEffect(() => {
-        fetchRooms(); // Llama a la función para obtener usuarios al montar el componente
+        fetchRooms();
     }, []);
 
     const fetchRooms = async () => {
@@ -32,7 +29,7 @@ function RoomList({ onEdit }) {
         }
     };
 
-    // Función para manejar la eliminación de un usuario
+
     const handleDelete = async (id) => {
         try {
             await deleteRoom(id);

@@ -1,6 +1,6 @@
-import api from '../utils/api'; // Configuración base de Axios
+import api from '../utils/api';
 
 export const getResources = async () => {
-    const response = await api.get('/resources'); // Llama a la API para obtener usuarios
+    const response = await api.get('/resources');
     return response.data;
 }

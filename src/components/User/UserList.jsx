@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { getUsers, deleteUser, getUserById } from '../../services/userService'; // Importa getUserById
+import { getUsers, deleteUser, getUserById } from '../../services/userService';
 import {
     Card,
     Table,
@@ -15,54 +15,53 @@ import {
 } from '@tremor/react';
 
 function UserList({ onEdit }) {
-    const [users, setUsers] = useState([]); // Estado para almacenar la lista de usuarios
-    const [searchTerm, setSearchTerm] = useState(''); // Estado para almacenar el término de búsqueda
-    const [searchResult, setSearchResult] = useState(null); // Estado para almacenar el resultado de la búsqueda
+    const [users, setUsers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResult, setSearchResult] = useState(null);
 
     useEffect(() => {
-        fetchUsers(); // Llama a la función para obtener usuarios al montar el componente
+        fetchUsers();
     }, []);
 
-    // Función para obtener la lista de usuarios desde el backend
+
     const fetchUsers = async () => {
         try {
-            const data = await getUsers(); // Llama al servicio para obtener la lista de usuarios
-            setUsers(data); // Actualiza el estado con los datos obtenidos
+            const data = await getUsers();
+            setUsers(data);
         } catch (error) {
             console.error('Error al obtener usuarios:', error);
         }
     };
 
-    // Función para manejar la eliminación de un usuario
+
     const handleDelete = async (id) => {
 
         try {
-            await deleteUser(id); // Llama al servicio para eliminar un usuario por ID
-            setUsers(users.filter((user) => user.CedulaCarnet !== id)); // Actualiza la lista de usuarios eliminando el usuario borrado
+            await deleteUser(id);
+            setUsers(users.filter((user) => user.CedulaCarnet !== id));
         } catch (error) {
             console.error('Error al eliminar usuario:', error);
         }
     };
 
-    // Función para manejar el cambio en el input de búsqueda
+
     const handleSearchChange = async (e) => {
         const value = e.target.value;
-        setSearchTerm(value); // Actualiza el estado con el valor del input de búsqueda
+        setSearchTerm(value);
 
         if (value !== '') {
             try {
-                const user = await getUserById(Number(value)); // Llama a la API para buscar el usuario por cédula
-                setSearchResult(user ? [user] : []); // Si se encuentra el usuario, lo muestra; si no, muestra un array vacío
+                const user = await getUserById(Number(value));
+                setSearchResult(user ? [user] : []);
             } catch (error) {
                 console.error('Error al buscar usuario:', error);
-                setSearchResult([]); // Si ocurre un error, limpia el resultado de la búsqueda
+                setSearchResult([]);
             }
         } else {
-            setSearchResult(null); // Si no hay término de búsqueda, limpia el resultado de la búsqueda
+            setSearchResult(null);
         }
     };
 
-    // Determina qué lista de usuarios mostrar: la búsqueda o todos los usuarios
     const displayedUsers = searchResult !== null ? searchResult : users;
 
     return (
@@ -71,12 +70,12 @@ function UserList({ onEdit }) {
                 Usuarios
                 <Badge style={{
                     marginLeft: '8px',
-                    backgroundColor: '#00000010',   // Fondo suave
-                    color: '#327aff ',             // Color de texto
-                    borderRadius: '17px',         // Bordes redondeados
-                    padding: '3px 7px',           // Relleno más pronunciado
-                    fontWeight: 'bold',           // Texto en negrita
-                    fontSize: '1rem',          // Tamaño de fuente más pequeño
+                    backgroundColor: '#00000010',
+                    color: '#327aff ',
+                    borderRadius: '17px',
+                    padding: '3px 7px',
+                    fontWeight: 'bold',
+                    fontSize: '1rem',
                 }}>{displayedUsers.length}</Badge>
             </Title>
             <div className="w-full flex justify-center">
@@ -160,7 +159,7 @@ function UserList({ onEdit }) {
     );
 }
 
-// Validación de PropTypes para el componente
+
 UserList.propTypes = {
     onEdit: PropTypes.func.isRequired,
 };

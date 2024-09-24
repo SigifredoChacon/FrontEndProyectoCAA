@@ -32,7 +32,7 @@ function groupConsecutiveTimes(timeSlots) {
             const lastDate = new Date(`1970-01-01T${lastTime}:00`);
             const currentDate = new Date(`1970-01-01T${currentTime}:00`);
 
-            if (currentDate - lastDate === 3600000) { // Diferencia de 1 hora
+            if (currentDate - lastDate === 3600000) {
                 currentGroup.push(currentTime);
             } else {
                 grouped.push(currentGroup);
@@ -58,7 +58,7 @@ function CubiclesReservationPage() {
     const [reservations, setReservations] = useState([]);
     const [cubicles, setCubicles] = useState([]);
     const [selectedCubicleR, setSelectedCubicle] = useState(null);
-    const [calendarKey, setCalendarKey] = useState(0); // Clave para forzar la recarga del calendario
+    const [calendarKey, setCalendarKey] = useState(0);
 
     const navigate = useNavigate();
 
@@ -107,23 +107,23 @@ function CubiclesReservationPage() {
             try {
 
 
-                // Construir la fecha en formato 'YYYY-MM-DD'
+
                 const year = selectedDay.getFullYear();
-                const month = String(selectedDay.getMonth() + 1).padStart(2, '0'); // Los meses son 0-indexados
+                const month = String(selectedDay.getMonth() + 1).padStart(2, '0');
                 const day = String(selectedDay.getDate()).padStart(2, '0');
                 const fechaReserva = `${year}-${month}-${day}`;
 
-                console.log("Fecha a enviar:", fechaReserva); // Verificar la fecha que se va a enviar
-                console.log("Hora inicio:", horaInicio); // Verificar la hora de inicio
-                console.log("Hora fin:", horaFinIncremented); // Verificar la hora de fin
+                console.log("Fecha a enviar:", fechaReserva);
+                console.log("Hora inicio:", horaInicio);
+                console.log("Hora fin:", horaFinIncremented);
 
 
                 const cubicleReservationToCreate = {
                     ...reservation,
                     idCubiculo: selectedCubicleR.idCubiculo,
-                    fecha: fechaReserva, // Convertir la fecha a formato YYYY-MM-DD
-                    horaInicio: horaInicio, // Guardar como string 'HH:mm'
-                    horaFin: horaFinIncremented, // Guardar como string 'HH:mm'
+                    fecha: fechaReserva,
+                    horaInicio: horaInicio,
+                    horaFin: horaFinIncremented,
                 };
 
                 await createReservation(cubicleReservationToCreate);
@@ -143,8 +143,8 @@ function CubiclesReservationPage() {
 
     const handleCubicleSelect = (cubicle) => {
         setSelectedCubicle(cubicle);
-        setReservations([]); // Reinicia las reservaciones
-        setCalendarKey(prevKey => prevKey + 1); // Cambia la clave para forzar la recarga del calendario
+        setReservations([]);
+        setCalendarKey(prevKey => prevKey + 1);
     };
 
     const handleCubicleReservationCreated = () => {
@@ -155,7 +155,7 @@ function CubiclesReservationPage() {
         setReservation(initialCubicleReservationState);
         setReservations([]);
         setSelectedCubicle(null);
-        setCalendarKey(prevKey => prevKey + 1); // Forzar la recarga del calendario
+        setCalendarKey(prevKey => prevKey + 1);
         navigate('/');
     };
 
@@ -168,7 +168,7 @@ function CubiclesReservationPage() {
     return (
         <div style={{ maxWidth: '1800px', margin: '0 auto', padding: '0 20px' }}>
             <div style={{ display: 'flex', flexDirection: 'row', height: '100vh', padding: '20px' }}>
-                {/* Barra lateral con la lista de cubículos */}
+
                 <div style={{
                     width: '20%',
                     marginRight: '20px',
@@ -206,7 +206,6 @@ function CubiclesReservationPage() {
                     </ul>
                 </div>
 
-                {/* Vista del calendario */}
                 <div style={{
                     width: '80%',
                     display: 'flex',
@@ -256,9 +255,9 @@ function CubiclesReservationPage() {
                     </div>
                     {selectedCubicleR ? (
                         <Calendar
-                            key={calendarKey} // Forzar recarga del calendario
+                            key={calendarKey}
                             onReservationsChange={handleReservationsChange}
-                            selectedCubicleId={selectedCubicleR.idCubiculo} // Pasar cubículo seleccionado al calendario
+                            selectedCubicleId={selectedCubicleR.idCubiculo}
                         />
                     ) : (
                         <p>Por favor, selecciona un cubículo para continuar.</p>

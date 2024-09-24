@@ -11,7 +11,7 @@ const CalendarRoomsNoEdit = ({ selectedRoomId, onReservationsChange, editable = 
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [reservations, setReservations] = useState([]);
     const [existingReservations, setExistingReservations] = useState([]);
-    const [userReservation, setUserReservation] = useState(null); // Estado para almacenar la reserva del usuario
+    const [userReservation, setUserReservation] = useState(null);
 
     const startOfSelectedWeek = startOfWeek(selectedDate, { weekStartsOn: 1 });
     const daysOfWeek = Array.from({ length: 6 }, (_, i) => addDays(startOfSelectedWeek, i));
@@ -42,7 +42,6 @@ const CalendarRoomsNoEdit = ({ selectedRoomId, onReservationsChange, editable = 
         }
     }, [selectedRoomId, startOfSelectedWeek]);
 
-    // Buscar la reserva del usuario basado en reservationId
     useEffect(() => {
         const fetchUserReservation = async () => {
             try {
@@ -66,7 +65,6 @@ const CalendarRoomsNoEdit = ({ selectedRoomId, onReservationsChange, editable = 
     const isReserved = (day, time) => {
         const currentTime = new Date(`1970-01-01T${time}:00`);
 
-        // Chequear si la reserva actual es la del usuario
         if (userReservation && startOfDay(userReservation.day).getTime() === startOfDay(day).getTime()) {
             const startTime = new Date(`1970-01-01T${userReservation.HoraInicio}:00`);
             const endTime = new Date(`1970-01-01T${userReservation.HoraFin}:00`);
@@ -75,7 +73,6 @@ const CalendarRoomsNoEdit = ({ selectedRoomId, onReservationsChange, editable = 
             }
         }
 
-        // Chequear si existe alguna otra reserva
         const existingReservation = existingReservations.find((reservation) => {
             const reservationDay = new Date(reservation.Fecha);
             if (startOfDay(reservationDay).getTime() === startOfDay(day).getTime()) {
@@ -87,10 +84,10 @@ const CalendarRoomsNoEdit = ({ selectedRoomId, onReservationsChange, editable = 
         });
 
         if (existingReservation) {
-            return 'reserved'; // Retornar 'reserved' si es una reserva existente
+            return 'reserved';
         }
 
-        return 'available'; // Retornar 'available' si no hay ninguna reserva
+        return 'available';
     };
 
     return (
@@ -147,7 +144,7 @@ CalendarRoomsNoEdit.propTypes = {
     selectedRoomId: PropTypes.number.isRequired,
     onReservationsChange: PropTypes.func.isRequired,
     editable: PropTypes.bool,
-    reservationId: PropTypes.number.isRequired, // Añadimos la prop reservationId
+    reservationId: PropTypes.number.isRequired,
 };
 
 export default CalendarRoomsNoEdit;

@@ -13,7 +13,7 @@ function ResourceFormEdit({ selectedResource, onResourceUpdated }) {
         }, {});
     };
 
-    // Maneja los cambios en los campos del formulario
+
     const handleChange = (e) => {
         const { name, value } = e.target;
             setResource((prevResource) => ({ ...prevResource, [name]: value }));
@@ -24,7 +24,6 @@ function ResourceFormEdit({ selectedResource, onResourceUpdated }) {
             const resourceToUpdate = convertFirstLetterToLowerCase(resource);
             const initialResourceLowerCase = convertFirstLetterToLowerCase(selectedResource);
 
-            // Filtra solo los campos que han cambiado
             const updatedFields = Object.keys(resourceToUpdate).reduce((acc, key) => {
                 if (resourceToUpdate[key] !== initialResourceLowerCase[key]) {
                     acc[key] = resourceToUpdate[key];
@@ -35,8 +34,8 @@ function ResourceFormEdit({ selectedResource, onResourceUpdated }) {
             if (Object.keys(updatedFields).length > 0) {
                 console.log('Updating resource with data:', updatedFields);
                 console.log('Resource to update:', resourceToUpdate.idRecursos);
-                await updateResource(selectedResource.idRecursos, updatedFields); // Actualiza solo los campos que han cambiado
-                onResourceUpdated(); // Notifica al componente padre que recurso ha sido actualizada
+                await updateResource(selectedResource.idRecursos, updatedFields);
+                onResourceUpdated();
             } else {
                 console.log('No changes detected, update not required.');
             }
@@ -45,10 +44,10 @@ function ResourceFormEdit({ selectedResource, onResourceUpdated }) {
         }
     };
 
-    // Maneja el envío del formulario
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        handleUpdateResource(); // Llama a la función de actualización
+        handleUpdateResource();
     };
 
     return (

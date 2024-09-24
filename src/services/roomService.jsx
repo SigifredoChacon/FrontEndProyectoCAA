@@ -1,7 +1,7 @@
-import api from '../utils/api'; // Configuración base de Axios
+import api from '../utils/api';
 
 export const getRooms = async () => {
-    const response = await api.get('/rooms'); // Llama a la API para obtener usuarios
+    const response = await api.get('/rooms');
     return response.data;
 };
 
@@ -20,14 +20,12 @@ export const updateRoom = async (id, formData) => {
     let response;
 
     if (formData instanceof FormData) {
-        // Si el objeto room es un FormData, se trata como multipart/form-data
         response = await api.patch(`/rooms/${id}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         });
     } else {
-        // Si room es un objeto normal, se trata como application/json
         response = await api.patch(`/rooms/${id}`, formData, {
             headers: {
                 'Content-Type': 'application/json',
@@ -40,11 +38,11 @@ export const updateRoom = async (id, formData) => {
 
 
 export const deleteRoom = async (id) => {
-    const response = await api.delete(`/rooms/${id}`); // Llama a la API para eliminar un usuario por ID
+    const response = await api.delete(`/rooms/${id}`);
     return response.data;
 };
 
 export const getRoomById = async (id) => {
-    const response = await api.get(`/rooms/${id}`); // Llama a la API para obtener un usuario por ID
+    const response = await api.get(`/rooms/${id}`);
     return response.data;
 }

@@ -1,24 +1,24 @@
 import {useEffect, useState} from 'react';
-import PropTypes from 'prop-types'; // Importa PropTypes
+import PropTypes from 'prop-types';
 import {createResource} from '../../services/resourceService.jsx';
 
-// Define el ventana inicial del usuario
+
 const initialResourceState = {
     nombre: '',
     ventana: 0,
 };
 
 function ResourceFormCreate({onResourceCreated}) {
-    const [resource, setResource] = useState(initialResourceState); // Ventana para el formulario del usuario
+    const [resource, setResource] = useState(initialResourceState);
 
-    // Maneja los cambios en los campos del formulario
+
     const handleChange = (e) => {
         const {name, value} = e.target;
         setResource((prevResource) => ({...prevResource, [name]: value}));
     };
 
 
-    // Maneja la creación de un nuevo usuario
+
     const handleCreateResource = async () => {
         try {
             const resourceToCreate = {
@@ -26,18 +26,18 @@ function ResourceFormCreate({onResourceCreated}) {
                 idRecursos: parseInt(resource.idRecursos, 10),
             };
 
-            await createResource(resourceToCreate); // Crea un nuevo usuario
-            onResourceCreated(); // Notifica al componente padre que el usuario ha sido creado
-            setResource(initialResourceState); // Limpia el formulario
+            await createResource(resourceToCreate);
+            onResourceCreated();
+            setResource(initialResourceState);
         } catch (error) {
             console.error('Error al crear recurso:', error);
         }
     };
 
-    // Maneja el envío del formulario
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        handleCreateResource(); // Siempre llama a la función de creación
+        handleCreateResource();
     };
 
     return (
@@ -86,7 +86,6 @@ function ResourceFormCreate({onResourceCreated}) {
 
 }
 
-// Validación de PropTypes para el componente
 ResourceFormCreate.propTypes = {
     onResourceCreated: PropTypes.func.isRequired,
 };

@@ -192,12 +192,12 @@ function HomePage() {
                 className="mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none"
                 style={{
                     position: 'relative',
-                    width: '1200px',    // Ajusta el ancho del botón
-                    height: '350px',   // Ajusta la altura del botón
-                    fontSize: '150px',  // Ajusta el tamaño del texto
+                    width: '1200px',
+                    height: '350px',
+                    fontSize: '150px',
                     color: 'white',
                     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
-                    borderRadius: '50px', // Aumenta el radio para un borde más redondeado
+                    borderRadius: '50px',
                 }}
             >
                 <div
@@ -210,8 +210,8 @@ function HomePage() {
                         backgroundImage: `url(${SalaDeReunion})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
-                        filter: 'brightness(50%)', // Reduce el brillo para oscurecer la imagen
-                        borderRadius: 'inherit', // Hereda el borde redondeado del botón
+                        filter: 'brightness(50%)',
+                        borderRadius: 'inherit',
                     }}
                 ></div>
                 <span style={{position: 'relative', zIndex: 1}}>Salas</span>
@@ -222,12 +222,12 @@ function HomePage() {
                 className="mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none"
                 style={{
                     position: 'relative',
-                    width: '1200px',    // Ajusta el ancho del botón
-                    height: '350px',   // Ajusta la altura del botón
-                    fontSize: '150px',  // Ajusta el tamaño del texto
+                    width: '1200px',
+                    height: '350px',
+                    fontSize: '150px',
                     color: 'white',
                     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
-                    borderRadius: '50px', // Aumenta el radio para un borde más redondeado
+                    borderRadius: '50px',
                 }}
             >
                 <div
@@ -240,8 +240,8 @@ function HomePage() {
                         backgroundImage: `url(${cubiculos})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
-                        filter: 'brightness(50%)', // Reduce el brillo para oscurecer la imagen
-                        borderRadius: 'inherit', // Hereda el borde redondeado del botón
+                        filter: 'brightness(50%)',
+                        borderRadius: 'inherit',
                     }}
                 ></div>
                 <span style={{position: 'relative', zIndex: 1}}>Cubículos</span>

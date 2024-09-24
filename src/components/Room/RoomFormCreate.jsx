@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {createRoom} from '../../services/roomService.jsx';
 
 const initialRoomState = {
-    imagen: null, // Cambiado de '' a null para almacenar el archivo
+    imagen: null,
     nombre: '',
     descripcion: '',
     restricciones: '',
@@ -16,7 +16,7 @@ function RoomFormCreate({onRoomCreated}) {
     const handleChange = (e) => {
         const {name, value, files} = e.target;
         if (name === 'imagen') {
-            setRoom((prevRoom) => ({...prevRoom, imagen: files[0]})); // Almacena el archivo
+            setRoom((prevRoom) => ({...prevRoom, imagen: files[0]}));
         } else {
             setRoom((prevRoom) => ({...prevRoom, [name]: value}));
         }
@@ -25,15 +25,15 @@ function RoomFormCreate({onRoomCreated}) {
     const handleCreateRoom = async () => {
         try {
             const formData = new FormData();
-            formData.append('imagen', room.imagen); // Agrega la imagen al FormData
+            formData.append('imagen', room.imagen);
             formData.append('nombre', room.nombre);
             formData.append('descripcion', room.descripcion);
             formData.append('restricciones', room.restricciones);
             formData.append('estado', room.estado);
 
-            await createRoom(formData); // Enviar FormData
+            await createRoom(formData);
             onRoomCreated();
-            setRoom(initialRoomState); // Limpia el formulario
+            setRoom(initialRoomState); 
         } catch (error) {
             console.error('Error al crear sala:', error);
         }

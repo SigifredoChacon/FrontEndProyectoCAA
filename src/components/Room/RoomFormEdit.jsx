@@ -16,11 +16,10 @@ function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
 
     console.log(room.Nombre);
 
-    // Maneja los cambios en los campos del formulario
     const handleChange = (e) => {
         const { name, value, files } = e.target;
         if (name === 'imagen') {
-            setRoom((prevRoom) => ({ ...prevRoom, Imagen: files[0] })); // Almacena el archivo
+            setRoom((prevRoom) => ({ ...prevRoom, Imagen: files[0] }));
         }
         else {
             setRoom((prevRoom) => ({ ...prevRoom, [name]: value }));
@@ -32,7 +31,7 @@ function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
             const roomToUpdate = convertFirstLetterToLowerCase(room);
             const initialRoomLowerCase = convertFirstLetterToLowerCase(selectedRoom);
 
-            // Filtra solo los campos que han cambiado
+
             const updatedFields = Object.keys(roomToUpdate).reduce((acc, key) => {
                 if (roomToUpdate[key] !== initialRoomLowerCase[key]) {
                     acc[key] = roomToUpdate[key];
@@ -44,19 +43,19 @@ function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
             if (Object.keys(updatedFields).length > 0) {
                 console.log('Updating room with data:', updatedFields);
 
-                // Agrega solo los campos que han cambiado al FormData
+
                 Object.keys(updatedFields).forEach(key => {
                     formData.append(key, updatedFields[key]);
                 });
 
-                // Si hay una imagen seleccionada, agregarla al FormData
+
                 if (room.Imagen) {
                     formData.append('Imagen', room.imagen);
                 }
 
                 console.log('Room to update:', roomToUpdate.idSala);
-                await updateRoom(selectedRoom.idSala, formData); // Enviar FormData
-                onRoomUpdated(); // Notifica al componente padre que la sala ha sido actualizada
+                await updateRoom(selectedRoom.idSala, formData);
+                onRoomUpdated();
             } else {
                 console.log('No changes detected, update not required.');
             }
@@ -66,10 +65,10 @@ function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
     };
 
 
-    // Maneja el envío del formulario
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        handleUpdateRoom(); // Llama a la función de actualización
+        handleUpdateRoom();
     };
 
     return (
@@ -145,7 +144,7 @@ function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
                         <select
                             name="Estado"
                             id="Estado"
-                            value={room.Estado ? '1' : '0'} // Mostrar como '1' o '0' en el select
+                            value={room.Estado ? '1' : '0'}
                             onChange={handleChange}
                             className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         >

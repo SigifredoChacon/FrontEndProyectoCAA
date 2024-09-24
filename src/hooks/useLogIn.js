@@ -6,19 +6,19 @@ export const useLogIn = () => {
     const { dispatch } = useAuthContext();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado adicional
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const logIn = async (email, password) => {
         setLoading(true);
         setError(null);
-        setIsAuthenticated(false); // Resetear el estado de autenticación
+        setIsAuthenticated(false);
 
         try {
             const response = await login(JSON.stringify({ email, password }));
             localStorage.setItem('token', JSON.stringify(response.data));
             dispatch({ type: 'LOGIN', payload: response.data });
             setLoading(false);
-            setIsAuthenticated(true); // Indicar que el usuario está autenticado
+            setIsAuthenticated(true);
 
         } catch (err) {
             setLoading(false);
@@ -30,6 +30,6 @@ export const useLogIn = () => {
         logIn,
         loading,
         error,
-        isAuthenticated, // Retornar el nuevo estado
+        isAuthenticated,
     };
 };

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {Routes, Route, useNavigate, useLocation} from 'react-router-dom'; // Importa Routes y Route de react-router-dom
+import {Routes, Route, useNavigate, useLocation} from 'react-router-dom';
 import ResourceList from '../components/Resource/ResourceList.jsx';
 import ResourceFormCreate from '../components/Resource/ResourceFormCreate.jsx';
 import ResourceFormEdit from '../components/Resource/ResourceFormEdit.jsx';
@@ -8,33 +8,32 @@ import { useResourceEdit } from '../hooks/useResourceEdit.js';
 function ResourcesPage() {
     const { selectedResource, handleEditResource, handleResourceUpdated } = useResourceEdit();
     const [isCreating, setIsCreating] = useState(false);
-    const navigate = useNavigate(); // Hook para navegar entre rutas
+    const navigate = useNavigate();
 
     const handleResourceCreated = () => {
         handleResourceUpdated();
         setIsCreating(false);
-        navigate('/resources'); // Navegar de vuelta a la lista de usuarios
+        navigate('/resources');
     };
 
     const handleAddResource = () => {
         setIsCreating(true);
         handleEditResource(null);
-        navigate('/resources/create'); // Navegar a la ruta de creación de usuario
+        navigate('/resources/create');
     };
 
     const handleEdit = (resource) => {
         handleEditResource(resource);
-        navigate(`/resources/edit/${resource.idRecursos}`); // Navegar a la ruta de edición de usuario
+        navigate(`/resources/edit/${resource.idRecursos}`);
     };
 
     const location = useLocation();
 
-    // Verifica si la ruta actual es '/create' o empieza con '/edit'
     const isOnCreateOrEditPage = location.pathname === "/resources/create" || location.pathname.startsWith("/resources/edit");
 
     return (
         <div style={{ maxWidth: '1800px', margin: '0 auto', padding: '0 20px' }}>
-            {/* Mostrar el título y el botón solo si no estás en la página de creación o edición */}
+
             {!isOnCreateOrEditPage && (
                 <>
                     <h1 style={{ textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px' }}>
@@ -63,13 +62,8 @@ function ResourcesPage() {
                 </>
             )}
             <Routes>
-                {/* Ruta para mostrar la lista de usuarios */}
                 <Route path="/" element={<ResourceList onEdit={handleEdit}/>}/>
-
-                {/* Ruta para crear un usuario */}
                 <Route path="create" element={<ResourceFormCreate onResourceCreated={handleResourceCreated}/>}/>
-
-                {/* Ruta para editar un usuario */}
                 <Route
                     path="edit/:id"
                     element={<ResourceFormEdit selectedResource={selectedResource}

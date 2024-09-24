@@ -18,7 +18,7 @@ import {
     TextInput,
 } from '@tremor/react';
 
-import ReservationFormEdit from '../components/Reservations/ReservationFormEdit.jsx'; // Importa el componente de edición de reservaciones
+import ReservationFormEdit from '../components/Reservations/ReservationFormEdit.jsx';
 
 function AllPersonalReservationPage() {
     const { user } = useAuthContext();

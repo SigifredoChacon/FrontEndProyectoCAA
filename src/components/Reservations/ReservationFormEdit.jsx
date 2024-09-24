@@ -13,9 +13,9 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
     const [reservation, setReservation] = useState({ ...selectedPersonalReservation });
     const [resources, setResources] = useState([]);
     const [selectedResources, setSelectedResources] = useState([]);
-    const [snack, setSnack] = useState(Boolean(selectedPersonalReservation.Refrigerio));// Inicializa directamente desde la reservación seleccionada
-    const [observations, setObservations] = useState(selectedPersonalReservation.Observaciones); // Igual que arriba
-    const [roomDetails, setRoomDetails] = useState(null);  // Estado para almacenar los detalles de la sala
+    const [snack, setSnack] = useState(Boolean(selectedPersonalReservation.Refrigerio));
+    const [observations, setObservations] = useState(selectedPersonalReservation.Observaciones);
+    const [roomDetails, setRoomDetails] = useState(null);
     const navigate = useNavigate();
 
 
@@ -29,9 +29,9 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
     useEffect(() => {
         if (resources.length > 0 && !resourcesLoaded) {
             loadInitialSelectedResources();
-            setResourcesLoaded(true);  // Indica que los recursos se han cargado
+            setResourcesLoaded(true);
         }
-    }, [resources, resourcesLoaded]);  // Dependencias de `resources` y `resourcesLoaded`
+    }, [resources, resourcesLoaded]);
 
     const fetchResources = async () => {
         try {
@@ -44,14 +44,13 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
 
     const fetchRoomDetails = async () => {
         try {
-            const room = await getRoomById(reservation.idSala);  // Obtén los detalles de la sala por ID
+            const room = await getRoomById(reservation.idSala);
 
             if (room && room.Imagen && room.Imagen.data) {
-                // Convertir el buffer en un Blob y luego en una URL de imagen
+
                 const blob = new Blob([new Uint8Array(room.Imagen.data)], { type: 'image/jpeg' });
                 const imageUrl = URL.createObjectURL(blob);
 
-                // Guardar la URL de la imagen en los detalles de la sala
                 setRoomDetails({
                     ...room,
                     imageUrl: imageUrl
@@ -90,7 +89,6 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
                 (recurso) => recurso.idRecursos === selectedRecursoId
             );
 
-            // Actualizar los recursos seleccionados
             setSelectedResources([...selectedResources, selectedRecurso]);
 
             // Eliminar el recurso seleccionado de la lista de recursos disponibles
@@ -103,13 +101,13 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
 
 
     const handleRemoveResource = (recurso) => {
-        // Eliminar el recurso de los recursos seleccionados
+
         const updatedSelectedResources = selectedResources.filter(
             (r) => r.idRecursos !== recurso.idRecursos
         );
         setSelectedResources(updatedSelectedResources);
 
-        // Agregar el recurso de vuelta a la lista de recursos disponibles
+
         const updatedResources = [...resources, recurso].filter((item, index, self) =>
             index === self.findIndex((r) => r.idRecursos === item.idRecursos)
         );
@@ -164,12 +162,11 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
         }
     };
 
-    //console.log(roomDetails)
     return (
         <div className="p-8 max-w-full mx-auto">
             <div className="flex flex-col md:flex-row items-start justify-start">
                 <div className="flex-shrink-0 md:w-5/12 p-4 mt-8">
-                    {roomDetails ? (  // Asegúrate de que los detalles de la sala estén disponibles antes de mostrar
+                    {roomDetails ? (
                         <>
                             <div className="text-center text-2xl font-bold mb-4 md:mb-2">
                                 {roomDetails.Nombre}
@@ -191,7 +188,7 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
                             )}
                         </>
                     ) : (
-                        <p>Cargando detalles de la sala...</p>  // Mensaje de carga
+                        <p>Cargando detalles de la sala...</p>
                     )}
                 </div>
 
@@ -202,7 +199,7 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
                             onReservationsChange={() => {
                             }}
                             editable={false}
-                            reservationId={reservation.idReservacion} // Pasar el id de la reserva del usuario
+                            reservationId={reservation.idReservacion}
                         />
                     </div>
 
@@ -216,7 +213,7 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
                                         name="refrigerio"
                                         value="si"
                                         onChange={handleSnackChange}
-                                        checked={snack === true}  // Se selecciona cuando snack es true
+                                        checked={snack === true}
                                         className="mr-2"
                                     />
                                     Sí
@@ -227,7 +224,7 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
                                         name="refrigerio"
                                         value="no"
                                         onChange={handleSnackChange}
-                                        checked={snack === false}  // Se selecciona cuando snack es false
+                                        checked={snack === false}
                                         className="mr-2"
                                     />
                                     No

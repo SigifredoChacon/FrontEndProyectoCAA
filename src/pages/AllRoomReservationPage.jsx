@@ -13,7 +13,7 @@ function AllRoomReservationPage() {
     const fetchActiveRooms = async () => {
         try {
             const data = await getRooms();
-            const activeRooms = data.filter(room => room.Estado === 1); // Filtrar por estado 1 (activas)
+            const activeRooms = data.filter(room => room.Estado === 1);
 
             const roomsWithImageUrls = activeRooms.map((room) => {
                 if (room.Imagen) {

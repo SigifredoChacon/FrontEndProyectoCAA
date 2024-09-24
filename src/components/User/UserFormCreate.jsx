@@ -1,9 +1,8 @@
 import {useEffect, useState} from 'react';
-import PropTypes from 'prop-types'; // Importa PropTypes
+import PropTypes from 'prop-types';
 import {createUser} from '../../services/userService';
-import {getRoles} from "../../services/roleService.jsx"; // Servicio para crear usuarios
+import {getRoles} from "../../services/roleService.jsx";
 
-// Define el estado inicial del usuario
 const initialUserState = {
     cedulaCarnet: 0,
     nombre: '',
@@ -17,31 +16,31 @@ const initialUserState = {
 };
 
 function UserFormCreate({onUserCreated}) {
-    const [user, setUser] = useState(initialUserState); // Estado para el formulario del usuario
-    const [roles, setRoles] = useState([]); // Estado para almacenar la lista de roles
+    const [user, setUser] = useState(initialUserState);
+    const [roles, setRoles] = useState([]);
 
-    // Maneja los cambios en los campos del formulario
+
     const handleChange = (e) => {
         const {name, value} = e.target;
         setUser((prevUser) => ({...prevUser, [name]: value}));
     };
 
     useEffect(() => {
-        fetchRoles(); // Llama a la función para obtener roles al montar el componente
+        fetchRoles();
     }, []);
 
 
-    // Función para obtener la lista de roles desde el backend
+
     const fetchRoles = async () => {
         try {
-            const data = await getRoles(); // Llama al servicio para obtener la lista de roles
-            setRoles(data); // Actualiza el estado con los datos obtenidos
+            const data = await getRoles();
+            setRoles(data);
         } catch (error) {
             console.error('Error al obtener roles:', error);
         }
     }
 
-    // Maneja la creación de un nuevo usuario
+
     const handleCreateUser = async () => {
         try {
 
@@ -51,19 +50,19 @@ function UserFormCreate({onUserCreated}) {
                 idRol: parseInt(user.idRol, 10),
             };
 
-            //console.log(userToCreate);
-            await createUser(userToCreate); // Crea un nuevo usuario
-            onUserCreated(); // Notifica al componente padre que el usuario ha sido creado
-            setUser(initialUserState); // Limpia el formulario
+
+            await createUser(userToCreate);
+            onUserCreated();
+            setUser(initialUserState);
         } catch (error) {
             console.error('Error al crear usuario:', error);
         }
     };
 
-    // Maneja el envío del formulario
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        handleCreateUser(); // Siempre llama a la función de creación
+        handleCreateUser();
     };
 
     return (
@@ -242,9 +241,9 @@ function UserFormCreate({onUserCreated}) {
     );
 }
 
-// Validación de PropTypes para el componente
+
 UserFormCreate.propTypes = {
-    onUserCreated: PropTypes.func.isRequired, // Cambiado de onUserUpdated a onUserCreated
+    onUserCreated: PropTypes.func.isRequired,
 };
 
 export default UserFormCreate;
