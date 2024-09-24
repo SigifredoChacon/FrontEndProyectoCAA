@@ -93,6 +93,10 @@ function CubiclesReservationPage() {
             });
 
         const groupedTimes = groupConsecutiveTimes(timeSlots);
+        const selectedDay = reservations[0].day;
+
+
+        selectedDay.setDate(selectedDay.getDate() + 1);
 
         for (let group of groupedTimes) {
             const horaInicio = group[0];
@@ -101,9 +105,7 @@ function CubiclesReservationPage() {
             const horaFinIncremented = `${String(parseInt(hour, 10) + 1).padStart(2, '0')}:${minute}`;
 
             try {
-                const selectedDay = reservations[0].day;
 
-                selectedDay.setDate(selectedDay.getDate() + 1);
 
                 // Construir la fecha en formato 'YYYY-MM-DD'
                 const year = selectedDay.getFullYear();
