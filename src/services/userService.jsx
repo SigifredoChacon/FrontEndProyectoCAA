@@ -7,7 +7,7 @@ export const getUsers = async () => {
 
 export const createUser = async (user) => {
     const response = await api.post('/users', user);
-    return response.data;
+    return response;
 };
 
 export const login = async (user) => {

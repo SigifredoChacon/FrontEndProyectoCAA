@@ -20,11 +20,15 @@ import {RoomReservationPage} from "./pages/RoomReservationPage.jsx";
 import AllPersonalReservationPage from "./pages/AllPersonalReservationPage.jsx";
 import {ManageReservationsPage} from "./pages/ManageReservationsPage.jsx";
 import Swal from 'sweetalert2';
+import RegisterSelection from "./pages/RegisterSelection.jsx";
+import RegisterStudentPage from "./pages/RegisterPage.jsx";
+import RegisterPage from "./pages/RegisterPage.jsx";
+import ProtectedRoute from "./components/Context/ProtectedRoute.jsx";
 
 
 const navigation = [
     {name: 'Mis reservaciones', href: '/personalReservations', current: false},
-    {name: 'Administrar Reservas', href: '/manageReservations', current: false},
+    {name: 'Administrar Reservas', href: '/manageReservations', current: false, allowedRoles: ['admin']},
 
 ];
 
@@ -259,7 +263,9 @@ function App() {
                 <Routes>
                     <Route path="/" element={<HomePage/>}/>
                     <Route path="/users/*" element={<UsersPage/>}/>
-                    <Route path="/rooms/*" element={<RoomsPage/>}/>
+                    <Route path="/rooms/*" element={<ProtectedRoute allowedRoles={['admin']}>
+                        <UsersPage />
+                    </ProtectedRoute>}/>
                     <Route path="/cubicles/*" element={<CubiclesPage/>}/>
                     <Route path="/login" element={<LogIn/>}/> {/* Nueva ruta para el calendario */}
                     <Route path="/reservationsCubicle/*" element={<CubicleReservationPage/>}/>
@@ -269,7 +275,9 @@ function App() {
                     <Route path="/personalReservations/*" element={<AllPersonalReservationPage/>}/>
                     <Route path="/resources/*" element={<ResourcesPage/>}/>
                     <Route path="/manageReservations/*" element={<ManageReservationsPage/>}/>
-
+                    <Route path="/register" element={<RegisterSelection/>}/>
+                    <Route path="/register/student" element={<RegisterPage role={'Estudiante'}/>}/>
+                    <Route path="/register/teacher" element={<RegisterPage role={'Profesor'}/>}/>
                 </Routes>
 
             </Router>

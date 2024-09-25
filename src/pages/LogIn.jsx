@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLogIn } from "../hooks/useLogIn.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; // Importar Link
 import Swal from 'sweetalert2';
 
 function LogIn() {
@@ -37,10 +37,19 @@ function LogIn() {
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
                 <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mb-6">Iniciar Sesión</h2>
+
+                {/* Texto y enlace para crear una cuenta */}
+                <div className="text-center mb-4">
+                    <span className="text-gray-600">¿No tienes cuenta?</span>{' '}
+                    <Link to="/register" className="text-blue-600 hover:underline">
+                        Regístrate
+                    </Link>
+                </div>
+
                 <div className="grid grid-cols-1 gap-y-6">
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                            Email
+                            Correo Electrónico
                         </label>
                         <input
                             type="text"
@@ -48,7 +57,7 @@ function LogIn() {
                             id="email"
                             onChange={(e) => setEmail(e.target.value)}
                             value={email}
-                            placeholder="Email"
+                            placeholder="Correo Electrónico"
                             required
                             className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
