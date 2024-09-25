@@ -189,13 +189,9 @@ function HomePage() {
         <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-100">
             <button
                 onClick={() => navigate('/allRoomReservation')}
-                className="mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none"
+                className="mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none relative w-full max-w-6xl h-48 md:h-56 lg:h-80 xl:h-96 lg:max-w-full"
                 style={{
-                    position: 'relative',
-                    width: '1200px',
-                    height: '350px',
-                    fontSize: '150px',
-                    color: 'white',
+                    fontSize: 'clamp(2rem, 5vw, 8rem)',
                     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
                     borderRadius: '50px',
                 }}
@@ -214,18 +210,14 @@ function HomePage() {
                         borderRadius: 'inherit',
                     }}
                 ></div>
-                <span style={{position: 'relative', zIndex: 1}}>Salas</span>
+                <span style={{ position: 'relative', zIndex: 1 }}>Salas</span>
             </button>
 
             <button
                 onClick={() => navigate('/reservationsCubicle')}
-                className="mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none"
+                className="mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none relative w-full max-w-6xl h-48 md:h-56 lg:h-80 xl:h-96 lg:max-w-full"
                 style={{
-                    position: 'relative',
-                    width: '1200px',
-                    height: '350px',
-                    fontSize: '150px',
-                    color: 'white',
+                    fontSize: 'clamp(2rem, 5vw, 8rem)',
                     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
                     borderRadius: '50px',
                 }}
@@ -244,12 +236,12 @@ function HomePage() {
                         borderRadius: 'inherit',
                     }}
                 ></div>
-                <span style={{position: 'relative', zIndex: 1}}>Cubículos</span>
+                <span style={{ position: 'relative', zIndex: 1 }}>Cubículos</span>
             </button>
-
-
         </div>
     );
+
+
 }
 
 function App() {
