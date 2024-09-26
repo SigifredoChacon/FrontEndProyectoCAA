@@ -263,8 +263,8 @@ function App() {
                 <Routes>
                     <Route path="/" element={<HomePage/>}/>
                     <Route path="/users/*" element={<UsersPage/>}/>
-                    <Route path="/rooms/*" element={<ProtectedRoute allowedRoles={['admin']}>
-                        <UsersPage />
+                    <Route path="/rooms/*" element={<ProtectedRoute allowedRoles={['Administrador']}>
+                        <RoomsPage/>
                     </ProtectedRoute>}/>
                     <Route path="/cubicles/*" element={<CubiclesPage/>}/>
                     <Route path="/login" element={<LogIn/>}/> {/* Nueva ruta para el calendario */}
