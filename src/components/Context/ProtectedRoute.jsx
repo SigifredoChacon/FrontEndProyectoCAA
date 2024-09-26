@@ -5,8 +5,9 @@ import {useAuthContext} from "../../hooks/useAuthContext.js";
 function ProtectedRoute({ children, allowedRoles }) {
     const { user, role } = useAuthContext();
 
+    console.log(user)
     if (!user) {
-        console.log('No hay usuario');
+
         // Si no está autenticado, redirigir al login
         return <Navigate to="/login" />;
     }

@@ -24,11 +24,13 @@ import RegisterSelection from "./pages/RegisterSelection.jsx";
 import RegisterStudentPage from "./pages/RegisterPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import ProtectedRoute from "./components/Context/ProtectedRoute.jsx";
+import NotAuthorized from "./components/Context/NotAuthorized.jsx";
+import RoleBasedComponent from "./components/Context/RoleBasedComponent.jsx";
 
 
 const navigation = [
-    {name: 'Mis reservaciones', href: '/personalReservations', current: false},
-    {name: 'Administrar Reservas', href: '/manageReservations', current: false, allowedRoles: ['admin']},
+    {name: 'Mis reservaciones', href: '/personalReservations', current: false, allowedRoles: ['all']},
+    {name: 'Administrar Reservas', href: '/manageReservations', current: false, allowedRoles: ['Administrador']},
 
 ];
 
@@ -81,19 +83,21 @@ function Navbar() {
                                 <div className="hidden sm:ml-6 sm:block">
                                     <div className="flex space-x-4">
                                         {navigation.map((item) => (
-                                            <Link
-                                                key={item.name}
-                                                to={item.href}
-                                                className={classNames(
-                                                    item.current
-                                                        ? 'bg-gray-900 text-white'
-                                                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                                                    'rounded-md px-3 py-2 text-sm font-medium'
-                                                )}
-                                                aria-current={item.current ? 'page' : undefined}
-                                            >
-                                                {item.name}
-                                            </Link>
+                                            <RoleBasedComponent allowedRoles={item.allowedRoles}>
+                                                <Link
+                                                    key={item.name}
+                                                    to={item.href}
+                                                    className={classNames(
+                                                        item.current
+                                                            ? 'bg-gray-900 text-white'
+                                                            : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                                        'rounded-md px-3 py-2 text-sm font-medium'
+                                                    )}
+                                                    aria-current={item.current ? 'page' : undefined}
+                                                >
+                                                    {item.name}
+                                                </Link>
+                                            </RoleBasedComponent>
                                         ))}
                                     </div>
                                 </div>
@@ -278,6 +282,7 @@ function App() {
                     <Route path="/register" element={<RegisterSelection/>}/>
                     <Route path="/register/student" element={<RegisterPage role={'Estudiante'}/>}/>
                     <Route path="/register/teacher" element={<RegisterPage role={'Profesor'}/>}/>
+                    <Route path="/not-authorized" element={<NotAuthorized/>}/>
                 </Routes>
 
             </Router>

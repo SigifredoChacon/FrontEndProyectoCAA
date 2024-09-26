@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 function RoleBasedComponent({ allowedRoles, children }) {
     const { user, role } = useAuthContext();
