@@ -44,4 +44,4 @@ export const getReservationByDate = async (date) => {
 export const shareReservation = async (reservation) => {
     const response = await api.post('/reservations/shareReservation', reservation);
     return response.data;
-}
+};
