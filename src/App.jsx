@@ -24,6 +24,7 @@ import RegisterSelection from "./pages/RegisterSelection.jsx";
 import RegisterStudentPage from "./pages/RegisterPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import ProtectedRoute from "./components/Context/ProtectedRoute.jsx";
+import AllReservationPage from "./pages/AllReservationPage.jsx";
 
 
 const navigation = [
@@ -278,8 +279,8 @@ function App() {
                     <Route path="/register" element={<RegisterSelection/>}/>
                     <Route path="/register/student" element={<RegisterPage role={'Estudiante'}/>}/>
                     <Route path="/register/teacher" element={<RegisterPage role={'Profesor'}/>}/>
+                    <Route path="/allReservations/*" element={<AllReservationPage/>}/>
                 </Routes>
-
             </Router>
         </AuthContextProvider>
     );

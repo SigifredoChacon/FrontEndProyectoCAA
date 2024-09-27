@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import { getReservationByUserId, deleteReservation } from '../services/reservationService.jsx';
+import { deleteReservation, getReservation} from '../services/reservationService.jsx';
 import {getNameRoomById, getRoomById} from '../services/roomService.jsx';
 import { getCubicleById } from '../services/cubicleService.jsx';
-import { useAuthContext } from '../hooks/useAuthContext.js';
 import { usePersonalReservation } from '../hooks/usePersonalReservation.js';
 import { getUserById } from '../services/userService.jsx';
-import { shareReservation } from '../services/reservationService.jsx';
+
 import {
     Card,
     Table,
@@ -21,15 +20,11 @@ import {
 } from '@tremor/react';
 
 import ReservationFormEdit from '../components/Reservations/ReservationFormEdit.jsx';
-import ShareReservationModal from '../components/Reservations/ShareReservationModal.jsx';
 
-function AllPersonalReservationPage() {
-    const { user } = useAuthContext();
+function AllReservationPage() {
     const {selectedReservation, handleEditReservation, handleReservationUpdated } = usePersonalReservation();
     const navigate = useNavigate();
     const [reservations, setReservations] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [reservationToShare, setReservationToShare] = useState(null);
 
     useEffect(() => {
         fetchReservations();
@@ -37,9 +32,11 @@ function AllPersonalReservationPage() {
 
     const fetchReservations = async () => {
         try {
-            const data = await getReservationByUserId(user);
+            const data = await getReservation();
             const reservationsWithDetails = await Promise.all(data.map(async (reservation) => {
+
                 let placeName = '';
+                let userName = '';
 
                 if (reservation.idCubiculo) {
                     const cubicle = await getCubicleById(reservation.idCubiculo);
@@ -48,7 +45,10 @@ function AllPersonalReservationPage() {
                     const room = await getNameRoomById(reservation.idSala);
                     placeName = room.Nombre;
                 }
-                return { ...reservation, placeName };
+
+                const user = await getUserById(reservation.idUsuario);
+                userName = user.Nombre;
+                return { ...reservation, placeName, userName };
             }));
 
             setReservations(reservationsWithDetails);
@@ -60,12 +60,12 @@ function AllPersonalReservationPage() {
     const handleEditPersonalReservation = (reservation) => {
 
         handleEditReservation(reservation);
-        navigate(`/personalReservations/edit/${reservation.idReservacion}`);
+        navigate(`/allReservations/edit/${reservation.idReservacion}`);
     };
 
     const handleReservationCreated = () => {
         handleReservationUpdated();
-        navigate('/personalReservations');
+        navigate('/allReservations');
     };
 
     const handleDeleteReservation = async (idReservacion) => {
@@ -82,59 +82,20 @@ function AllPersonalReservationPage() {
         setIsModalOpen(true);
     };
 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-        setReservationToShare(null);
-    };
-
-    const handleShareReservation = async (emails) => {
-        if (!reservationToShare) return;
-
-        try {
-
-            const userData = await getUserById(user);
-            const userName = userData.Nombre;
-
-            // Crea el objeto con la información que necesitas enviar al backend
-            const reservationData = {
-                correosDestinatarios: emails,
-                nombreRemitente: userName,
-                reservationDetails: reservationToShare,
-                observaciones: reservationToShare.Observaciones,
-                idSala: reservationToShare.idSala,
-                idCubiculo: reservationToShare.idCubiculo,
-                refrigerio: reservationToShare.Refrigerio,
-            };
-
-            // Llama al servicio que envía los datos al backend
-            await shareReservation(reservationData);
-
-            alert('Reservación compartida exitosamente');
-            handleCloseModal();
-        } catch (error) {
-            console.error('Error al compartir la reservación:', error);
-            alert('Error al compartir la reservación');
-        }
-    };
-
-
-
-
-
     const location = useLocation();
-    const isOnCreateOrEditPage = location.pathname.startsWith("/personalReservations/edit/");
+    const isOnCreateOrEditPage = location.pathname.startsWith("/allReservations/edit/");
 
 
     return (
         <div style={{ maxWidth: '1800px', margin: '0 auto', padding: '0 20px' }}>
             {!isOnCreateOrEditPage && (
                 <h1 style={{ textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px' }}>
-                    Mis Reservaciones
+                    Reservaciones Generales
                 </h1>
             )}
             <Card style={{ border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px' }}>
                 <Title>
-                    Mis Reservaciones
+                    Reservaciones Generales
                     <Badge style={{
                         marginLeft: '8px',
                         backgroundColor: '#00000010',
@@ -163,6 +124,8 @@ function AllPersonalReservationPage() {
                     <Table className="mt-8">
                         <TableHead>
                             <TableRow>
+                                <TableHeaderCell>Cedula/Carnet</TableHeaderCell>
+                                <TableHeaderCell>Usuario</TableHeaderCell>
                                 <TableHeaderCell>Fecha</TableHeaderCell>
                                 <TableHeaderCell>Hora Inicio</TableHeaderCell>
                                 <TableHeaderCell>Hora Fin</TableHeaderCell>
@@ -176,6 +139,8 @@ function AllPersonalReservationPage() {
                         <TableBody>
                             {reservations.map((reservation) => (
                                 <TableRow key={reservation.idReservacion}>
+                                    <TableCell>{reservation.idUsuario}</TableCell>
+                                    <TableCell>{reservation.userName}</TableCell>
                                     <TableCell>{new Date(reservation.Fecha).toLocaleDateString('es-ES', {
                                         day: 'numeric',
                                         month: 'long',
@@ -210,11 +175,6 @@ function AllPersonalReservationPage() {
                                                       clipRule="evenodd"/>
                                             </svg>
                                         </button>
-                                        <button onClick={() => handleOpenModal(reservation)} >
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-                                                <path fillRule="evenodd" d="M15.75 4.5a3 3 0 1 1 .825 2.066l-8.421 4.679a3.002 3.002 0 0 1 0 1.51l8.421 4.679a3 3 0 1 1-.729 1.31l-8.421-4.678a3 3 0 1 1 0-4.132l8.421-4.679a3 3 0 0 1-.096-.755Z" clipRule="evenodd" />
-                                            </svg>
-                                        </button>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -222,13 +182,8 @@ function AllPersonalReservationPage() {
                     </Table>
                 )}
             </Card>
-            <ShareReservationModal
-                open={isModalOpen}
-                handleClose={handleCloseModal}
-                handleShare={handleShareReservation}
-            />
         </div>
     );
 }
 
-export default AllPersonalReservationPage;
+export default AllReservationPage;
