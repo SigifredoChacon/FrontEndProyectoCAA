@@ -167,7 +167,7 @@ function CubiclesReservationPage() {
 
     return (
         <div style={{ maxWidth: '1800px', margin: '0 auto', padding: '0 20px' }}>
-            <div style={{ display: 'flex', flexDirection: 'row', height: '100vh', padding: '20px' }}>
+            <div style={{display: 'flex', flexDirection: 'row', height: '100vh', padding: '20px'}}>
 
                 <div style={{
                     width: '20%',
@@ -213,7 +213,9 @@ function CubiclesReservationPage() {
                     backgroundColor: '#ffffff',
                     padding: '20px',
                     borderRadius: '8px',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                    flexGrow: 1,
+                    minHeight: 'min-content'  // Asegura que el contenedor sea lo suficientemente grande como para ajustarse al contenido mínimo
                 }}>
                     <div style={{
                         display: 'flex',
@@ -253,16 +255,19 @@ function CubiclesReservationPage() {
                             </button>
                         </div>
                     </div>
-                    {selectedCubicleR ? (
-                        <Calendar
-                            key={calendarKey}
-                            onReservationsChange={handleReservationsChange}
-                            selectedCubicleId={selectedCubicleR.idCubiculo}
-                        />
-                    ) : (
-                        <p>Por favor, selecciona un cubículo para continuar.</p>
-                    )}
+                    <div style={{flexGrow: 1}}>
+                        {selectedCubicleR ? (
+                            <Calendar
+                                key={calendarKey}
+                                onReservationsChange={handleReservationsChange}
+                                selectedCubicleId={selectedCubicleR.idCubiculo}
+                            />
+                        ) : (
+                            <p>Por favor, selecciona un cubículo para continuar.</p>
+                        )}
+                    </div>
                 </div>
+
             </div>
         </div>
     );

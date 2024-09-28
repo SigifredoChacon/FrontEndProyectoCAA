@@ -44,7 +44,7 @@ const CalendarRooms = ({ selectedRoomId, onReservationsChange }) => {
     }, [selectedRoomId, startOfSelectedWeek]);
 
     const handleDateChange = (event) => {
-        const newDate = new Date(event.target.value);
+        const newDate = new Date(event.target.value + 'T00:00:00');
 
         if (reservations.length > 0) {
             if (isSameWeek(newDate, selectedDate, { weekStartsOn: 1 })) {
