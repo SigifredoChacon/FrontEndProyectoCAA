@@ -83,7 +83,7 @@ function Navbar() {
                                 <div className="hidden sm:ml-6 sm:block">
                                     <div className="flex space-x-4">
                                         {navigation.map((item) => (
-                                            <RoleBasedComponent allowedRoles={item.allowedRoles}>
+
                                                 <Link
                                                     key={item.name}
                                                     to={item.href}
@@ -97,7 +97,7 @@ function Navbar() {
                                                 >
                                                     {item.name}
                                                 </Link>
-                                            </RoleBasedComponent>
+
                                         ))}
                                     </div>
                                 </div>
