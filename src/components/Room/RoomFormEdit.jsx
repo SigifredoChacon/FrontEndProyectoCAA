@@ -14,14 +14,14 @@ function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
         }, {});
     };
 
-    console.log(room.Nombre);
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
         if (name === 'imagen') {
             setRoom((prevRoom) => ({ ...prevRoom, Imagen: files[0] }));
-        }
-        else {
+        } else if (name === 'Estado') {
+            setRoom((prevRoom) => ({ ...prevRoom, Estado: value === '1' }));
+        } else {
             setRoom((prevRoom) => ({ ...prevRoom, [name]: value }));
         }
     };
@@ -86,6 +86,7 @@ function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
                             name="imagen"
                             id="imagen"
                             onChange={handleChange}
+                            accept="image/png, image/jpeg, image/jpg"
                             className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                     </div>

@@ -7,12 +7,12 @@ import {
     Badge
 } from '@tremor/react';
 
-function RoomList({ onEdit }) {
+function RoomList({ onEdit, reload}) {
     const [rooms, setRooms] = useState([]);
 
     useEffect(() => {
         fetchRooms();
-    }, []);
+    }, [reload]);
 
     const fetchRooms = async () => {
         try {
