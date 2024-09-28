@@ -77,10 +77,6 @@ function AllReservationPage() {
         }
     };
 
-    const handleOpenModal = (reservation) => {
-        setReservationToShare(reservation);
-        setIsModalOpen(true);
-    };
 
     const location = useLocation();
     const isOnCreateOrEditPage = location.pathname.startsWith("/allReservations/edit/");

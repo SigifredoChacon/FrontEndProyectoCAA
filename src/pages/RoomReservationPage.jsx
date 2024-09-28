@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import CalendarRooms from "../components/Calendar/CalendarRooms.jsx";
-import {useLocation, useNavigate} from 'react-router-dom';
+import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import {useAuthContext} from "../hooks/useAuthContext.js";
 import {useRoomReservationEdit} from "../hooks/useRoomReservationEdit.js";
 import {createReservation} from "../services/reservationService.jsx";
 import {getResources} from "../services/resourcesService.jsx";
+import UserExternalFormCreate from "../components/User/UserExternalFormCreate.jsx";
 
 
 const initialRoomReservationState = {
@@ -63,6 +64,8 @@ export function RoomReservationPage() {
     const [snack, setSnack] = useState(false);
     const [observations, setObservations] = useState('');
     const navigate = useNavigate();
+    const idExternalRef = useRef(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         fetchResources();
@@ -131,7 +134,7 @@ export function RoomReservationPage() {
 
     const handleCreateRoomReservation = async () => {
         handleAddRoomReservation();
-
+        console.log("Observaciones a enviar:", observations);
         const timeSlots = reservations
             .map(reservation => reservation.time)
             .sort((a, b) => {
@@ -184,9 +187,44 @@ export function RoomReservationPage() {
         setReservation(initialRoomReservationState);
     };
 
+    const handleCreateExternalReservation = () => {
+        setIsModalOpen(true); // Abrir el modal
+    };
+
+    // Función para cerrar el modal
+    const handleCloseModal = () => {
+        setIsModalOpen(false); // Cerrar el modal
+    };
+
+    const handleUserCreated = (idExternal) => {
+        if (idExternal !== undefined) {
+            idExternalRef.current = parseInt(idExternal, 10);
+            console.log("ID externo recibido y almacenado en la referencia:", idExternalRef.current);
+
+            setReservation(prevReservation => ({
+                ...prevReservation,
+                idUsuario: idExternalRef.current,
+            }));
+
+            setIsModalOpen(false); // Cerrar el modal después de crear el usuario
+
+            // Navegar de vuelta a la página de reservas, manteniendo la información de la sala
+            navigate('/reservationsRoom', { state: { selectedRoom } });
+        } else {
+            console.warn("Se intentó asignar un ID externo undefined.");
+        }
+    };
+
+
+
+
+
+
     return (
         <div className="p-8 max-w-full mx-auto">
-
+            <Routes>
+                <Route path="createExternalUser" element={<UserExternalFormCreate onUserCreated={handleUserCreated} />} />
+            </Routes>
             <div className="flex flex-col md:flex-row items-start justify-start">
 
                 <div className="flex-shrink-0 md:w-5/12 p-4 mt-8">
@@ -296,7 +334,20 @@ export function RoomReservationPage() {
 
 
                     <div className="flex justify-end space-x-4">
-                        <button onClick={handleRoomReservationCreated} className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
+                        <button
+                            onClick={handleCreateExternalReservation}
+                            style={{
+                                padding: '10px 20px',
+                                marginRight: '10px',
+                                backgroundColor: '#004080',
+                                color: '#fff',
+                                border: 'none',
+                                borderRadius: '4px',
+                                cursor: 'pointer'
+                            }}>Reservar Externo
+                        </button>
+                        <button onClick={handleRoomReservationCreated}
+                                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
                             Cancelar
                         </button>
                         <button onClick={handleCreateRoomReservation}
@@ -305,6 +356,22 @@ export function RoomReservationPage() {
                         </button>
                     </div>
                 </div>
+                {isModalOpen && (
+                    <div style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(0,0,0,0.5)',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        zIndex: 1000
+                    }}>
+                        <UserExternalFormCreate onUserCreated={handleUserCreated} onCancel={handleCloseModal} />
+                    </div>
+                )}
             </div>
         </div>
     )

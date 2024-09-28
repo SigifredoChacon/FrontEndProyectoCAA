@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useState, useEffect, useRef} from 'react';
+import {Route, Routes, useNavigate} from 'react-router-dom';
 import { useCubicleReservationEdit } from "../hooks/useCubicleReservationEdit.js";
 import { useCubicleEdit } from "../hooks/useCubicleEdit.js";
 import Calendar from '../components/Calendar/Calendar.jsx';
 import { getCubicles } from '../services/cubicleService.jsx';
 import { createReservation } from "../services/reservationService.jsx";
 import {useAuthContext} from "../hooks/useAuthContext.js";
+import UserExternalFormCreate from "../components/User/UserExternalFormCreate.jsx";
+
 
 
 const initialCubicleReservationState = {
@@ -59,6 +61,8 @@ function CubiclesReservationPage() {
     const [cubicles, setCubicles] = useState([]);
     const [selectedCubicleR, setSelectedCubicle] = useState(null);
     const [calendarKey, setCalendarKey] = useState(0);
+    const idExternalRef = useRef(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -66,6 +70,8 @@ function CubiclesReservationPage() {
 
     useEffect(() => {
         fetchCubicles();
+
+
     }, []);
 
     const fetchCubicles = async () => {
@@ -137,6 +143,7 @@ function CubiclesReservationPage() {
     };
 
     const handleSubmit = (e) => {
+        //console.log(reservation.idUsuario);
         e.preventDefault();
         handleCreateCubicleReservation();
     };
@@ -165,9 +172,41 @@ function CubiclesReservationPage() {
         handleEditCubicleReservation(null);
     };
 
+    const handleCreateExternalReservation = () => {
+        setIsModalOpen(true); // Abrir el modal
+    };
+
+    // Función para cerrar el modal
+    const handleCloseModal = () => {
+        setIsModalOpen(false); // Cerrar el modal
+    };
+
+
+    const handleUserCreated = (idExternal) => {
+        if (idExternal !== undefined) {
+            idExternalRef.current = parseInt(idExternal, 10);
+            console.log("ID externo recibido y almacenado en la referencia:", idExternalRef.current);
+
+            setReservation(prevReservation => ({
+                ...prevReservation,
+                idUsuario: idExternalRef.current,
+            }));
+
+            setIsModalOpen(false); // Cerrar el modal después de crear el usuario
+            navigate('/reservationsCubicle');
+        } else {
+            console.warn("Se intentó asignar un ID externo undefined.");
+        }
+    };
+
+
+
     return (
         <div style={{ maxWidth: '1800px', margin: '0 auto', padding: '0 20px' }}>
             <div style={{display: 'flex', flexDirection: 'row', height: '100vh', padding: '20px'}}>
+                <Routes>
+                    <Route path="createExternalUser" element={<UserExternalFormCreate onUserCreated={handleUserCreated} />} />
+                </Routes>
 
                 <div style={{
                     width: '20%',
@@ -231,6 +270,20 @@ function CubiclesReservationPage() {
                         </h2>
                         <div>
                             <button
+                                onClick={handleCreateExternalReservation}
+                                style={{
+                                    padding: '10px 20px',
+                                    marginRight: '10px',
+                                    backgroundColor: '#004080',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Reservar Externo
+                            </button>
+                            <button
                                 onClick={handleCubicleReservationCreated}
                                 style={{
                                     padding: '10px 20px',
@@ -267,7 +320,22 @@ function CubiclesReservationPage() {
                         )}
                     </div>
                 </div>
-
+                {isModalOpen && (
+                    <div style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(0,0,0,0.5)',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        zIndex: 1000
+                    }}>
+                        <UserExternalFormCreate onUserCreated={handleUserCreated} onCancel={handleCloseModal} />
+                    </div>
+                )}
             </div>
         </div>
     );
