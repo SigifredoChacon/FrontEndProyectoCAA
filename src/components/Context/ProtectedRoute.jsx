@@ -1,19 +1,24 @@
+import React from "react";
 import { Navigate } from "react-router-dom";
-import {useAuthContext} from "../../hooks/useAuthContext.js";
-
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 function ProtectedRoute({ children, allowedRoles }) {
-    const { user, role } = useAuthContext();
+    const { user, role, loading } = useAuthContext();
 
-    console.log(user)
+    if (loading) {
+        // Mostrar un spinner o algún componente de carga mientras se obtiene el usuario
+        return <div>Loading...</div>;  // Puedes personalizar este loader
+    }
+
     if (!user) {
-
-        // Si no está autenticado, redirigir al login
+        // Si no hay usuario autenticado, redirigir al login
         return <Navigate to="/login" />;
     }
 
+    if(allowedRoles.includes('all')) return children
+
     if (!allowedRoles.includes(role)) {
-        // Si no tiene el rol permitido, redirigir a una página no autorizada o la página de inicio
+        // Si el usuario no tiene el rol permitido, redirigir a una página no autorizada
         return <Navigate to="/not-authorized" />;
     }
 

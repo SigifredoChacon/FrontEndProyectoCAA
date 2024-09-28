@@ -1,4 +1,4 @@
-import {createContext , useReducer, useEffect} from "react";
+import {createContext, useReducer, useEffect, useState} from "react";
 
 
 import {jwtDecode} from "jwt-decode";
@@ -26,18 +26,21 @@ const authReducer = (state, action) => {
     }
 }
 
-export const AuthContextProvider = ({children}) => {
-   const [state , dispatch] = useReducer(authReducer, {user: null})
+export const AuthContextProvider = ({ children }) => {
+    const [state, dispatch] = useReducer(authReducer, { user: null, role: null });
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('token'))
-        if(user) {
-            dispatch({type: 'LOGIN', payload: user})
+        const token = localStorage.getItem('token');
+        if (token) {
+            dispatch({ type: 'LOGIN', payload: token });
         }
+        setLoading(false);  // Finaliza la carga después de procesar el token
     }, []);
+
     return (
-         <AuthContext.Provider value={{...state, dispatch}}>
-              {children}
-         </AuthContext.Provider>
-    )
+        <AuthContext.Provider value={{ ...state, dispatch, loading }}>
+            {children}
+        </AuthContext.Provider>
+    );
 }

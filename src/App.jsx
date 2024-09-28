@@ -4,7 +4,7 @@ import RoomsPage from "./pages/RoomPage.jsx";
 import CubiclesPage from "./pages/CubiclePage.jsx";
 import LogIn from "./pages/LogIn.jsx";
 import React, {useEffect} from 'react';
-import {BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation} from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation, BrowserRouter} from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import {AuthContextProvider} from "./components/Context/AuthContext.jsx";
@@ -84,7 +84,7 @@ function Navbar() {
                                 <div className="hidden sm:ml-6 sm:block">
                                     <div className="flex space-x-4">
                                         {navigation.map((item) => (
-
+                                            <RoleBasedComponent allowedRoles={item.allowedRoles}>
                                                 <Link
                                                     key={item.name}
                                                     to={item.href}
@@ -98,6 +98,7 @@ function Navbar() {
                                                 >
                                                     {item.name}
                                                 </Link>
+                                            </RoleBasedComponent>
 
                                         ))}
                                     </div>
@@ -193,6 +194,7 @@ function Navbar() {
 
 function HomePage() {
     const navigate = useNavigate();
+    const{role} = useAuthContext();
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-100">
@@ -222,7 +224,7 @@ function HomePage() {
                 <span style={{ position: 'relative', zIndex: 1 }}>Salas</span>
             </button>
 
-            <button
+            {!(role == 'Estudiante')&& (<button
                 onClick={() => navigate('/reservationsCubicle')}
                 className="mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none relative w-full max-w-6xl h-48 md:h-56 lg:h-80 xl:h-96 lg:max-w-full"
                 style={{
@@ -247,6 +249,7 @@ function HomePage() {
                 ></div>
                 <span style={{ position: 'relative', zIndex: 1 }}>Cubículos</span>
             </button>
+            )}
         </div>
     );
 
@@ -257,37 +260,68 @@ function App() {
 
 
     return (
-        <AuthContextProvider>
-        <Router>
+        <>
+        <Navbar/>
 
-            {/* Navbar que estará visible en todas las vistas */}
-            <Navbar/>
+        <Routes>
 
-            {/* Definición de las rutas de la aplicación */}
+                <Route path="/" element={<HomePage/>}/>
 
-                <Routes>
-                    <Route path="/" element={<HomePage/>}/>
-                    <Route path="/users/*" element={<UsersPage/>}/>
-                    <Route path="/rooms/*" element={<ProtectedRoute allowedRoles={['Administrador']}>
+                <Route path="/users/*" element={
+                    <ProtectedRoute allowedRoles={['Administrador']}>
+                        <UsersPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/rooms/*" element={
+                    <ProtectedRoute allowedRoles={['Administrador']}>
                         <RoomsPage/>
-                    </ProtectedRoute>}/>
-                    <Route path="/cubicles/*" element={<CubiclesPage/>}/>
-                    <Route path="/login" element={<LogIn/>}/> {/* Nueva ruta para el calendario */}
-                    <Route path="/reservationsCubicle/*" element={<CubicleReservationPage/>}/>
-                    <Route path="/generalEmails" element={<EmailPage/>}/>
-                    <Route path="/allRoomReservation/*" element={<AllRoomReservationPage/>}/>
-                    <Route path="/reservationsRoom" element={<RoomReservationPage/>}/>
-                    <Route path="/personalReservations/*" element={<AllPersonalReservationPage/>}/>
-                    <Route path="/resources/*" element={<ResourcesPage/>}/>
-                    <Route path="/manageReservations/*" element={<ManageReservationsPage/>}/>
-                    <Route path="/register" element={<RegisterSelection/>}/>
-                    <Route path="/register/student" element={<RegisterPage role={'Estudiante'}/>}/>
-                    <Route path="/register/teacher" element={<RegisterPage role={'Profesor'}/>}/>
-                    <Route path="/allReservations/*" element={<AllReservationPage/>}/>
-                    <Route path="/not-authorized" element={<NotAuthorized/>}/>
-                </Routes>
-            </Router>
-        </AuthContextProvider>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/cubicles/*" element={
+                    <ProtectedRoute allowedRoles={['Administrador']}>
+                        <CubiclesPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/reservationsCubicle/*" element={
+                    <ProtectedRoute allowedRoles={['Administrador', 'Profesor']}>
+                        <CubicleReservationPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/generalEmails" element={
+                    <ProtectedRoute allowedRoles={['Administrador']}>
+                        <EmailPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/personalReservations/*" element={
+                    <ProtectedRoute allowedRoles={['all']}>
+                        <AllPersonalReservationPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/resources/*" element={
+                    <ProtectedRoute allowedRoles={['Administrador']}>
+                        <ResourcesPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/manageReservations/*" element={
+                    <ProtectedRoute allowedRoles={['Administrador']}>
+                        <ManageReservationsPage/>
+                    </ProtectedRoute>}
+                />
+                <Route path="/allReservations/*" element={
+                    <ProtectedRoute allowedRoles={['Administrador']}>
+                        <AllReservationPage/>
+                    </ProtectedRoute>
+                }/>
+
+                <Route path="/login" element={<LogIn/>}/> {/* Nueva ruta para el calendario */}
+                <Route path="/register" element={<RegisterSelection/>}/>
+                <Route path="/register/student" element={<RegisterPage role={'Estudiante'}/>}/>
+                <Route path="/register/teacher" element={<RegisterPage role={'Profesor'}/>}/>
+                <Route path="/allRoomReservation/*" element={<AllRoomReservationPage/>}/>
+                <Route path="/reservationsRoom" element={<RoomReservationPage/>}/>
+                <Route path="/not-authorized" element={<NotAuthorized/>}/>
+        </Routes>
+        </>
     );
 }
 

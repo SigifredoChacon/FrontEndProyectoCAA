@@ -12,7 +12,7 @@ function RoleBasedComponent({ allowedRoles, children }) {
         return <>{children}</>;
     }
 
-    return null; // No renderiza nada si el rol no es permitido
+    return null;
 }
 
 export default RoleBasedComponent;
