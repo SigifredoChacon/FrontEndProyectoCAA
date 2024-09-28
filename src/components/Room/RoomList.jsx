@@ -7,12 +7,12 @@ import {
     Badge
 } from '@tremor/react';
 
-function RoomList({ onEdit }) {
+function RoomList({ onEdit, reload}) {
     const [rooms, setRooms] = useState([]);
 
     useEffect(() => {
         fetchRooms();
-    }, []);
+    }, [reload]);
 
     const fetchRooms = async () => {
         try {
@@ -71,7 +71,7 @@ function RoomList({ onEdit }) {
                              style={{width: '100%', height: '400px', objectFit: 'cover', borderRadius: '12px'}}/>
                         <h3 style={{marginTop: '12px', marginBottom: '8px', fontSize: '1.25rem'}}>{room.Nombre}</h3>
                         <p style={{marginBottom: '12px', color: '#666', textAlign: 'center'}}>
-                            {room.Estado === 1 ? 'Activa' : 'Desactivada'}
+                            {room.Estado === 1 ? 'Activa' : 'Bloqueada'}
                         </p>
                         <div style={{display: 'flex', gap: '8px', justifyContent: 'center'}}>
                             <button onClick={() => onEdit(room)}

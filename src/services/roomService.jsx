@@ -51,3 +51,13 @@ export const getNameRoomById = async (id) => {
     const response = await api.get(`/rooms/getName/${id}`);
     return response.data;
 }
+
+export const lockRoom = async () => {
+    const response = await api.patch(`/rooms/roomLock`);
+    return response.data;
+}
+
+export const unLockRoom = async () => {
+    const response = await api.patch(`/rooms/roomUnLock`);
+    return response.data;
+}

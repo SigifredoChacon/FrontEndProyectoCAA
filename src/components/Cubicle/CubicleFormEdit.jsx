@@ -21,7 +21,15 @@ function CubicleFormEdit({ selectedCubicle, onCubicleUpdated }) {
                 ...prevCubicle,
                 [name]: value === '1' ? true : false
             }));
-        } else {
+
+        }
+        else if (name === 'Estado') {
+            setCubicle((prevCubicle) => ({
+                ...prevCubicle,
+                [name]: value === '1' ? true : false
+            }));
+        }
+        else {
             setCubicle((prevCubicle) => ({ ...prevCubicle, [name]: value }));
         }
     };
@@ -109,6 +117,21 @@ function CubicleFormEdit({ selectedCubicle, onCubicleUpdated }) {
                         >
                             <option value="1">Tiene ventana</option>
                             <option value="0">No tiene ventana</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label htmlFor="Estado" className="block text-sm font-medium text-gray-700">
+                            Estado
+                        </label>
+                        <select
+                            name="Estado"
+                            id="Estado"
+                            value={cubicle.Estado ? '1' : '0'}
+                            onChange={handleChange}
+                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        >
+                            <option value="1">Activo</option>
+                            <option value="0">Bloqueado</option>
                         </select>
                     </div>
                 </div>

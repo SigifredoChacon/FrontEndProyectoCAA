@@ -77,7 +77,8 @@ function CubiclesReservationPage() {
     const fetchCubicles = async () => {
         try {
             const data = await getCubicles();
-            setCubicles(data);
+            const filteredData = data.filter(cubicle => cubicle.Estado === 1);
+            setCubicles(filteredData);
         } catch (error) {
             console.error('Error al obtener los cubículos:', error);
         }
