@@ -11,8 +11,8 @@ function RoomsPage() {
     const [isCreating, setIsCreating] = useState(false);
     const [refresh, setRefresh] = useState(false);
     const navigate = useNavigate();
-    const [isLocked, setIsLocked] = useState(() => {
-        const savedState = localStorage.getItem('isLocked');
+    const [isRoomLocked, setIsRoomLocked] = useState(() => {
+        const savedState = localStorage.getItem('isRoomLocked');
         return savedState === 'true';
     });
 
@@ -30,14 +30,14 @@ function RoomsPage() {
 
     // Función para que las salas se bloqueen o desbloqueen dependiendo del caso
     const handleBlockRoom = async () => {
-        if (isLocked) {
+        if (isRoomLocked) {
             await unLockRoom();
-            setIsLocked(false);
-            localStorage.setItem('isLocked', 'false');
+            setIsRoomLocked(false);
+            localStorage.setItem('isRoomLocked', 'false');
         } else {
             await lockRoom();
-            setIsLocked(true);
-            localStorage.setItem('isLocked', 'true');
+            setIsRoomLocked(true);
+            localStorage.setItem('isRoomLocked', 'true');
         }
 
         setRefresh(prev => !prev);
@@ -59,7 +59,7 @@ function RoomsPage() {
                         Gestión de Salas
                     </h1>
 
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
+                    <div style={{display: 'flex', justifyContent: 'flex-end', marginBottom: '20px'}}>
                         <button
                             onClick={handleAddRoom}
                             style={{
@@ -82,7 +82,7 @@ function RoomsPage() {
                         <button
                             onClick={handleBlockRoom}
                             style={{
-                                backgroundColor: '#fc1919',
+                                backgroundColor: isRoomLocked ? '#28a745' : '#fc1919',
                                 color: 'white',
                                 border: 'none',
                                 padding: '10px 20px',
@@ -91,19 +91,21 @@ function RoomsPage() {
                                 cursor: 'pointer',
                                 transition: 'background-color 0.3s ease'
                             }}
-                            onMouseOver={(e) => e.target.style.backgroundColor = '#fe5757'}
-                            onMouseOut={(e) => e.target.style.backgroundColor = '#fc1919'}
+                            onMouseOver={(e) => e.target.style.backgroundColor = isRoomLocked ? '#4bd162' : '#fe5757'}
+                            onMouseOut={(e) => e.target.style.backgroundColor = isRoomLocked ? '#28a745' : '#fc1919'}
                         >
-                            {isLocked ? 'Desbloquear Salas' : 'Bloquear Salas'}
+                            {isRoomLocked ? 'Desbloquear Salas' : 'Bloquear Salas'}
                         </button>
+
                     </div>
                 </>
             )}
 
             <Routes>
-                <Route path="/" element={<RoomList onEdit={handleEdit} reload={refresh}  />} />
-                <Route path="create" element={<RoomFormCreate onRoomCreated={handleRoomCreated} />} />
-                <Route path="edit/:id" element={<RoomFormEdit selectedRoom={selectedRoom} onRoomUpdated={handleRoomCreated} />} />
+                <Route path="/" element={<RoomList onEdit={handleEdit} reload={refresh}/>}/>
+                <Route path="create" element={<RoomFormCreate onRoomCreated={handleRoomCreated}/>}/>
+                <Route path="edit/:id"
+                       element={<RoomFormEdit selectedRoom={selectedRoom} onRoomUpdated={handleRoomCreated}/>}/>
             </Routes>
         </div>
     );

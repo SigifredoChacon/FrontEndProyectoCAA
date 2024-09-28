@@ -14,12 +14,12 @@ import {
 } from '@tremor/react';
 
 
-function CubicleList({ onEdit }) {
+function CubicleList({ onEdit, reload }) {
     const [cubicles, setCubicles] = useState([]);
 
     useEffect(() => {
         fetchCubicles();
-    }, []);
+    }, [reload]);
 
 
     const fetchCubicles = async () => {
@@ -68,6 +68,12 @@ function CubicleList({ onEdit }) {
                         <TableHeaderCell >
                             Ventana
                         </TableHeaderCell>
+                        <TableHeaderCell >
+                            Estado
+                        </TableHeaderCell>
+                        <TableHeaderCell >
+                            Acciones
+                        </TableHeaderCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -77,6 +83,9 @@ function CubicleList({ onEdit }) {
                             <TableCell>{cubicle.Nombre}</TableCell>
                             <TableCell>
                                 {cubicle.Ventana === 1 ? 'Tiene ventana' : 'No tiene ventana'}
+                            </TableCell>
+                            <TableCell>
+                                {cubicle.Estado === 1 ? 'Activo' : 'Bloqueado'}
                             </TableCell>
                             <TableCell className="text-left">
                                 <button onClick={() => onEdit(cubicle)} >

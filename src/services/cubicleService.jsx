@@ -23,4 +23,14 @@ export const deleteCubicle = async (id) => {
 export const getCubicleById = async (id) => {
     const response = await api.get(`/cubicles/${id}`);
     return response.data;
-}
+};
+
+export const lockCubicle = async () => {
+    const response = await api.patch(`/cubicles/cubicleLock`);
+    return response.data;
+};
+
+export const unLockCubicle = async () => {
+    const response = await api.patch(`/cubicles/cubicleUnLock`);
+    return response.data;
+};
