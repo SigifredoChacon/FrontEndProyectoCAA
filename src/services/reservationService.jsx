@@ -45,3 +45,21 @@ export const shareReservation = async (reservation) => {
     const response = await api.post('/reservations/shareReservation', reservation);
     return response.data;
 };
+export const getReservationsByCubicleIdAndWeek = async (cubicleId, startDate, endDate) => {
+    const response = await api.get(`/reservations/getbyCubicleIdDate/${cubicleId}`, {
+        params: {
+            startDate,
+            endDate
+        }
+    });
+    return response.data;
+};
+export const getReservationsByRoomIdAndWeek = async (roomId, startDate, endDate) => {
+    const response = await api.get(`/reservations/getbyRoomIdDate/${roomId}`, {
+        params: {
+            startDate,
+            endDate
+        }
+    });
+    return response.data;
+}

@@ -3,9 +3,9 @@ import { format, startOfWeek, addDays, isSameWeek, startOfDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 import TimeSlot from './TimeSlot';
 import PropTypes from 'prop-types';
-import {getReservationByRoomId} from "../../services/reservationService.jsx";
+import {getReservationsByRoomIdAndWeek} from "../../services/reservationService.jsx";
 
-const timeSlots = ['07:30', '08:30', '09:30', '10:30', '11:30', '12:30', '13:30', '14:30', '15:30', '16:30'];
+const timeSlots = ['07:30', '08:30', '09:30', '10:30', '11:30', '12:30', '13:30', '14:30', '15:30'];
 
 const CalendarRooms = ({ selectedRoomId, onReservationsChange }) => {
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -19,14 +19,12 @@ const CalendarRooms = ({ selectedRoomId, onReservationsChange }) => {
     useEffect(() => {
         const fetchReservations = async () => {
             try {
-                const response = await getReservationByRoomId(selectedRoomId);
+                const startDate = format(startOfSelectedWeek, 'yyyy-MM-dd');
+                const endDate = format(addDays(startOfSelectedWeek, 6), 'yyyy-MM-dd');
 
-                const filteredReservations = response.filter(reservation => {
-                    const reservationDate = new Date(reservation.Fecha);
-                    return isSameWeek(reservationDate, startOfSelectedWeek, { weekStartsOn: 1 });
-                });
+                const response = await getReservationsByRoomIdAndWeek(selectedRoomId, startDate, endDate);
 
-                const formattedReservations = filteredReservations.map(reservation => ({
+                const formattedReservations = response.map(reservation => ({
                     ...reservation,
                     day: new Date(reservation.Fecha),
                 }));
@@ -40,7 +38,6 @@ const CalendarRooms = ({ selectedRoomId, onReservationsChange }) => {
         if (selectedRoomId) {
             fetchReservations();
         }
-0
     }, [selectedRoomId, startOfSelectedWeek]);
 
     const handleDateChange = (event) => {
@@ -127,7 +124,8 @@ const CalendarRooms = ({ selectedRoomId, onReservationsChange }) => {
                     type="date"
                     value={format(selectedDate, 'yyyy-MM-dd')}
                     onChange={handleDateChange}
-                    className="p-2 text-base rounded-md border border-gray-300 bg-white text-gray-800 focus:border-green-500 focus:outline-none transition duration-300 ease-in-out max-w-full"
+                    min={format(new Date(), 'yyyy-MM-dd')}  // Aquí establecemos la fecha mínima como hoy
+                    className="p-2 text-base rounded border border-gray-300 bg-white text-gray-800 focus:border-green-500 focus:outline-none"
                     disabled={reservations.length > 0 && selectedDay !== null}
                 />
             </div>
@@ -151,17 +149,21 @@ const CalendarRooms = ({ selectedRoomId, onReservationsChange }) => {
                             <td className="p-3 border border-gray-300 font-bold bg-gray-200 text-center text-sm">
                                 {time}
                             </td>
-                            {daysOfWeek.map((day, colIndex) => (
-                                <td key={colIndex} className="p-3 border border-gray-300 text-center text-sm">
-                                    <TimeSlot
-                                        day={day}
-                                        time={time}
-                                        isReserved={isReserved(day, time)}
-                                        onReserve={handleReserve}
-                                        disabled={isReserved(day, time) === 'reserved' || (selectedDay && selectedDay.getTime() !== day.getTime())}
-                                    />
-                                </td>
-                            ))}
+                            {daysOfWeek.map((day, colIndex) => {
+                                const isPastDate = day < startOfDay(new Date());  // Comparar si es una fecha pasada
+
+                                return (
+                                    <td key={colIndex} className="p-3 border border-gray-200 text-center">
+                                        <TimeSlot
+                                            day={day}
+                                            time={time}
+                                            isReserved={isReserved(day, time)}
+                                            onReserve={handleReserve}
+                                            disabled={isReserved(day, time) === 'reserved' || isPastDate || (selectedDay && selectedDay.getTime() !== day.getTime())}
+                                        />
+                                    </td>
+                                );
+                            })}
                         </tr>
                     ))}
                     </tbody>
