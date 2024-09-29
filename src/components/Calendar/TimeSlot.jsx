@@ -1,8 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {useAuthContext} from "../../hooks/useAuthContext.js";
+import Swal from "sweetalert2";
+
 
 const TimeSlot = ({ day, time, isReserved, onReserve, disabled }) => {
+    const {user} = useAuthContext();
     const handleClick = () => {
+        if(!user) {
+            Swal.fire({
+                title: '¡Tienes que estar registrado!',
+                text: 'Para poder realizar una reservación, por favor, inicia sesión 🤗',
+                icon: 'warning',
+                showConfirmButton: true,
+                confirmButtonText: 'Aceptar',  // Texto del botón
+            });
+            return;
+        }
         if (!disabled) {
             onReserve(day, time);
         }

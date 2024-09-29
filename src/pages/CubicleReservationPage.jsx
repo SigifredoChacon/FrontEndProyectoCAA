@@ -7,7 +7,8 @@ import { getCubicles } from '../services/cubicleService.jsx';
 import { createReservation } from "../services/reservationService.jsx";
 import {useAuthContext} from "../hooks/useAuthContext.js";
 import UserExternalFormCreate from "../components/User/UserExternalFormCreate.jsx";
-
+import Swal from "sweetalert2";
+import ReservationForUser from "../components/Reservations/ReservationForUser.jsx";
 
 
 const initialCubicleReservationState = {
@@ -51,6 +52,7 @@ function groupConsecutiveTimes(timeSlots) {
 }
 
 function CubiclesReservationPage() {
+    const {role} = useAuthContext();
     const {user}=useAuthContext();
     initialCubicleReservationState.idUsuario=user;
     const { handleEditCubicle, handleCubicleUpdated } = useCubicleEdit();
@@ -63,6 +65,7 @@ function CubiclesReservationPage() {
     const [calendarKey, setCalendarKey] = useState(0);
     const idExternalRef = useRef(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalUserSearchedOpen, setIsModalUserSearchedOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -144,7 +147,16 @@ function CubiclesReservationPage() {
     };
 
     const handleSubmit = (e) => {
-        //console.log(reservation.idUsuario);
+        if(!user) {
+            Swal.fire({
+                title: '¡Tienes que estar registrado!',
+                text: 'Para poder realizar una reservación, por favor, inicia sesión 🤗',
+                icon: 'warning',
+                showConfirmButton: true,
+                confirmButtonText: 'Aceptar',  // Texto del botón
+            });
+            return;
+        }
         e.preventDefault();
         handleCreateCubicleReservation();
     };
@@ -200,6 +212,34 @@ function CubiclesReservationPage() {
         }
     };
 
+    //Funcion para el modal de la reservacion para un usuario ya registrado
+    const handleCreateUserReservation = () => {
+        setIsModalUserSearchedOpen(true); // Abrir el modal
+    };
+
+    // Función para cerrar el modal
+    const handleCloseModalUser = () => {
+        setIsModalUserSearchedOpen(false); // Cerrar el modal
+    };
+
+
+    const handleUserSearched = (idUserSearched) => {
+        if (idUserSearched !== undefined) {
+            idExternalRef.current = parseInt(idUserSearched, 10);
+            console.log("ID externo recibido y almacenado en la referencia:", idExternalRef.current);
+
+            setReservation(prevReservation => ({
+                ...prevReservation,
+                idUsuario: idExternalRef.current,
+            }));
+
+            setIsModalUserSearchedOpen(false); // Cerrar el modal después de crear el usuario
+            navigate('/reservationsCubicle');
+        } else {
+            console.warn("Se intentó asignar un ID externo undefined.");
+        }
+    };
+
 
 
     return (
@@ -207,6 +247,7 @@ function CubiclesReservationPage() {
             <div style={{display: 'flex', flexDirection: 'row', height: '100vh', padding: '20px'}}>
                 <Routes>
                     <Route path="createExternalUser" element={<UserExternalFormCreate onUserCreated={handleUserCreated} />} />
+                    <Route path="reserveUser" element={<ReservationForUser onUserSearched={handleUserSearched}/>}/>
                 </Routes>
 
                 <div style={{
@@ -270,6 +311,23 @@ function CubiclesReservationPage() {
                             {selectedCubicleR ? `Reservar Cubículo: ${selectedCubicleR.Nombre}` : 'Seleccionar Cubículo'}
                         </h2>
                         <div>
+                            {(!(role == 'Estudiante') && role && !(role == 'Externo') && !(role == 'Profesor')) &&(
+                            <button
+                                onClick={handleCreateUserReservation}
+                                style={{
+                                    padding: '10px 20px',
+                                    marginRight: '10px',
+                                    backgroundColor: '#004080',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer'
+                                }}>
+
+                                Reservar por Usuario
+                            </button>
+                                )}
+                            {(!(role == 'Estudiante') && role && !(role == 'Externo') && !(role == 'Profesor')) &&(
                             <button
                                 onClick={handleCreateExternalReservation}
                                 style={{
@@ -284,6 +342,7 @@ function CubiclesReservationPage() {
                             >
                                 Reservar Externo
                             </button>
+                            )}
                             <button
                                 onClick={handleCubicleReservationCreated}
                                 style={{
@@ -335,6 +394,26 @@ function CubiclesReservationPage() {
                         zIndex: 1000
                     }}>
                         <UserExternalFormCreate onUserCreated={handleUserCreated} onCancel={handleCloseModal} />
+                    </div>
+                )}
+
+                {isModalUserSearchedOpen && (
+                    <div style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(0,0,0,0.5)',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        zIndex: 1000
+                    }}>
+                        <ReservationForUser
+                            onUserSearched={handleUserSearched}
+                            onCancel={handleCloseModalUser}
+                        />
                     </div>
                 )}
             </div>

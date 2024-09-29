@@ -31,7 +31,15 @@ function UserFormEdit({ selectedUser, onUserUpdated}) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setUser((prevUser) => ({ ...prevUser, [name]: value }));
+        if (name === 'Estado') {
+            setUser((prevUser) => ({
+                ...prevUser,
+                [name]: value === '1' ? true : false
+            }));
+        }
+        else {
+            setUser((prevUser) => ({ ...prevUser, [name]: value }));
+        }
     };
 
     const handleUpdateUser = async () => {
@@ -88,6 +96,7 @@ function UserFormEdit({ selectedUser, onUserUpdated}) {
                             onChange={handleChange}
                             placeholder="Cédula/Carnet"
                             required
+                            disabled
                             className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                     </div>
@@ -104,100 +113,24 @@ function UserFormEdit({ selectedUser, onUserUpdated}) {
                             onChange={handleChange}
                             placeholder="Nombre"
                             required
+                            disabled
                             className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                     </div>
-
                     <div>
-                        <label htmlFor="CorreoEmail" className="block text-sm font-medium text-gray-700">
-                            Correo Personal
+                        <label htmlFor="Estado" className="block text-sm font-medium text-gray-700">
+                            Estado
                         </label>
-                        <input
-                            type="email"
-                            name="CorreoEmail"
-                            id="CorreoEmail"
-                            value={user.CorreoEmail}
+                        <select
+                            name="Estado"
+                            id="Estado"
+                            value={user.Estado ? '1' : '0'}
                             onChange={handleChange}
-                            placeholder="Correo Personal"
-                            required
                             className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="CorreoInstitucional" className="block text-sm font-medium text-gray-700">
-                            Correo Institucional
-                        </label>
-                        <input
-                            type="email"
-                            name="CorreoInstitucional"
-                            id="CorreoInstitucional"
-                            value={user.CorreoInstitucional}
-                            onChange={handleChange}
-                            placeholder="Correo Institucional"
-                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="Contrasena" className="block text-sm font-medium text-gray-700">
-                            Contraseña
-                        </label>
-                        <input
-                            type="password"
-                            name="Contrasena"
-                            id="Contrasena"
-                            value={user.Contrasena}
-                            onChange={handleChange}
-                            placeholder="Contraseña"
-                            required
-                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="Telefono" className="block text-sm font-medium text-gray-700">
-                            Teléfono
-                        </label>
-                        <input
-                            type="text"
-                            name="Telefono"
-                            id="Telefono"
-                            value={user.Telefono}
-                            onChange={handleChange}
-                            placeholder="Teléfono"
-                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="Telefono2" className="block text-sm font-medium text-gray-700">
-                            Teléfono Alternativo
-                        </label>
-                        <input
-                            type="text"
-                            name="Telefono2"
-                            id="Telefono2"
-                            value={user.Telefono2}
-                            onChange={handleChange}
-                            placeholder="Teléfono Alternativo"
-                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="Direccion" className="block text-sm font-medium text-gray-700">
-                            Dirección
-                        </label>
-                        <input
-                            type="text"
-                            name="Direccion"
-                            id="Direccion"
-                            value={user.Direccion}
-                            onChange={handleChange}
-                            placeholder="Dirección"
-                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        />
+                        >
+                            <option value="0">Activo</option>
+                            <option value="1">Bloqueado</option>
+                        </select>
                     </div>
 
                     <div>

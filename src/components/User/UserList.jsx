@@ -118,6 +118,9 @@ function UserList({ onEdit }) {
                             Rol
                         </TableHeaderCell>
                         <TableHeaderCell>
+                            Estado
+                        </TableHeaderCell>
+                        <TableHeaderCell>
                             Acciones
                         </TableHeaderCell>
                     </TableRow>
@@ -135,6 +138,7 @@ function UserList({ onEdit }) {
                             <TableCell>{user.Telefono2}</TableCell>
                             <TableCell>{user.Direccion}</TableCell>
                             <TableCell>{user.NombreRol}</TableCell>
+                            <TableCell>{user.Estado === 0 ? 'Activo' : 'Bloqueado'}</TableCell>
                             <TableCell className="text-left">
                                 <button onClick={() => onEdit(user)}>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

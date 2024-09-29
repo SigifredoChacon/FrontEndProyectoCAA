@@ -6,7 +6,8 @@ import {useRoomReservationEdit} from "../hooks/useRoomReservationEdit.js";
 import {createReservation} from "../services/reservationService.jsx";
 import {getResources} from "../services/resourcesService.jsx";
 import UserExternalFormCreate from "../components/User/UserExternalFormCreate.jsx";
-
+import Swal from "sweetalert2";
+import ReservationForUser from "../components/Reservations/ReservationForUser.jsx";
 
 const initialRoomReservationState = {
     fecha: '',
@@ -51,6 +52,7 @@ function groupConsecutiveTimes(timeSlots) {
 
 
 export function RoomReservationPage() {
+    const {role} = useAuthContext();
     const location = useLocation();
     const {selectedRoom} = location.state || {};
     const {user} = useAuthContext();
@@ -66,6 +68,7 @@ export function RoomReservationPage() {
     const navigate = useNavigate();
     const idExternalRef = useRef(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalUserSearchedOpen, setIsModalUserSearchedOpen] = useState(false);
 
     useEffect(() => {
         fetchResources();
@@ -133,6 +136,16 @@ export function RoomReservationPage() {
     };
 
     const handleCreateRoomReservation = async () => {
+        if(!user) {
+            Swal.fire({
+                title: '¡Tienes que estar registrado!',
+                text: 'Para poder realizar una reservación, por favor, inicia sesión 🤗',
+                icon: 'warning',
+                showConfirmButton: true,
+                confirmButtonText: 'Aceptar',  // Texto del botón
+            });
+            return;
+        }
         handleAddRoomReservation();
         console.log("Observaciones a enviar:", observations);
         const timeSlots = reservations
@@ -214,7 +227,33 @@ export function RoomReservationPage() {
             console.warn("Se intentó asignar un ID externo undefined.");
         }
     };
+    //Funcion para el modal de la reservacion para un usuario ya registrado
+    const handleCreateUserReservation = () => {
+        setIsModalUserSearchedOpen(true); // Abrir el modal
+    };
 
+    // Función para cerrar el modal
+    const handleCloseModalUser = () => {
+        setIsModalUserSearchedOpen(false); // Cerrar el modal
+    };
+
+
+    const handleUserSearched = (idUserSearched) => {
+        if (idUserSearched !== undefined) {
+            idExternalRef.current = parseInt(idUserSearched, 10);
+            console.log("ID externo recibido y almacenado en la referencia:", idExternalRef.current);
+
+            setReservation(prevReservation => ({
+                ...prevReservation,
+                idUsuario: idExternalRef.current,
+            }));
+
+            setIsModalUserSearchedOpen(false); // Cerrar el modal después de crear el usuario
+            navigate('/reservationsRoom', { state: { selectedRoom } });
+        } else {
+            console.warn("Se intentó asignar un ID externo undefined.");
+        }
+    };
 
 
 
@@ -224,6 +263,7 @@ export function RoomReservationPage() {
         <div className="p-8 max-w-full mx-auto">
             <Routes>
                 <Route path="createExternalUser" element={<UserExternalFormCreate onUserCreated={handleUserCreated} />} />
+                <Route path="reserveUser" element={<ReservationForUser onUserSearched={handleUserSearched}/>}/>
             </Routes>
             <div className="flex flex-col md:flex-row items-start justify-start">
 
@@ -264,8 +304,9 @@ export function RoomReservationPage() {
                     <div className="bg-white w-full shadow-md rounded-lg p-4 mb-4 h-full">
                         <CalendarRooms selectedRoomId={selectedRoom.idSala} onReservationsChange={handleReservationsChange}/>
                     </div>
-
+                    {user && (
                     <div className="flex flex-col md:flex-row mb-4">
+                        {(!(role == 'Estudiante') && role && !(role == 'Externo') ) &&(
                         <div className="md:w-1/2 bg-gray-200 p-4 rounded-lg mb-4 md:mb-0 md:mr-2">
                             <label className="block mb-2 font-bold">Refrigerio</label>
                             <div>
@@ -279,6 +320,7 @@ export function RoomReservationPage() {
                                 </label>
                             </div>
                         </div>
+                        )}
                         <div className="md:w-1/2 bg-gray-200 p-4 rounded-lg">
                             <label className="block text-sm font-medium text-gray-700">
                                 Recursos Disponibles
@@ -300,8 +342,8 @@ export function RoomReservationPage() {
                             </select>
                         </div>
                     </div>
-
-
+                    )}
+                    {user && (
                     <div className="bg-gray-100 p-4 rounded-lg mb-4">
                         <h4 className="font-semibold mb-2">Recursos Seleccionados:</h4>
                         {selectedResources.length > 0 ? (
@@ -321,8 +363,8 @@ export function RoomReservationPage() {
                             <p className="text-sm text-gray-500">No se han seleccionado recursos.</p>
                         )}
                     </div>
-
-
+                        )}
+                    {user && (
                     <div className="bg-gray-200 p-4 rounded-lg mb-4">
                         <textarea
                             className="w-full p-2 rounded-md border border-gray-300"
@@ -331,9 +373,26 @@ export function RoomReservationPage() {
                             onChange={handleObservationsChange}
                         />
                     </div>
-
+                        )}
 
                     <div className="flex justify-end space-x-4">
+                        {(!(role == 'Estudiante') && role && !(role == 'Externo') && !(role == 'Profesor')) &&(
+                            <button
+                                onClick={handleCreateUserReservation}
+                                style={{
+                                    padding: '10px 20px',
+                                    marginRight: '10px',
+                                    backgroundColor: '#004080',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer'
+                                }}>
+
+                                Reservar por Usuario
+                            </button>
+                        )}
+                        {(!(role == 'Estudiante') && role && !(role == 'Externo') && !(role == 'Profesor')) &&(
                         <button
                             onClick={handleCreateExternalReservation}
                             style={{
@@ -346,14 +405,17 @@ export function RoomReservationPage() {
                                 cursor: 'pointer'
                             }}>Reservar Externo
                         </button>
+                        )}
                         <button onClick={handleRoomReservationCreated}
                                 className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
                             Cancelar
                         </button>
+                        {user && (
                         <button onClick={handleCreateRoomReservation}
                                 className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
                             Reservar
                         </button>
+                        )}
                     </div>
                 </div>
                 {isModalOpen && (
@@ -370,6 +432,25 @@ export function RoomReservationPage() {
                         zIndex: 1000
                     }}>
                         <UserExternalFormCreate onUserCreated={handleUserCreated} onCancel={handleCloseModal} />
+                    </div>
+                )}
+                {isModalUserSearchedOpen && (
+                    <div style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(0,0,0,0.5)',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        zIndex: 1000
+                    }}>
+                        <ReservationForUser
+                            onUserSearched={handleUserSearched}
+                            onCancel={handleCloseModalUser}
+                        />
                     </div>
                 )}
             </div>

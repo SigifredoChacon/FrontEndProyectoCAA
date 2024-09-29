@@ -224,7 +224,7 @@ function HomePage() {
                 <span style={{ position: 'relative', zIndex: 1 }}>Salas</span>
             </button>
 
-            {!(role == 'Estudiante')&& (<button
+            {(!(role == 'Estudiante') && role)&& (<button
                 onClick={() => navigate('/reservationsCubicle')}
                 className="mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none relative w-full max-w-6xl h-48 md:h-56 lg:h-80 xl:h-96 lg:max-w-full"
                 style={{
