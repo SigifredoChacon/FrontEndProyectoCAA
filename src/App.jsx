@@ -27,6 +27,7 @@ import ProtectedRoute from "./components/Context/ProtectedRoute.jsx";
 import NotAuthorized from "./components/Context/NotAuthorized.jsx";
 import RoleBasedComponent from "./components/Context/RoleBasedComponent.jsx";
 import AllReservationPage from "./pages/AllReservationPage.jsx";
+import AllPendingReservationPage from "./pages/AllPendingReservationPage.jsx";
 
 
 const navigation = [
@@ -310,6 +311,11 @@ function App() {
                 <Route path="/allReservations/*" element={
                     <ProtectedRoute allowedRoles={['Administrador']}>
                         <AllReservationPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/pendingReservations/*" element={
+                    <ProtectedRoute allowedRoles={['Administrador']}>
+                        <AllPendingReservationPage/>
                     </ProtectedRoute>
                 }/>
 

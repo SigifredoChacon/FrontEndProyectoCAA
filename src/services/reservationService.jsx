@@ -5,6 +5,11 @@ export const getReservation = async () => {
     return response.data;
 };
 
+export const getPendingReservation = async () => {
+    const response = await api.get('/reservations/pending');
+    return response.data;
+};
+
 export const createReservation = async (reservation) => {
     const response = await api.post('/reservations', reservation);
     return response.data;

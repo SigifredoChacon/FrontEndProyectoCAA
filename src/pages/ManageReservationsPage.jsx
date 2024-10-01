@@ -7,6 +7,7 @@ import Rooms from "/src/assets/rooms.svg";
 import Cubicle from "/src/assets/cubicle.svg";
 import Resources from "/src/assets/resources.svg";
 import GeneralReservations from "/src/assets/GReservations.svg";
+import PendingReservations from "/src/assets/pendingReservations.svg";
 
 export function ManageReservationsPage() {
     const navigation = [
@@ -27,6 +28,7 @@ export function ManageReservationsPage() {
         { name: 'Cubiculos', href: '/cubicles', current: false, svg: Cubicle },
         { name: 'Recursos', href: '/resources', current: false, svg: Resources },
         { name: 'Reservaciones Generales', href: '/allReservations', current: false, svg: GeneralReservations },
+        { name: 'Reservaciones Pendientes', href: '/pendingReservations', current: false, svg: PendingReservations },
     ];
 
     return (

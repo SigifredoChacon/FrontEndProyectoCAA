@@ -18,6 +18,7 @@ const initialRoomReservationState = {
     observaciones: '',
     refrigerio: false,
     idRecursos: [],
+    estado: true,
 };
 
 function groupConsecutiveTimes(timeSlots) {
@@ -136,7 +137,7 @@ export function RoomReservationPage() {
     };
 
     const handleCreateRoomReservation = async () => {
-        if(!user) {
+        if (!user) {
             Swal.fire({
                 title: '¡Tienes que estar registrado!',
                 text: 'Para poder realizar una reservación, por favor, inicia sesión 🤗',
@@ -146,8 +147,10 @@ export function RoomReservationPage() {
             });
             return;
         }
-        handleAddRoomReservation();
-        console.log("Observaciones a enviar:", observations);
+
+        handleAddRoomReservation(); // Mantén este método si tiene sentido en tu flujo
+
+        // Asegúrate de calcular de nuevo los `timeSlots` y `groupedTimes` cada vez que se pulsa reservar
         const timeSlots = reservations
             .map(reservation => reservation.time)
             .sort((a, b) => {
@@ -158,10 +161,53 @@ export function RoomReservationPage() {
 
         const groupedTimes = groupConsecutiveTimes(timeSlots);
 
-        const selectedDay = reservations[0].day;
+        // Verifica si tienes al menos una reserva en `reservations`
+        if (reservations.length === 0) {
+            Swal.fire({
+                title: 'Error',
+                text: 'No hay horarios seleccionados.',
+                icon: 'error',
+            });
+            return;
+        }
+
+
+        const selectedDay = new Date(reservations[0].day);
+
+        const isSaturday = selectedDay.getDay() === 6;
 
         selectedDay.setDate(selectedDay.getDate() + 1);
 
+
+
+
+        if (isSaturday) {
+
+            Swal.fire({
+                title: '¡Reserva en sábado!',
+                text: 'Las reservas para los sábados necesitan aprobación de la administración. ¿Desea continuar?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Aceptar',
+                cancelButtonText: 'Cancelar',
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    // Si el usuario confirma, proceder con la reserva con `estado: 0` (pendiente de aprobación)
+                    await makeRoomReservation(groupedTimes, selectedDay, 0); // 0 indica pendiente
+                } else {
+                    // Si cancela, restablecer el estado para que el flujo siga funcionando
+                    console.log("Reserva cancelada por el usuario");
+                    // Aquí puedes restablecer cualquier estado si es necesario
+                }
+            });
+        } else {
+            // Si no es sábado, proceder con la reserva normalmente (estado 1, aprobada)
+            await makeRoomReservation(groupedTimes, selectedDay, 1); // 1 indica aprobada
+        }
+    };
+
+// Nueva función para hacer la reserva
+    const makeRoomReservation = async (groupedTimes, selectedDay, estado) => {
         for (let group of groupedTimes) {
             const horaInicio = group[0];
             const horaFin = group[group.length - 1];
@@ -186,6 +232,7 @@ export function RoomReservationPage() {
                     idRecursos: selectedResources.map((recurso) => recurso.idRecursos),
                     refrigerio: snack,
                     observaciones: observations,
+                    estado: estado, // Estado de la reserva (0 para pendiente, 1 para aprobada)
                 };
 
                 console.log(RoomReservationToCreate);
@@ -196,9 +243,10 @@ export function RoomReservationPage() {
             }
         }
 
-        handleRoomReservationCreated();
-        setReservation(initialRoomReservationState);
+        handleRoomReservationCreated(); // Navega al home u otra vista una vez creada la reserva
+        setReservation(initialRoomReservationState); // Reiniciar estado de la reserva
     };
+
 
     const handleCreateExternalReservation = () => {
         setIsModalOpen(true); // Abrir el modal

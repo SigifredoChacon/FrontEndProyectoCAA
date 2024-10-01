@@ -19,6 +19,7 @@ const initialCubicleReservationState = {
     idUsuario: 0,
     observaciones: '',
     refrigerio: false,
+    estado: true,
 };
 
 function groupConsecutiveTimes(timeSlots) {
@@ -103,11 +104,49 @@ function CubiclesReservationPage() {
             });
 
         const groupedTimes = groupConsecutiveTimes(timeSlots);
-        const selectedDay = reservations[0].day;
 
+        if (reservations.length === 0) {
+            Swal.fire({
+                title: 'Error',
+                text: 'No hay horarios seleccionados.',
+                icon: 'error',
+            });
+            return;
+        }
+
+
+        const selectedDay = new Date(reservations[0].day);
+
+        const isSaturday = selectedDay.getDay() === 6;
 
         selectedDay.setDate(selectedDay.getDate() + 1);
 
+
+        if (isSaturday) {
+            Swal.fire({
+                title: '¡Reserva en sábado!',
+                text: 'Las reservas para los sábados necesitan aprobación de la administración. ¿Desea continuar?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Aceptar',
+                cancelButtonText: 'Cancelar',
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    // Si el usuario confirma, proceder con la reserva con `estado: 0`
+                    await makeCubicleReservation(groupedTimes, selectedDay, 0); // 0 indica que está pendiente de aprobación
+                } else {
+                    // Si cancela, no se hace nada
+                    console.log("Reserva cancelada por el usuario");
+                }
+            });
+        } else {
+            // Si no es sábado, proceder con la reserva normalmente (estado 1)
+            await makeRoomReservation(groupedTimes, selectedDay, 1); // 1 indica que está activa
+        }
+
+    };
+
+    const makeCubicleReservation = async (groupedTimes, selectedDay, status) => {
         for (let group of groupedTimes) {
             const horaInicio = group[0];
             const horaFin = group[group.length - 1];
@@ -115,9 +154,6 @@ function CubiclesReservationPage() {
             const horaFinIncremented = `${String(parseInt(hour, 10) + 1).padStart(2, '0')}:${minute}`;
 
             try {
-
-
-
                 const year = selectedDay.getFullYear();
                 const month = String(selectedDay.getMonth() + 1).padStart(2, '0');
                 const day = String(selectedDay.getDate()).padStart(2, '0');
@@ -134,6 +170,7 @@ function CubiclesReservationPage() {
                     fecha: fechaReserva,
                     horaInicio: horaInicio,
                     horaFin: horaFinIncremented,
+                    estado: status,
                 };
 
                 await createReservation(cubicleReservationToCreate);
@@ -144,7 +181,7 @@ function CubiclesReservationPage() {
 
         handleCubicleReservationCreated();
         setReservation(initialCubicleReservationState);
-    };
+    }
 
     const handleSubmit = (e) => {
         if(!user) {
