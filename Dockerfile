@@ -1,29 +1,27 @@
-# Usa una imagen de Node.js como base
-FROM node:14 AS build
+# Etapa de construcción
+FROM node:18-alpine AS build
 
-# Establece el directorio de trabajo en el contenedor
+# Crear un directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Copia el package.json y package-lock.json al contenedor
+# Copiar los archivos package.json y package-lock.json e instalar dependencias
 COPY package*.json ./
-
-# Instala las dependencias de la aplicación
 RUN npm install
 
-# Copia el resto de la aplicación al contenedor
+# Copiar el resto del código del proyecto
 COPY . .
 
-# Compila la aplicación (esto genera una carpeta 'dist' con Vite)
+# Construir la aplicación
 RUN npm run build
 
-# Usa una imagen ligera de Nginx para servir el frontend
+# Etapa para servir la aplicación
 FROM nginx:alpine
 
-# Copia los archivos estáticos compilados de Vite al directorio de Nginx
+# Copiar los archivos de la aplicación construida a la carpeta de Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Expone el puerto en el que Nginx servirá la aplicación
+# Exponer el puerto 80 para el contenedor
 EXPOSE 80
 
-# Comando para iniciar Nginx
+# Comando para correr Nginx
 CMD ["nginx", "-g", "daemon off;"]
