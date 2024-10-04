@@ -131,7 +131,7 @@ const Calendar = ({ selectedCubicleId, onReservationsChange }) => {
                     type="date"
                     value={format(selectedDate, 'yyyy-MM-dd')}
                     onChange={handleDateChange}
-                    min={format(new Date(), 'yyyy-MM-dd')}  // Aquí establecemos la fecha mínima como hoy
+                    min={format(new Date(), 'yyyy-MM-dd')}
                     className="p-2 text-base rounded border border-gray-300 bg-white text-gray-800 focus:border-green-500 focus:outline-none"
                     disabled={reservations.length > 0 && selectedDay !== null}
                 />

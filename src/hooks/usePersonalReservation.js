@@ -4,12 +4,9 @@ import { useState } from 'react';
 export function usePersonalReservation() {
     const [selectedReservation, setSelectedReservation] = useState(null);
 
-
-
-    const handleEditReservation = (cubicleReservation) => {
-        setSelectedReservation(cubicleReservation);
+    const handleEditReservation = (Reservation) => {
+        setSelectedReservation(Reservation);
     };
-
 
     const handleReservationUpdated = () => {
         setSelectedReservation(null);

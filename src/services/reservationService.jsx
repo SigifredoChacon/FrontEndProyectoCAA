@@ -46,6 +46,12 @@ export const getReservationByDate = async (date) => {
     const response = await api.get(`/reservations/getbyDate/${date}`);
     return response.data;
 };
+
+export const deleteReservationByDate = async (date) => {
+    const response = await api.delete(`/reservations/deleteByDate/${date}`);
+    return response.data;
+};
+
 export const shareReservation = async (reservation) => {
     const response = await api.post('/reservations/shareReservation', reservation);
     return response.data;
