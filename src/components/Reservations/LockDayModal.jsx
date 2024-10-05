@@ -5,6 +5,8 @@ import {useAuthContext} from "../../hooks/useAuthContext.js";
 import {getCubicles} from "../../services/cubicleService.jsx";
 import {getRooms} from "../../services/roomService.jsx";
 import {addDays, format} from "date-fns";
+import {sendAllEmail} from "../../services/userService.jsx";
+import {es} from "date-fns/locale";
 
 const initialReservationState = {
     fecha: '',
@@ -20,6 +22,8 @@ const initialReservationState = {
 
 function LockDayModal({ onCancel }) {
     const navigate = useNavigate();
+    const [asunto] = useState('Bloqueo de Fecha');
+    const [descripcion, setDescripcion] = useState('');
     const [date, setDate] = useState(new Date());
     const { user } = useAuthContext();
     const {role} = useAuthContext();
@@ -54,15 +58,20 @@ function LockDayModal({ onCancel }) {
     };
 
     const handleLockDay = async () => {
+        const descriptionDate = format(date, 'dd MMMM yyyy', { locale: es });
+        const newDescripcion = `Le informamos que la fecha ${descriptionDate} ha sido bloqueada debido a motivos administrativos. Lamentamos los inconvenientes que esto pueda causar. En caso de que hubiese alguna reservación programada para dicha fecha, esta ha sido cancelada de manera automática. Agradecemos su comprensión.`;
+
+        setDescripcion(newDescripcion);
         try {
             // Formateamos la fecha correctamente antes de la consulta
             const formattedDate = format(date, 'yyyy-MM-dd');
+
             const nextDay = format(addDays(date, 1), 'yyyy-MM-dd');
 
             // Obtenemos las reservas de esa fecha
             const reservations = await getReservationByDate(formattedDate);
 
-            console.log("Reservaciones encontradas:", reservations);
+
             if (reservations.length > 0) {
                 await deleteReservationByDate(formattedDate);
             }
@@ -72,7 +81,14 @@ function LockDayModal({ onCancel }) {
             await makeCubicleReservation(nextDay);
             await makeRoomReservation(nextDay);
 
-            // Llamamos a la función onCancel
+            try {
+                await sendAllEmail({ asunto, descripcion: newDescripcion });
+                alert('Email enviado correctamente');
+            } catch (error) {
+                console.error('Error al enviar email:', error);
+                alert('Error al enviar email');
+            }
+
             onCancel();
         } catch (error) {
             console.error(error);

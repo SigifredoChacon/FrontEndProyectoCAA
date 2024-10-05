@@ -32,7 +32,7 @@ function AllReservationPage() {
 
     useEffect(() => {
         fetchReservations();
-    }, []);
+    }, [isModalOpen]);
 
     const fetchReservations = async () => {
         try {
