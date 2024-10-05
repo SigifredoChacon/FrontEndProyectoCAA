@@ -17,6 +17,7 @@ export const createReservation = async (reservation) => {
 
 export const updateReservation = async (id, reservation) => {
     const response = await api.patch(`/reservations/${id}`, reservation);
+    console.log(response.data);
     return response.data;
 };
 

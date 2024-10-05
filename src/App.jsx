@@ -3,7 +3,7 @@ import UsersPage from "./pages/UserPage.jsx";
 import RoomsPage from "./pages/RoomPage.jsx";
 import CubiclesPage from "./pages/CubiclePage.jsx";
 import LogIn from "./pages/LogIn.jsx";
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation, BrowserRouter} from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
@@ -28,6 +28,10 @@ import NotAuthorized from "./components/Context/NotAuthorized.jsx";
 import RoleBasedComponent from "./components/Context/RoleBasedComponent.jsx";
 import AllReservationPage from "./pages/AllReservationPage.jsx";
 import AllPendingReservationPage from "./pages/AllPendingReservationPage.jsx";
+import StarRating from "./components/Reservations/StarRating.jsx";
+import useReservationChecker from "./hooks/useReservationChecker.js";
+import {updateReservation} from "./services/reservationService.jsx";
+import {createValoration} from "./services/valorationService.jsx";
 
 
 const navigation = [
@@ -195,7 +199,45 @@ function Navbar() {
 
 function HomePage() {
     const navigate = useNavigate();
-    const{role} = useAuthContext();
+    const { role } = useAuthContext();
+    const expiredReservations = useReservationChecker();  // Hook personalizado para obtener las reservas expiradas
+    const [activeReservation, setActiveReservation] = useState(null);
+    const [rating, setRating] = useState(0);  // Estado para la calificación con estrellas
+    const [observaciones, setObservaciones] = useState('');  // Estado para las observaciones
+    const [isValorationOpen, setIsValorationOpen] = useState(false);  // Controla si el formulario está abierto
+
+    // Mostrar el formulario si hay reservas expiradas
+    useEffect(() => {
+        if (expiredReservations.length > 0) {
+            setActiveReservation(expiredReservations[0]);  // Mostrar la primera reserva expirada
+            setIsValorationOpen(true);  // Abre el formulario de valoración
+        }
+    }, [expiredReservations]);
+
+    const handleSubmitValoration = async (e) => {
+        e.preventDefault();
+        try {
+            await createValoration({
+                idSala: activeReservation.idSala,
+                idCubiculo: activeReservation.idCubiculo,
+                nota: rating,  // Guardamos el rating
+                observaciones
+            });
+            await updateReservation(activeReservation.idReservacion, { encuestaCompletada: true });
+            // Limpiar la reserva activa y cerrar el formulario
+            setActiveReservation(null);
+            setRating(0);  // Reiniciar la calificación
+            setObservaciones('');  // Limpiar observaciones
+            setIsValorationOpen(false);  // Cierra el formulario de valoración
+        } catch (error) {
+            console.error('Error al enviar la valoración:', error);
+        }
+    };
+
+    const handleCloseValoration = async () => {
+        await updateReservation(activeReservation.idReservacion, { encuestaCompletada: true });
+        setIsValorationOpen(false);
+    };
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-100">
@@ -225,36 +267,121 @@ function HomePage() {
                 <span style={{ position: 'relative', zIndex: 1 }}>Salas</span>
             </button>
 
-            {(!(role == 'Estudiante') && role)&& (<button
-                onClick={() => navigate('/reservationsCubicle')}
-                className="mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none relative w-full max-w-6xl h-48 md:h-56 lg:h-80 xl:h-96 lg:max-w-full"
-                style={{
-                    fontSize: 'clamp(2rem, 5vw, 8rem)',
-                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
-                    borderRadius: '50px',
-                }}
-            >
-                <div
+            {role !== 'Estudiante' && role && (
+                <button
+                    onClick={() => navigate('/reservationsCubicle')}
+                    className="mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none relative w-full max-w-6xl h-48 md:h-56 lg:h-80 xl:h-96 lg:max-w-full"
                     style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        backgroundImage: `url(${cubiculos})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        filter: 'brightness(50%)',
-                        borderRadius: 'inherit',
+                        fontSize: 'clamp(2rem, 5vw, 8rem)',
+                        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
+                        borderRadius: '50px',
                     }}
-                ></div>
-                <span style={{ position: 'relative', zIndex: 1 }}>Cubículos</span>
-            </button>
+                >
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundImage: `url(${cubiculos})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            filter: 'brightness(50%)',
+                            borderRadius: 'inherit',
+                        }}
+                    ></div>
+                    <span style={{ position: 'relative', zIndex: 1 }}>Cubículos</span>
+                </button>
+            )}
+
+            {/* Formulario de valoración condicional */}
+            {isValorationOpen && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'rgba(0,0,0,0.5)',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    zIndex: 1000
+                }}>
+                    <div style={{
+                        backgroundColor: 'white',
+                        padding: '20px',
+                        borderRadius: '8px',
+                        maxWidth: '400px',
+                        width: '100%'
+                    }}>
+                        <h2 style={{textAlign: 'center', fontWeight: 'bold'}}>Valorar Reservación</h2>
+                        <p style={{textAlign: 'center'}}>¿Cómo fue tu experiencia
+                            en {activeReservation.idSala ? 'la sala' : 'el cubículo'}?</p>
+
+                        {/* Componente de estrellas para la calificación */}
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            marginBottom: '20px',
+                            marginTop: '20px'
+                        }}>
+                            <StarRating rating={rating} onRating={setRating}/>
+                        </div>
+                        <h2 style={{marginBottom: '10px'}}>Observaciones:</h2>
+                        {/* Campo de observaciones */}
+                        <textarea
+                            name="observaciones"
+                            value={observaciones}
+                            onChange={(e) => setObservaciones(e.target.value)}
+                            placeholder="Tu opinion nos ayuda a mejorar"
+                            style={{
+                                width: '100%',
+                                padding: '10px',
+                                borderRadius: '4px',
+                                border: '1px solid #ccc',
+                                marginBottom: '20px'
+                            }}
+                            rows={4}  // Puedes ajustar el número de filas
+                        />
+
+                        {/* Botones Confirmar y Cancelar */}
+                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                            <button
+                                onClick={handleSubmitValoration}
+                                style={{
+                                    backgroundColor: '#0d6efd',
+                                    color: 'white',
+                                    padding: '10px 20px',
+                                    borderRadius: '5px',
+                                    border: 'none',
+                                    fontSize: '16px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Confirmar
+                            </button>
+                            <button
+                                onClick={handleCloseValoration}
+                                style={{
+                                    backgroundColor: '#dc3545',
+                                    color: 'white',
+                                    padding: '10px 20px',
+                                    borderRadius: '5px',
+                                    border: 'none',
+                                    fontSize: '16px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );
-
-
 }
 
 function App() {

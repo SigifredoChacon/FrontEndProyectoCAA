@@ -1,0 +1,13 @@
+.star-rating {
+    display: flex;
+    gap: 5px;  /* Espacio entre las estrellas */
+}
+
+.star {
+    cursor: pointer;
+    transition: fill 0.2s;  /* Transición suave cuando se llenan las estrellas */
+}
+
+.star:hover {
+    fill: #ffc107;  /* Color amarillo cuando haces hover sobre la estrella */
+}
