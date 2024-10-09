@@ -11,18 +11,8 @@ import PendingReservations from "/src/assets/pendingReservations.svg";
 
 export function ManageReservationsPage() {
     const navigation = [
-        {
-            name: 'Usuarios',
-            href: '/users',
-            current: false,
-            svg: UserIcon
-        },
-        {
-            name: 'Dashboard',
-            href: '/#',
-            current: false,
-            svg: DashBoardIcon
-        },
+        { name: 'Usuarios', href: '/users', current: false, svg: UserIcon},
+        { name: 'Dashboard', href: '/dashboard', current: false, svg: DashBoardIcon},
         { name: 'Enviar notificaciones', href: '/generalEmails', current: false, svg: Notifications },
         { name: 'Salas', href: '/rooms', current: false, svg: Rooms },
         { name: 'Cubiculos', href: '/cubicles', current: false, svg: Cubicle },

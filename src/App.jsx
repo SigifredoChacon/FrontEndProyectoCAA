@@ -32,6 +32,8 @@ import StarRating from "./components/Reservations/StarRating.jsx";
 import useReservationChecker from "./hooks/useReservationChecker.js";
 import {updateReservation} from "./services/reservationService.jsx";
 import {createValoration} from "./services/valorationService.jsx";
+import Dashboard from "./components/Dashboard/Dashboard.jsx";
+import DashboardSelection from "./pages/DashboardSelection.jsx";
 
 
 const navigation = [
@@ -443,6 +445,21 @@ function App() {
                 <Route path="/pendingReservations/*" element={
                     <ProtectedRoute allowedRoles={['Administrador']}>
                         <AllPendingReservationPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/dashboard/*" element={
+                    <ProtectedRoute allowedRoles={['Administrador']}>
+                        <DashboardSelection/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/dashboard/rooms" element={
+                    <ProtectedRoute allowedRoles={['Administrador']}>
+                        <Dashboard type={'room'}/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/dashboard/cubicles" element={
+                    <ProtectedRoute allowedRoles={['Administrador']}>
+                        <Dashboard type={'cubicle'}/>
                     </ProtectedRoute>
                 }/>
 

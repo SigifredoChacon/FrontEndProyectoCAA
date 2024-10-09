@@ -75,3 +75,23 @@ export const getReservationsByRoomIdAndWeek = async (roomId, startDate, endDate)
     });
     return response.data;
 }
+
+export const getReservationsByYear = async (year) => {
+    const response = await api.get(`/reservations/year/${year}`);
+    return response.data;
+};
+
+export const getReservationsByMonth = async (year, month) => {
+    const response = await api.get(`/reservations/month/${year}/${month}`);
+    return response.data;
+};
+
+export const getReservationsByRange = async (startDate, endDate) => {
+    const response = await api.get(`/reservations/range`, {
+        params: {
+            startDate,
+            endDate
+        }
+    });
+    return response.data;
+};
