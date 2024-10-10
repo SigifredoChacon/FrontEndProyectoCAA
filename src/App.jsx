@@ -1,5 +1,6 @@
 import './App.css';
 import UsersPage from "./pages/UserPage.jsx";
+import AssetsPage from "./pages/AssetPage.jsx";
 import RoomsPage from "./pages/RoomPage.jsx";
 import CubiclesPage from "./pages/CubiclePage.jsx";
 import LogIn from "./pages/LogIn.jsx";
@@ -36,9 +37,11 @@ import Dashboard from "./components/Dashboard/Dashboard.jsx";
 import DashboardSelection from "./pages/DashboardSelection.jsx";
 
 
+
 const navigation = [
     {name: 'Mis reservaciones', href: '/personalReservations', current: false, allowedRoles: ['all']},
     {name: 'Administrar Reservas', href: '/manageReservations', current: false, allowedRoles: ['Administrador']},
+    {name: 'Activos', href: '/assets', current: false, allowedRoles: ['Administrador', 'Profesor']},
 
 ];
 
@@ -226,11 +229,11 @@ function HomePage() {
                 observaciones
             });
             await updateReservation(activeReservation.idReservacion, { encuestaCompletada: true });
-            // Limpiar la reserva activa y cerrar el formulario
+
             setActiveReservation(null);
-            setRating(0);  // Reiniciar la calificación
-            setObservaciones('');  // Limpiar observaciones
-            setIsValorationOpen(false);  // Cierra el formulario de valoración
+            setRating(0);
+            setObservaciones('');
+            setIsValorationOpen(false);
         } catch (error) {
             console.error('Error al enviar la valoración:', error);
         }
@@ -462,6 +465,11 @@ function App() {
                         <Dashboard type={'cubicle'}/>
                     </ProtectedRoute>
                 }/>
+            <Route path="/assets/*" element={
+                <ProtectedRoute allowedRoles={['Administrador']}>
+                    <AssetsPage/>
+                </ProtectedRoute>
+            }/>
 
                 <Route path="/login" element={<LogIn/>}/>
                 <Route path="/register" element={<RegisterSelection/>}/>
