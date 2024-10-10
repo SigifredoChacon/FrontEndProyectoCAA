@@ -15,6 +15,7 @@ import ViewReviewStars from "./ViewReviewStars.jsx";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import './dashboard.css';
+import {useNavigate} from "react-router-dom";
 
 
 const Dashboard = ({ type }) => {
@@ -29,6 +30,7 @@ const Dashboard = ({ type }) => {
     const [comments, setComments] = useState([]);
     const [totalReservations, setTotalReservations] = useState(0); // Estado para el total de reservas
     const dashboardRef = useRef();
+    const navigate = useNavigate();
 
     useEffect(() => {
         loadItems();
@@ -146,7 +148,28 @@ const Dashboard = ({ type }) => {
 
     return (
         <div className="container mx-auto px-10 py-6" ref={dashboardRef}>
-            <h1 className="text-center text-2xl font-bold my-4">Reporte de {type === 'room' ? 'Salas' : 'Cubículos'}</h1>
+            <button
+                onClick={() => navigate('/dashboard')}
+                style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    position: 'absolute',
+                    top: '80px',
+                    left: '10px',
+                    padding: '5px',
+                }}
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                     stroke="currentColor" style={{width: '32px', height: '32px'}}>
+                    <path strokeLinecap="round" strokeLinejoin="round"
+                          d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                </svg>
+
+
+            </button>
+            <h1 className="text-center text-2xl font-bold my-4">Reporte
+                de {type === 'room' ? 'Salas' : 'Cubículos'}</h1>
 
             <div className="flex justify-center items-center space-x-4 mb-6">
                 <button className="px-4 py-2 bg-green-500 text-white rounded-md no-print" onClick={exportToPDF}>
@@ -155,9 +178,15 @@ const Dashboard = ({ type }) => {
             </div>
 
             <div className="flex justify-center space-x-4 mb-6">
-                <button className="px-4 py-2 bg-blue-500 text-white rounded-md" onClick={() => setTimePeriod('week')}>Semana</button>
-                <button className="px-4 py-2 bg-blue-500 text-white rounded-md" onClick={() => setTimePeriod('month')}>Mes</button>
-                <button className="px-4 py-2 bg-blue-500 text-white rounded-md" onClick={() => setTimePeriod('year')}>Año</button>
+                <button className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                        onClick={() => setTimePeriod('week')}>Semana
+                </button>
+                <button className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                        onClick={() => setTimePeriod('month')}>Mes
+                </button>
+                <button className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                        onClick={() => setTimePeriod('year')}>Año
+                </button>
             </div>
 
             <div className="flex justify-center gap-4 mb-6">
@@ -221,11 +250,12 @@ const Dashboard = ({ type }) => {
                                 borderWidth: 2,
                             },
                         ],
-                    }} />
+                    }}/>
                 </div>
 
                 <div className="w-[45%] p-4 border border-gray-200 rounded-lg shadow-md relative">
-                    <h2 className="text-center text-lg font-semibold mb-4">Valoración de {type === 'room' ? 'Salas' : 'Cubículos'}</h2>
+                    <h2 className="text-center text-lg font-semibold mb-4">Valoración
+                        de {type === 'room' ? 'Salas' : 'Cubículos'}</h2>
                     <button
                         className="absolute top-2 right-2 px-2 py-1 bg-blue-500 text-white rounded-md no-print"
                         onClick={openModal}
@@ -243,7 +273,7 @@ const Dashboard = ({ type }) => {
                                 borderWidth: 2,
                             },
                         ],
-                    }} />
+                    }}/>
                 </div>
             </div>
 
@@ -268,7 +298,7 @@ const Dashboard = ({ type }) => {
                                 comments.map((comment, index) => (
                                     <div key={index} className="border-b border-gray-200 py-2">
                                         <p>{comment.Observaciones || 'Sin comentarios'}</p>
-                                        <ViewReviewStars rating={comment.Nota} />
+                                        <ViewReviewStars rating={comment.Nota}/>
                                     </div>
                                 ))
                             ) : (

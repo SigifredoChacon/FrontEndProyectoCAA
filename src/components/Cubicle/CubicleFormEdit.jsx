@@ -72,21 +72,6 @@ function CubicleFormEdit({ selectedCubicle, onCubicleUpdated }) {
                 <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mb-6">Editar Cubiculo</h2>
 
                 <div className="grid grid-cols-1 gap-y-6">
-                    <div>
-                        <label htmlFor="idCubiculo" className="block text-sm font-medium text-gray-700">
-                            idCubiculo
-                        </label>
-                        <input
-                            type="text"
-                            name="idCubiculo"
-                            id="idCubiculo"
-                            value={cubicle.idCubiculo}
-                            onChange={handleChange}
-                            placeholder="idCubiculo"
-                            required
-                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        />
-                    </div>
 
                     <div>
                         <label htmlFor="Nombre" className="block text-sm font-medium text-gray-700">

@@ -56,21 +56,6 @@ function ResourceFormEdit({ selectedResource, onResourceUpdated }) {
                 <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mb-6">Editar Recurso</h2>
 
                 <div className="grid grid-cols-1 gap-y-6">
-                    <div>
-                        <label htmlFor="idRecursos" className="block text-sm font-medium text-gray-700">
-                            idRecursos
-                        </label>
-                        <input
-                            type="text"
-                            name="idRecursos"
-                            id="idRecursos"
-                            value={resource.idRecursos}
-                            onChange={handleChange}
-                            placeholder="idRecursos"
-                            required
-                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        />
-                    </div>
 
                     <div>
                         <label htmlFor="Nombre" className="block text-sm font-medium text-gray-700">

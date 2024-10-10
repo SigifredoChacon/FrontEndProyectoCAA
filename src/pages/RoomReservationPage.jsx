@@ -309,199 +309,225 @@ export function RoomReservationPage() {
 
     return (
         <div className="p-8 max-w-full mx-auto">
+
             <Routes>
-                <Route path="createExternalUser" element={<UserExternalFormCreate onUserCreated={handleUserCreated} />} />
+                <Route path="createExternalUser" element={<UserExternalFormCreate onUserCreated={handleUserCreated}/>}/>
                 <Route path="reserveUser" element={<ReservationForUser onUserSearched={handleUserSearched}/>}/>
             </Routes>
-            <div className="flex flex-col md:flex-row items-start justify-start">
 
-                <div className="flex-shrink-0 md:w-5/12 p-4 mt-8">
-
-                    <div className="text-center text-2xl font-bold mb-4 md:mb-2">
-                        {selectedRoom.Nombre}
-                    </div>
-                    <div className="w-full h-full overflow-hidden">
-                        <img
-                            src={selectedRoom.imageUrl}
-                            alt={selectedRoom.Nombre}
-                            className="w-full h-full object-contain rounded-lg max-w-full max-h-full"
-                        />
-                    </div>
-
-
-                    <strong className="mt-8 mb-4 block">Descripción de la sala:</strong> {/* Ajuste de márgenes */}
-                    <div className="mt-4 text-justify text-sm text-gray-700 w-full max-w-md max-h-32 overflow-y-auto">
-                        {selectedRoom.Descripcion}
-                    </div>
+                <button
+                    onClick={() => navigate('/allRoomReservation')}
+                    style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        position: 'absolute',
+                        top: '80px',
+                        left: '10px',
+                        padding: '5px',
+                    }}
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                         stroke="currentColor" style={{width: '32px', height: '32px'}}>
+                        <path strokeLinecap="round" strokeLinejoin="round"
+                              d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
 
 
-                    {selectedRoom.Restricciones && (
-                        <>
-                            <strong className="mt-8 mb-4 block">Restricciones:</strong> {/* Ajuste de márgenes */}
-                            <div
-                                className="mt-4 text-justify text-sm text-gray-700 w-full max-w-md max-h-32 overflow-y-auto">
-                                {selectedRoom.Restricciones}
-                            </div>
-                        </>
-                    )}
-                </div>
+                </button>
+                <div className="flex flex-col md:flex-row items-start justify-start">
 
+                    <div className="flex-shrink-0 md:w-5/12 p-4 mt-8">
 
-                <div className="flex-grow md:w-6/10 p-4">
-
-                    <div className="bg-white w-full shadow-md rounded-lg p-4 mb-4 h-full">
-                        <CalendarRooms selectedRoomId={selectedRoom.idSala} onReservationsChange={handleReservationsChange}/>
-                    </div>
-                    {user && (
-                    <div className="flex flex-col md:flex-row mb-4">
-                        {(!(role == 'Estudiante') && role && !(role == 'Externo') ) &&(
-                        <div className="md:w-1/2 bg-gray-200 p-4 rounded-lg mb-4 md:mb-0 md:mr-2">
-                            <label className="block mb-2 font-bold">Refrigerio</label>
-                            <div>
-                                <label className="mr-4">
-                                    <input type="radio" name="refrigerio" value="si" onChange={handleSnackChange} className="mr-2"/>
-                                    Sí
-                                </label>
-                                <label>
-                                    <input type="radio" name="refrigerio" value="no" onChange={handleSnackChange} className="mr-2"/>
-                                    No
-                                </label>
-                            </div>
+                        <div className="text-center text-2xl font-bold mb-4 md:mb-2">
+                            {selectedRoom.Nombre}
                         </div>
-                        )}
-                        <div className="md:w-1/2 bg-gray-200 p-4 rounded-lg">
-                            <label className="block text-sm font-medium text-gray-700">
-                                Recursos Disponibles
-                            </label>
-                            <select
-                                name="idRecursos"
-                                id="idRecursos"
-                                value=""
-                                onChange={handleChangeResource}
-                                required
-                                className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            >
-                                <option value="">Seleccione un Recurso</option>
-                                {resources.map((recurso) => (
-                                    <option key={recurso.idRecursos} value={recurso.idRecursos}>
-                                        {recurso.Nombre}
-                                    </option>
-                                ))}
-                            </select>
+                        <div className="w-full h-full overflow-hidden">
+                            <img
+                                src={selectedRoom.imageUrl}
+                                alt={selectedRoom.Nombre}
+                                className="w-full h-full object-contain rounded-lg max-w-full max-h-full"
+                            />
                         </div>
-                    </div>
-                    )}
-                    {user && (
-                    <div className="bg-gray-100 p-4 rounded-lg mb-4">
-                        <h4 className="font-semibold mb-2">Recursos Seleccionados:</h4>
-                        {selectedResources.length > 0 ? (
-                            <ul className="space-y-2">
-                                {selectedResources.map((recurso) => (
-                                    <li key={recurso.idRecursos}>
-                                        <button
-                                            onClick={() => handleRemoveResource(recurso)}
-                                            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-                                        >
-                                            {recurso.Nombre} &times;
-                                        </button>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p className="text-sm text-gray-500">No se han seleccionado recursos.</p>
+
+
+                        <strong className="mt-8 mb-4 block">Descripción de la sala:</strong> {/* Ajuste de márgenes */}
+                        <div
+                            className="mt-4 text-justify text-sm text-gray-700 w-full max-w-md max-h-32 overflow-y-auto">
+                            {selectedRoom.Descripcion}
+                        </div>
+
+
+                        {selectedRoom.Restricciones && (
+                            <>
+                                <strong className="mt-8 mb-4 block">Restricciones:</strong> {/* Ajuste de márgenes */}
+                                <div
+                                    className="mt-4 text-justify text-sm text-gray-700 w-full max-w-md max-h-32 overflow-y-auto">
+                                    {selectedRoom.Restricciones}
+                                </div>
+                            </>
                         )}
                     </div>
+
+
+                    <div className="flex-grow md:w-6/10 p-4">
+
+                        <div className="bg-white w-full shadow-md rounded-lg p-4 mb-4 h-full">
+                            <CalendarRooms selectedRoomId={selectedRoom.idSala}
+                                           onReservationsChange={handleReservationsChange}/>
+                        </div>
+                        {user && (
+                            <div className="flex flex-col md:flex-row mb-4">
+                                {(!(role == 'Estudiante') && role && !(role == 'Externo')) && (
+                                    <div className="md:w-1/2 bg-gray-200 p-4 rounded-lg mb-4 md:mb-0 md:mr-2">
+                                        <label className="block mb-2 font-bold">Refrigerio</label>
+                                        <div>
+                                            <label className="mr-4">
+                                                <input type="radio" name="refrigerio" value="si"
+                                                       onChange={handleSnackChange} className="mr-2"/>
+                                                Sí
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="refrigerio" value="no"
+                                                       onChange={handleSnackChange} className="mr-2"/>
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                )}
+                                <div className="md:w-1/2 bg-gray-200 p-4 rounded-lg">
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Recursos Disponibles
+                                    </label>
+                                    <select
+                                        name="idRecursos"
+                                        id="idRecursos"
+                                        value=""
+                                        onChange={handleChangeResource}
+                                        required
+                                        className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    >
+                                        <option value="">Seleccione un Recurso</option>
+                                        {resources.map((recurso) => (
+                                            <option key={recurso.idRecursos} value={recurso.idRecursos}>
+                                                {recurso.Nombre}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
                         )}
-                    {user && (
-                    <div className="bg-gray-200 p-4 rounded-lg mb-4">
+                        {user && (
+                            <div className="bg-gray-100 p-4 rounded-lg mb-4">
+                                <h4 className="font-semibold mb-2">Recursos Seleccionados:</h4>
+                                {selectedResources.length > 0 ? (
+                                    <ul className="space-y-2">
+                                        {selectedResources.map((recurso) => (
+                                            <li key={recurso.idRecursos}>
+                                                <button
+                                                    onClick={() => handleRemoveResource(recurso)}
+                                                    className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                                                >
+                                                    {recurso.Nombre} &times;
+                                                </button>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="text-sm text-gray-500">No se han seleccionado recursos.</p>
+                                )}
+                            </div>
+                        )}
+                        {user && (
+                            <div className="bg-gray-200 p-4 rounded-lg mb-4">
                         <textarea
                             className="w-full p-2 rounded-md border border-gray-300"
                             rows="4"
                             placeholder="Observaciones"
                             onChange={handleObservationsChange}
                         />
-                    </div>
+                            </div>
                         )}
 
-                    <div className="flex justify-end space-x-4">
-                        {(!(role == 'Estudiante') && role && !(role == 'Externo') && !(role == 'Profesor')) &&(
-                            <button
-                                onClick={handleCreateUserReservation}
-                                style={{
-                                    padding: '10px 20px',
-                                    marginRight: '10px',
-                                    backgroundColor: '#004080',
-                                    color: '#fff',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer'
-                                }}>
+                        <div className="flex justify-end space-x-4">
+                            {(!(role == 'Estudiante') && role && !(role == 'Externo') && !(role == 'Profesor')) && (
+                                <button
+                                    onClick={handleCreateUserReservation}
+                                    style={{
+                                        padding: '10px 20px',
+                                        marginRight: '10px',
+                                        backgroundColor: '#004080',
+                                        color: '#fff',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer'
+                                    }}>
 
-                                Reservar por Usuario
+                                    Reservar por Usuario
+                                </button>
+                            )}
+                            {(!(role == 'Estudiante') && role && !(role == 'Externo') && !(role == 'Profesor')) && (
+                                <button
+                                    onClick={handleCreateExternalReservation}
+                                    style={{
+                                        padding: '10px 20px',
+                                        marginRight: '10px',
+                                        backgroundColor: '#004080',
+                                        color: '#fff',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer'
+                                    }}>Reservar Externo
+                                </button>
+                            )}
+                            <button onClick={handleRoomReservationCreated}
+                                    className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
+                                Cancelar
                             </button>
-                        )}
-                        {(!(role == 'Estudiante') && role && !(role == 'Externo') && !(role == 'Profesor')) &&(
-                        <button
-                            onClick={handleCreateExternalReservation}
-                            style={{
-                                padding: '10px 20px',
-                                marginRight: '10px',
-                                backgroundColor: '#004080',
-                                color: '#fff',
-                                border: 'none',
-                                borderRadius: '4px',
-                                cursor: 'pointer'
-                            }}>Reservar Externo
-                        </button>
-                        )}
-                        <button onClick={handleRoomReservationCreated}
-                                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
-                            Cancelar
-                        </button>
-                        {user && (
-                        <button onClick={handleCreateRoomReservation}
-                                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
-                            Reservar
-                        </button>
-                        )}
+                            {user && (
+                                <button onClick={handleCreateRoomReservation}
+                                        className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+                                    Reservar
+                                </button>
+                            )}
+                        </div>
                     </div>
+                    {isModalOpen && (
+                        <div style={{
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: 'rgba(0,0,0,0.5)',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            zIndex: 1000
+                        }}>
+                            <UserExternalFormCreate onUserCreated={handleUserCreated} onCancel={handleCloseModal}/>
+                        </div>
+                    )}
+                    {isModalUserSearchedOpen && (
+                        <div style={{
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: 'rgba(0,0,0,0.5)',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            zIndex: 1000
+                        }}>
+                            <ReservationForUser
+                                onUserSearched={handleUserSearched}
+                                onCancel={handleCloseModalUser}
+                            />
+                        </div>
+                    )}
                 </div>
-                {isModalOpen && (
-                    <div style={{
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: 'rgba(0,0,0,0.5)',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        zIndex: 1000
-                    }}>
-                        <UserExternalFormCreate onUserCreated={handleUserCreated} onCancel={handleCloseModal} />
-                    </div>
-                )}
-                {isModalUserSearchedOpen && (
-                    <div style={{
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: 'rgba(0,0,0,0.5)',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        zIndex: 1000
-                    }}>
-                        <ReservationForUser
-                            onUserSearched={handleUserSearched}
-                            onCancel={handleCloseModalUser}
-                        />
-                    </div>
-                )}
             </div>
-        </div>
-    )
-}
+            )
+            }

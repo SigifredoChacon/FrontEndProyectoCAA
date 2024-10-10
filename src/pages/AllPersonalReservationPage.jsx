@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { getReservationByUserId, deleteReservation } from '../services/reservationService.jsx';
 import {getNameRoomById, getRoomById} from '../services/roomService.jsx';
@@ -126,13 +126,33 @@ function AllPersonalReservationPage() {
 
 
     return (
-        <div style={{ maxWidth: '1800px', margin: '0 auto', padding: '0 20px' }}>
+        <div style={{maxWidth: '1800px', margin: '0 auto', padding: '0 20px'}}>
+            <button
+                onClick={() => navigate('/')}
+                style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    position: 'absolute',
+                    top: '80px',
+                    left: '10px',
+                    padding: '5px',
+                }}
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                     stroke="currentColor" style={{width: '32px', height: '32px'}}>
+                    <path strokeLinecap="round" strokeLinejoin="round"
+                          d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                </svg>
+
+
+            </button>
             {!isOnCreateOrEditPage && (
-                <h1 style={{ textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px' }}>
+                <h1 style={{textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px'}}>
                     Mis Reservaciones
                 </h1>
             )}
-            <Card style={{ border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px' }}>
+            <Card style={{border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px'}}>
                 <Title>
                     Mis Reservaciones
                     <Badge style={{
@@ -149,12 +169,12 @@ function AllPersonalReservationPage() {
                 </Title>
 
 
-
                 {/* Configuración de las rutas */}
                 <Routes>
                     <Route
                         path="edit/:id"
-                        element={<ReservationFormEdit selectedPersonalReservation={selectedReservation} onReservationUpdated={handleReservationCreated} />}
+                        element={<ReservationFormEdit selectedPersonalReservation={selectedReservation}
+                                                      onReservationUpdated={handleReservationCreated}/>}
                     />
                     {/* Otras rutas que quieras agregar */}
                 </Routes>
@@ -200,7 +220,8 @@ function AllPersonalReservationPage() {
                                                 </svg>
                                             </button>
                                         )}
-                                        <button onClick={() => handleDeleteReservation(reservation.idReservacion)} style={{marginRight: '8px'}}>
+                                        <button onClick={() => handleDeleteReservation(reservation.idReservacion)}
+                                                style={{marginRight: '8px'}}>
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                                  fill="currentColor" className="size-6">
                                                 <path
@@ -210,9 +231,12 @@ function AllPersonalReservationPage() {
                                                       clipRule="evenodd"/>
                                             </svg>
                                         </button>
-                                        <button onClick={() => handleOpenModal(reservation)} >
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-                                                <path fillRule="evenodd" d="M15.75 4.5a3 3 0 1 1 .825 2.066l-8.421 4.679a3.002 3.002 0 0 1 0 1.51l8.421 4.679a3 3 0 1 1-.729 1.31l-8.421-4.678a3 3 0 1 1 0-4.132l8.421-4.679a3 3 0 0 1-.096-.755Z" clipRule="evenodd" />
+                                        <button onClick={() => handleOpenModal(reservation)}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                 fill="currentColor" className="size-6">
+                                                <path fillRule="evenodd"
+                                                      d="M15.75 4.5a3 3 0 1 1 .825 2.066l-8.421 4.679a3.002 3.002 0 0 1 0 1.51l8.421 4.679a3 3 0 1 1-.729 1.31l-8.421-4.678a3 3 0 1 1 0-4.132l8.421-4.679a3 3 0 0 1-.096-.755Z"
+                                                      clipRule="evenodd"/>
                                             </svg>
                                         </button>
                                     </TableCell>

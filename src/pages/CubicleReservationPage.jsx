@@ -280,10 +280,31 @@ function CubiclesReservationPage() {
 
 
     return (
-        <div style={{ maxWidth: '1800px', margin: '0 auto', padding: '0 20px' }}>
+        <div style={{maxWidth: '1800px', margin: '0 auto', padding: '0 20px'}}>
+            <button
+                onClick={() => navigate('/')}
+                style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    position: 'absolute',
+                    top: '80px',
+                    left: '10px',
+                    padding: '5px',
+                }}
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                     stroke="currentColor" style={{width: '32px', height: '32px'}}>
+                    <path strokeLinecap="round" strokeLinejoin="round"
+                          d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                </svg>
+
+
+            </button>
             <div style={{display: 'flex', flexDirection: 'row', height: '100vh', padding: '20px'}}>
                 <Routes>
-                    <Route path="createExternalUser" element={<UserExternalFormCreate onUserCreated={handleUserCreated} />} />
+                    <Route path="createExternalUser"
+                           element={<UserExternalFormCreate onUserCreated={handleUserCreated}/>}/>
                     <Route path="reserveUser" element={<ReservationForUser onUserSearched={handleUserSearched}/>}/>
                 </Routes>
 
@@ -348,37 +369,37 @@ function CubiclesReservationPage() {
                             {selectedCubicleR ? `Reservar Cubículo: ${selectedCubicleR.Nombre}` : 'Seleccionar Cubículo'}
                         </h2>
                         <div>
-                            {(!(role == 'Estudiante') && role && !(role == 'Externo') && !(role == 'Profesor')) &&(
-                            <button
-                                onClick={handleCreateUserReservation}
-                                style={{
-                                    padding: '10px 20px',
-                                    marginRight: '10px',
-                                    backgroundColor: '#004080',
-                                    color: '#fff',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer'
-                                }}>
+                            {(!(role == 'Estudiante') && role && !(role == 'Externo') && !(role == 'Profesor')) && (
+                                <button
+                                    onClick={handleCreateUserReservation}
+                                    style={{
+                                        padding: '10px 20px',
+                                        marginRight: '10px',
+                                        backgroundColor: '#004080',
+                                        color: '#fff',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer'
+                                    }}>
 
-                                Reservar por Usuario
-                            </button>
-                                )}
-                            {(!(role == 'Estudiante') && role && !(role == 'Externo') && !(role == 'Profesor')) &&(
-                            <button
-                                onClick={handleCreateExternalReservation}
-                                style={{
-                                    padding: '10px 20px',
-                                    marginRight: '10px',
-                                    backgroundColor: '#004080',
-                                    color: '#fff',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                Reservar Externo
-                            </button>
+                                    Reservar por Usuario
+                                </button>
+                            )}
+                            {(!(role == 'Estudiante') && role && !(role == 'Externo') && !(role == 'Profesor')) && (
+                                <button
+                                    onClick={handleCreateExternalReservation}
+                                    style={{
+                                        padding: '10px 20px',
+                                        marginRight: '10px',
+                                        backgroundColor: '#004080',
+                                        color: '#fff',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    Reservar Externo
+                                </button>
                             )}
                             <button
                                 onClick={handleCubicleReservationCreated}
@@ -430,7 +451,7 @@ function CubiclesReservationPage() {
                         alignItems: 'center',
                         zIndex: 1000
                     }}>
-                        <UserExternalFormCreate onUserCreated={handleUserCreated} onCancel={handleCloseModal} />
+                        <UserExternalFormCreate onUserCreated={handleUserCreated} onCancel={handleCloseModal}/>
                     </div>
                 )}
 

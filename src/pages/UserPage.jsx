@@ -33,15 +33,36 @@ function UsersPage() {
     const isOnCreateOrEditPage = location.pathname === "/users/create" || location.pathname.startsWith("/users/edit");
 
     return (
-        <div style={{ maxWidth: '1800px', margin: '0 auto', padding: '0 20px' }}>
+        <div style={{maxWidth: '1800px', margin: '0 auto', padding: '0 20px', position: 'relative'}}>
+
+            <button
+                onClick={() => navigate('/manageReservations')}
+                style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    position: 'absolute',
+                    top: '15px',
+                    left: '-50px',
+                    padding: '5px',
+                }}
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                     stroke="currentColor" style={{width: '32px', height: '32px'}}>
+                    <path strokeLinecap="round" strokeLinejoin="round"
+                          d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                </svg>
+
+
+            </button>
 
             {!isOnCreateOrEditPage && (
                 <>
-                    <h1 style={{ textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px' }}>
+                    <h1 style={{textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px'}}>
                         Gestión de Usuarios
                     </h1>
 
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
+                    <div style={{display: 'flex', justifyContent: 'flex-end', marginBottom: '20px'}}>
                         <button
                             onClick={handleAddUser}
                             style={{
@@ -52,10 +73,10 @@ function UsersPage() {
                                 fontSize: '16px',
                                 borderRadius: '5px',
                                 cursor: 'pointer',
-                                transition: 'background-color 0.3s ease'
+                                transition: 'background-color 0.3s ease',
                             }}
-                            onMouseOver={(e) => e.target.style.backgroundColor = '#004080'}
-                            onMouseOut={(e) => e.target.style.backgroundColor = '#002855'}
+                            onMouseOver={(e) => (e.target.style.backgroundColor = '#004080')}
+                            onMouseOut={(e) => (e.target.style.backgroundColor = '#002855')}
                         >
                             Agregar Usuario
                         </button>
@@ -64,14 +85,15 @@ function UsersPage() {
             )}
 
             <Routes>
-                <Route path="/" element={<UserList onEdit={handleEdit} />} />
-                <Route path="create" element={<UserFormCreate onUserCreated={handleUserCreated} />} />
+                <Route path="/" element={<UserList onEdit={handleEdit}/>}/>
+                <Route path="create" element={<UserFormCreate onUserCreated={handleUserCreated}/>}/>
                 <Route
                     path="edit/:id"
-                    element={<UserFormEdit selectedUser={selectedUser} onUserUpdated={handleUserCreated} />}
+                    element={<UserFormEdit selectedUser={selectedUser} onUserUpdated={handleUserCreated}/>}
                 />
             </Routes>
         </div>
+
     );
 }
 

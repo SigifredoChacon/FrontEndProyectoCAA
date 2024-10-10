@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import {getRooms} from "../services/roomService.jsx";
 import {Badge, Card, Title} from "@tremor/react";
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 function AllRoomReservationPage() {
     const [rooms, setRooms] = useState([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchActiveRooms();
@@ -30,10 +32,29 @@ function AllRoomReservationPage() {
 
     return (
         <div>
-            <Title style={{ textAlign: 'center', fontSize: '2.5rem', margin: '20px 0' }}>
+            <Title style={{textAlign: 'center', fontSize: '2.5rem', margin: '20px 0'}}>
                 Salas
             </Title>
+            <button
+                onClick={() => navigate('/')}
+                style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    position: 'absolute',
+                    top: '80px',
+                    left: '10px',
+                    padding: '5px',
+                }}
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                     stroke="currentColor" style={{width: '32px', height: '32px'}}>
+                    <path strokeLinecap="round" strokeLinejoin="round"
+                          d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                </svg>
 
+
+            </button>
             <div style={{
                 display: 'flex',
                 flexWrap: 'wrap',
@@ -47,7 +68,7 @@ function AllRoomReservationPage() {
                             pathname: "/reservationsRoom",
 
                         }}
-                        state = {{ selectedRoom: room }}
+                        state={{selectedRoom: room}}
                         key={room.id}
                     >
                         <Card style={{
@@ -61,8 +82,8 @@ function AllRoomReservationPage() {
                             cursor: 'pointer',
                         }}>
                             <img src={room.imageUrl} alt={room.Nombre}
-                                 style={{ width: '100%', height: '400px', objectFit: 'cover', borderRadius: '12px' }} />
-                            <h3 style={{ marginTop: '12px', marginBottom: '8px', fontSize: '1.25rem' }}>{room.Nombre}</h3>
+                                 style={{width: '100%', height: '400px', objectFit: 'cover', borderRadius: '12px'}}/>
+                            <h3 style={{marginTop: '12px', marginBottom: '8px', fontSize: '1.25rem'}}>{room.Nombre}</h3>
                             <p style={{
                                 marginTop: '12px',
                                 marginBottom: '8px',
