@@ -27,6 +27,7 @@ const Dashboard = ({ type }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [comments, setComments] = useState([]);
+    const [totalReservations, setTotalReservations] = useState(0); // Estado para el total de reservas
     const dashboardRef = useRef();
 
     useEffect(() => {
@@ -53,6 +54,11 @@ const Dashboard = ({ type }) => {
             reservations = await getReservationsByRange(startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0]);
         }
         const usageData = calculateUsage(reservations);
+
+
+        const total = usageData.reduce((sum, item) => sum + item.usage, 0);
+        setTotalReservations(total);
+
         setReservationsData(usageData);
     };
 
@@ -112,7 +118,7 @@ const Dashboard = ({ type }) => {
     const exportToPDF = async () => {
         const dashboardElement = dashboardRef.current;
 
-        // Oculta los elementos con la clase no-print temporalmente
+
         const noPrintElements = document.querySelectorAll('.no-print');
         noPrintElements.forEach((el) => {
             el.style.display = 'none';
@@ -137,7 +143,6 @@ const Dashboard = ({ type }) => {
             el.style.display = '';
         });
     };
-
 
     return (
         <div className="container mx-auto px-10 py-6" ref={dashboardRef}>
@@ -202,7 +207,9 @@ const Dashboard = ({ type }) => {
 
             <div className="flex justify-center gap-10 mb-6">
                 <div className="w-[45%] p-4 border border-gray-200 rounded-lg shadow-md">
-                    <h2 className="text-center text-lg font-semibold mb-4">Uso de {type === 'room' ? 'Salas' : 'Cubículos'}</h2>
+                    <h2 className="text-center text-lg font-semibold mb-2">
+                        Uso de {type === 'room' ? 'Salas' : 'Cubículos'} (Total de reservas: {totalReservations})
+                    </h2>
                     <Line data={{
                         labels: reservationsData.map((res) => res.item),
                         datasets: [

@@ -60,13 +60,12 @@ function AllPendingReservationPage() {
     };
 
     const handleViewReservation = (reservation) => {
-        setSelectedReservation(reservation);  // Guardamos la reserva seleccionada
+        setSelectedReservation(reservation);
 
     };
 
     const handleAcceptReservation = async () => {
-        // Lógica para aceptar la reservación
-        console.log("Reserva aceptada:", selectedReservation);
+
         try{
             await updateReservation(selectedReservation.idReservacion, {estado: true});
         }
@@ -176,7 +175,7 @@ function AllPendingReservationPage() {
                     </Table>
                 )}
 
-                {/* Modal para ver detalles de la reserva */}
+
                 {selectedReservation && (
                     <div style={{
                         position: 'fixed',

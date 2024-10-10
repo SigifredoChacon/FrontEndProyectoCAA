@@ -11,7 +11,7 @@ const initialUserState = {
     telefono: '',
     telefono2: '',
     direccion: '',
-    estado:0,
+    estado: 0,
     idRol: 5,
     correoInstitucional: ''
 };

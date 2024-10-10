@@ -148,9 +148,9 @@ export function RoomReservationPage() {
             return;
         }
 
-        handleAddRoomReservation(); // Mantén este método si tiene sentido en tu flujo
+        handleAddRoomReservation();
 
-        // Asegúrate de calcular de nuevo los `timeSlots` y `groupedTimes` cada vez que se pulsa reservar
+
         const timeSlots = reservations
             .map(reservation => reservation.time)
             .sort((a, b) => {
@@ -192,17 +192,17 @@ export function RoomReservationPage() {
                 cancelButtonText: 'Cancelar',
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    // Si el usuario confirma, proceder con la reserva con `estado: 0` (pendiente de aprobación)
-                    await makeRoomReservation(groupedTimes, selectedDay, 0); // 0 indica pendiente
+
+                    await makeRoomReservation(groupedTimes, selectedDay, 0);
                 } else {
-                    // Si cancela, restablecer el estado para que el flujo siga funcionando
+
                     console.log("Reserva cancelada por el usuario");
-                    // Aquí puedes restablecer cualquier estado si es necesario
+
                 }
             });
         } else {
-            // Si no es sábado, proceder con la reserva normalmente (estado 1, aprobada)
-            await makeRoomReservation(groupedTimes, selectedDay, 1); // 1 indica aprobada
+
+            await makeRoomReservation(groupedTimes, selectedDay, 1);
         }
     };
 
