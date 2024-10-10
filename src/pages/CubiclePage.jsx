@@ -28,7 +28,6 @@ function CubiclesPage() {
         navigate('/cubicles/create');
     };
 
-    // Función para que las salas se bloqueen o desbloqueen dependiendo del caso
     const handleBlockCubicle = async () => {
         if (isCubicleLocked) {
             await unLockCubicle();

@@ -28,7 +28,7 @@ function RoomsPage() {
         navigate('/rooms/create');
     };
 
-    // Función para que las salas se bloqueen o desbloqueen dependiendo del caso
+
     const handleBlockRoom = async () => {
         if (isRoomLocked) {
             await unLockRoom();

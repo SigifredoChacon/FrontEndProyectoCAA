@@ -463,7 +463,7 @@ function App() {
                     </ProtectedRoute>
                 }/>
 
-                <Route path="/login" element={<LogIn/>}/> {/* Nueva ruta para el calendario */}
+                <Route path="/login" element={<LogIn/>}/>
                 <Route path="/register" element={<RegisterSelection/>}/>
                 <Route path="/register/student" element={<RegisterPage role={'Estudiante'}/>}/>
                 <Route path="/register/teacher" element={<RegisterPage role={'Profesor'}/>}/>

@@ -109,7 +109,7 @@ function LockDayModal({ onCancel }) {
                     const ReservationToCreate = {
                         ...reservation,
                         idCubiculo: cubicle.idCubiculo,
-                        fecha: formattedDate, // Usamos la fecha correctamente formateada
+                        fecha: formattedDate,
                     };
 
                     console.log("Creando reservación para el cubículo:", cubicle.idCubiculo);

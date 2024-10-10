@@ -21,8 +21,6 @@ import {
 } from '@tremor/react';
 
 import ReservationFormEdit from '../components/Reservations/ReservationFormEdit.jsx';
-import UserExternalFormCreate from "../components/User/UserExternalFormCreate.jsx";
-import ReservationForUser from "../components/Reservations/ReservationForUser.jsx";
 
 function AllReservationPage() {
     const {selectedReservation, handleEditReservation, handleReservationUpdated } = usePersonalReservation();
