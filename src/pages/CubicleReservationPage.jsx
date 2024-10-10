@@ -141,7 +141,7 @@ function CubiclesReservationPage() {
             });
         } else {
             // Si no es sábado, proceder con la reserva normalmente (estado 1)
-            await makeRoomReservation(groupedTimes, selectedDay, 1); // 1 indica que está activa
+            await makeCubicleReservation(groupedTimes, selectedDay, 1); // 1 indica que está activa
         }
 
     };

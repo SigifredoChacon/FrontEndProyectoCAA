@@ -11,6 +11,7 @@ const initialUserState = {
     telefono: '',
     telefono2: '',
     direccion: '',
+    estado:0,
     idRol: 5,
     correoInstitucional: ''
 };
@@ -46,6 +47,7 @@ function UserExternalFormCreate({onUserCreated, onCancel}) {
 
             const userToCreate = {
                 ...user,
+                estado: parseInt(user.estado, 10),
                 cedulaCarnet: parseInt(user.cedulaCarnet, 10),
                 idRol: parseInt(user.idRol, 10),
             };
