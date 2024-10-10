@@ -202,7 +202,7 @@ function AssetFormEdit({ selectedAsset, onAssetUpdated}) {
                         <select
                             name="Condicion"
                             id="Condicion"
-                            value={asset.Condicion}
+                            value={asset.Condicion ? '1' : '0'}
                             onChange={handleChange}
                             className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         >
