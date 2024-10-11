@@ -37,13 +37,16 @@ import Dashboard from "./components/Dashboard/Dashboard.jsx";
 import DashboardSelection from "./pages/DashboardSelection.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import EditProfilePage from "./pages/EditProfilePage.jsx";
+import {CategoryAssetsPage} from "./pages/CategoryAssetsPage.jsx";
+import {AssetRequestPage} from "./pages/AssetRequestPage.jsx";
 
 
 
 const navigation = [
     {name: 'Mis reservaciones', href: '/personalReservations', current: false, allowedRoles: ['all']},
     {name: 'Administrar Reservas', href: '/manageReservations', current: false, allowedRoles: ['Administrador']},
-    {name: 'Activos', href: '/assets', current: false, allowedRoles: ['Administrador', 'Profesor']},
+    {name: 'Activos', href: '/categoryAssets', current: false, allowedRoles: ['Administrador', 'Profesor']},
+    {name: 'Administrar Activos', href: '/assets', current: false, allowedRoles: ['Administrador']},
 
 ];
 
@@ -54,8 +57,11 @@ function classNames(...classes) {
 }
 
 function Navbar() {
+    const {logout} = useLogout()
     const {user} = useAuthContext()
-
+    const handleClick = () => {
+        logout()
+    }
     return (
         <Disclosure as="nav" style={{ backgroundColor: '#002855' }}>
             {({ open }) => (
@@ -439,6 +445,16 @@ function App() {
                 <Route path="/manageReservations/*" element={
                     <ProtectedRoute allowedRoles={['Administrador']}>
                         <ManageReservationsPage/>
+                    </ProtectedRoute>}
+                />
+                <Route path="/categoryAssets/*" element={
+                    <ProtectedRoute allowedRoles={['Administrador', 'Profesor']}>
+                        <CategoryAssetsPage/>
+                    </ProtectedRoute>}
+                />
+                <Route path="/assetsRequest/*" element={
+                    <ProtectedRoute allowedRoles={['Administrador', 'Profesor']}>
+                        <AssetRequestPage/>
                     </ProtectedRoute>}
                 />
                 <Route path="/allReservations/*" element={
