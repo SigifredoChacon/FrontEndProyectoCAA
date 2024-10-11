@@ -6,21 +6,21 @@ import {jwtDecode} from "jwt-decode";
 export const AuthContext = createContext();
 
 const authReducer = (state, action) => {
-    const decodedToken = jwtDecode(action.payload)
     switch (action.type) {
         case 'LOGIN':
-
-
+            if (!action.payload) return state;  // Si no hay token, devuelve el estado sin cambios
+            const decodedToken = jwtDecode(action.payload);
             return {
                 ...state,
                 user: decodedToken.id,
-                role: decodedToken.role
-            }
+                role: decodedToken.role,
+            };
         case 'LOGOUT':
             return {
                 ...state,
-                user: null
-            }
+                user: null,
+                role: null,
+            };
         default:
             return state;
     }
@@ -31,11 +31,21 @@ export const AuthContextProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            dispatch({ type: 'LOGIN', payload: token });
-        }
-        setLoading(false);  // Finaliza la carga después de procesar el token
+        const checkToken = () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                dispatch({ type: 'LOGIN', payload: token });
+            } else {
+                dispatch({ type: 'LOGOUT' });
+            }
+        };
+
+        checkToken(); // Verifica el token al cargar
+        setLoading(false);
+
+        window.addEventListener('storage', checkToken); // Escucha cambios en localStorage
+
+        return () => window.removeEventListener('storage', checkToken); // Limpia el listener
     }, []);
 
     return (

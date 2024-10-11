@@ -35,6 +35,8 @@ import {updateReservation} from "./services/reservationService.jsx";
 import {createValoration} from "./services/valorationService.jsx";
 import Dashboard from "./components/Dashboard/Dashboard.jsx";
 import DashboardSelection from "./pages/DashboardSelection.jsx";
+import ProfilePage from "./pages/ProfilePage.jsx";
+import EditProfilePage from "./pages/EditProfilePage.jsx";
 
 
 
@@ -52,11 +54,8 @@ function classNames(...classes) {
 }
 
 function Navbar() {
-    const {logout} = useLogout()
     const {user} = useAuthContext()
-    const handleClick = () => {
-        logout()
-    }
+
     return (
         <Disclosure as="nav" style={{ backgroundColor: '#002855' }}>
             {({ open }) => (
@@ -156,20 +155,22 @@ function Navbar() {
                                                     )}
                                                 </Menu.Item>
                                             )}
-                                            <Menu.Item>
-                                                {({active}) => (
-                                                    <a
-                                                        href="/"
-                                                        onClick={handleClick}
-                                                        className={classNames(
-                                                            active ? 'bg-gray-100' : '',
-                                                            'block px-4 py-2 text-sm text-gray-700'
+
+                                            {user && (
+                                                    <Menu.Item>
+                                                        {({active}) => (
+                                                            <a
+                                                                href="/profile"
+                                                                className={classNames(
+                                                                    active ? 'bg-gray-100' : '',
+                                                                    'block px-4 py-2 text-sm text-gray-700'
+                                                                )}
+                                                            >
+                                                                Mi Perfil
+                                                            </a>
                                                         )}
-                                                    >
-                                                        Cerrar Sesión
-                                                    </a>
-                                                )}
-                                            </Menu.Item>
+                                                    </Menu.Item>
+                                            )}
                                         </Menu.Items>
                                     </Transition>
                                 </Menu>
@@ -475,6 +476,19 @@ function App() {
                 <Route path="/register" element={<RegisterSelection/>}/>
                 <Route path="/register/student" element={<RegisterPage role={'Estudiante'}/>}/>
                 <Route path="/register/teacher" element={<RegisterPage role={'Profesor'}/>}/>
+                <Route path="/profile" element={
+                    <ProtectedRoute allowedRoles={['all']}>
+                        <ProfilePage />
+                    </ProtectedRoute>
+
+                }/>
+                <Route path="/editProfile" element={
+                    <ProtectedRoute allowedRoles={['all']}>
+                        <EditProfilePage />
+                    </ProtectedRoute>
+
+                }/>
+
                 <Route path="/allRoomReservation/*" element={<AllRoomReservationPage/>}/>
                 <Route path="/reservationsRoom" element={<RoomReservationPage/>}/>
                 <Route path="/not-authorized" element={<NotAuthorized/>}/>
