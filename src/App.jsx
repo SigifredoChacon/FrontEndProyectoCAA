@@ -35,13 +35,16 @@ import {updateReservation} from "./services/reservationService.jsx";
 import {createValoration} from "./services/valorationService.jsx";
 import Dashboard from "./components/Dashboard/Dashboard.jsx";
 import DashboardSelection from "./pages/DashboardSelection.jsx";
+import {CategoryAssetsPage} from "./pages/CategoryAssetsPage.jsx";
+import {AssetRequestPage} from "./pages/AssetRequestPage.jsx";
 
 
 
 const navigation = [
     {name: 'Mis reservaciones', href: '/personalReservations', current: false, allowedRoles: ['all']},
     {name: 'Administrar Reservas', href: '/manageReservations', current: false, allowedRoles: ['Administrador']},
-    {name: 'Activos', href: '/assets', current: false, allowedRoles: ['Administrador', 'Profesor']},
+    {name: 'Activos', href: '/categoryAssets', current: false, allowedRoles: ['Administrador', 'Profesor']},
+    {name: 'Administrar Activos', href: '/assets', current: false, allowedRoles: ['Administrador']},
 
 ];
 
@@ -438,6 +441,16 @@ function App() {
                 <Route path="/manageReservations/*" element={
                     <ProtectedRoute allowedRoles={['Administrador']}>
                         <ManageReservationsPage/>
+                    </ProtectedRoute>}
+                />
+                <Route path="/categoryAssets/*" element={
+                    <ProtectedRoute allowedRoles={['Administrador', 'Profesor']}>
+                        <CategoryAssetsPage/>
+                    </ProtectedRoute>}
+                />
+                <Route path="/assetsRequest/*" element={
+                    <ProtectedRoute allowedRoles={['Administrador', 'Profesor']}>
+                        <AssetRequestPage/>
                     </ProtectedRoute>}
                 />
                 <Route path="/allReservations/*" element={
