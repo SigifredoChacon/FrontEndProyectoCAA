@@ -35,6 +35,7 @@ import {createValoration} from "./services/valorationService.jsx";
 import Dashboard from "./components/Dashboard/Dashboard.jsx";
 import DashboardSelection from "./pages/DashboardSelection.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
+import EditProfilePage from "./pages/EditProfilePage.jsx";
 
 
 const navigation = [
@@ -472,7 +473,13 @@ function App() {
                         <ProfilePage />
                     </ProtectedRoute>
 
-                    }/>
+                }/>
+                <Route path="/editProfile" element={
+                    <ProtectedRoute allowedRoles={['all']}>
+                        <EditProfilePage />
+                    </ProtectedRoute>
+
+                }/>
 
                 <Route path="/allRoomReservation/*" element={<AllRoomReservationPage/>}/>
                 <Route path="/reservationsRoom" element={<RoomReservationPage/>}/>

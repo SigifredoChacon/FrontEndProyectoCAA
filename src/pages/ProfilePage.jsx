@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useLogout } from "../hooks/useLogout.js";
-import { useNavigate } from "react-router-dom";
+import {Route, Routes, useNavigate} from "react-router-dom";
 import { getUserById } from "../services/userService.jsx";
 import { useAuthContext } from "../hooks/useAuthContext.js";
+import EditProfilePage from "./EditProfilePage.jsx";
 
 function ProfilePage() {
     const navigate = useNavigate();
     const { logout } = useLogout();
     const { user } = useAuthContext();
     const [userLog, setUserLog] = useState(null);
-
-    const handleClick = () => {
-        logout();
-        navigate('/', { replace: true });
-        window.location.reload();
-    };
 
     useEffect(() => {
         // Solo llama a la API si 'user' tiene un valor válido
@@ -36,9 +31,23 @@ function ProfilePage() {
         return <div>Cargando...</div>; // Muestra un mensaje de carga mientras se obtienen los datos
     }
 
+
+    const handleClick = () => {
+        logout();
+        navigate('/', { replace: true });
+        window.location.reload();
+    };
+
+    const handleEditProfile = () => {
+        navigate('/editProfile', { state: { userLog } }); // Pasar userLog en el estado de la navegación
+    };
+
+
+
+
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col">
-            {/* Main Content */}
+
             <div className="flex flex-col lg:flex-row flex-1 p-6 space-y-6 lg:space-y-0 lg:space-x-6">
 
                 {/* Profile Info Section */}
@@ -84,7 +93,7 @@ function ProfilePage() {
                     {/* Buttons and Image centered */}
                     <div className="flex flex-col items-center space-y-4 mt-4">
                         <button className="w-full py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300">Cambiar contraseña</button>
-                        <button className="w-full py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300">Editar perfil</button>
+                        <button onClick={handleEditProfile} className="w-full py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300">Editar perfil</button>
                         <button onClick={handleClick} className="w-full py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300">Cerrar sesión</button>
 
                         {/* Image with blur and margin */}
@@ -99,6 +108,7 @@ function ProfilePage() {
                 </div>
 
             </div>
+
         </div>
     );
 }
