@@ -16,6 +16,7 @@ import EmailPage from "./pages/EmailPage.jsx";
 import AllRoomReservationPage from "./pages/AllRoomReservationPage.jsx";
 import SalaDeReunion from './assets/SalaDeReunion.jpeg';
 import cubiculos from './assets/cubiculos.jpg';
+import computadoras from './assets/computadoras.png';
 import ResourcesPage from "./pages/ResourcePage.jsx";
 import {RoomReservationPage} from "./pages/RoomReservationPage.jsx";
 import AllPersonalReservationPage from "./pages/AllPersonalReservationPage.jsx";
@@ -306,6 +307,35 @@ function HomePage() {
                     <span style={{ position: 'relative', zIndex: 1 }}>Cubículos</span>
                 </button>
             )}
+
+            {role !== 'Estudiante' && role && (
+                <button
+                    onClick={() => navigate('/categoryAssets')}
+                    className="mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none relative w-full max-w-6xl h-48 md:h-56 lg:h-80 xl:h-96 lg:max-w-full"
+                    style={{
+                        fontSize: 'clamp(2rem, 5vw, 8rem)',
+                        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
+                        borderRadius: '50px',
+                    }}
+                >
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundImage: `url(${computadoras})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            filter: 'brightness(50%)',
+                            borderRadius: 'inherit',
+                        }}
+                    ></div>
+                    <span style={{ position: 'relative', zIndex: 1 }}>Activos</span>
+                </button>
+            )}
+
 
             {/* Formulario de valoración condicional */}
             {isValorationOpen && (
