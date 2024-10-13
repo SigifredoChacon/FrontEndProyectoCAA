@@ -32,10 +32,8 @@ export function AssetRequestPage() {
     const [fileUploaded, setFileUploaded] = useState(false);
     const [request, setRequest] = useState(initialRequestState);
     const [file, setFile] = useState(null);
-
-    // Nuevos estados
-    const [isFormLocked, setIsFormLocked] = useState(false); // Para bloquear el formulario
-    const [pdfPreview, setPdfPreview] = useState(null); // Almacena la URL de vista previa del PDF
+    const [isFormLocked, setIsFormLocked] = useState(false);
+    const [pdfPreview, setPdfPreview] = useState(null);
 
     const getTitle = () => {
         switch (id) {
@@ -61,15 +59,14 @@ export function AssetRequestPage() {
     };
 
     const handleFileUpload = (e) => {
-            const uploadedFile = e.target.files[0];
-            setFile(uploadedFile);
-            setFileUploaded(true); // Establece `fileUploaded` a `true` cuando el archivo se sube exitosamente
-
+        const uploadedFile = e.target.files[0];
+        setFile(uploadedFile);
+        setFileUploaded(true);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setIsSubmitted(true); // `isSubmitted` se establece en `true` cuando el formulario se completa
+        setIsSubmitted(true);
     };
 
     const handleCreateRequest = async () => {
@@ -98,25 +95,22 @@ export function AssetRequestPage() {
             accesorios: "Cargador, Mouse"
         };
 
-        // Generar PDF lleno y mostrar vista previa
         const pdfBytes = await generateFilledPDF(userData, formData, assetData, startDate, endDate);
         const pdfBlob = new Blob([pdfBytes], { type: "application/pdf" });
         const pdfUrl = URL.createObjectURL(pdfBlob);
         setPdfPreview(pdfUrl);
-
-        // Bloquear el formulario
         setIsFormLocked(true);
     };
 
     const handleDownloadPDF = () => {
         saveAs(pdfPreview, 'SolicitudCompleta.pdf');
+        setIsSubmitted(true);
     };
 
     const handleBackToEdit = () => {
         setIsFormLocked(false);
         setPdfPreview(null);
         setIsSubmitted(false);
-        setPdfPreview(null);
         setFileUploaded(false);
     };
 
@@ -143,17 +137,28 @@ export function AssetRequestPage() {
 
     return (
         <div className="min-h-screen flex bg-gray-100">
-            <div className="flex-1 flex items-center justify-center">
-                <h1 className="text-4xl font-bold text-gray-800">{getTitle()}</h1>
+            <div className="flex-1 flex flex-col items-center justify-center">
+                <h1 className="text-4xl font-bold text-gray-800 mb-4">{getTitle()}</h1>
+
+                {pdfPreview && (
+                    <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6 mb-6">
+                        <h3 className="text-lg font-semibold mb-4 text-center">Vista previa del PDF</h3>
+                        <iframe src={pdfPreview} width="100%" height="800px" title="Vista previa PDF" className="rounded-md border border-gray-300"></iframe>
+                        <div className="mt-4 flex justify-between">
+                            <button className="bg-gray-400 text-white py-2 px-4 rounded-md" onClick={handleBackToEdit}>Volver a Editar</button>
+                            <button className="bg-green-500 text-white py-2 px-4 rounded-md" onClick={handleDownloadPDF}>Descargar PDF</button>
+                        </div>
+                    </div>
+                )}
             </div>
-            <div className="flex-1 flex items-center justify-center bg-gray-50">
-                <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+
+            <div className="flex-1 flex flex-col items-center justify-center bg-gray-50 p-8 space-y-6">
+                <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg mb-6">
                     <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mb-6">Formulario de Solicitud</h2>
 
                     {!pdfPreview ? (
                         <>
                             <div className="grid grid-cols-1 gap-y-6">
-                                {/* Campos del formulario */}
                                 <div>
                                     <label htmlFor="usoBien" className="block text-sm font-medium text-gray-700">Uso del Bien</label>
                                     <select
@@ -198,30 +203,31 @@ export function AssetRequestPage() {
                                 <button type="button" onClick={handleCreateRequest} className="inline-flex justify-center rounded-md border border-transparent bg-[#004080] py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-[#003060] focus:outline-none focus:ring-2 focus:ring-offset-2">Generar PDF</button>
                             </div>
                         </>
-                    ) : (
-                        <div className="text-center">
-                            <h3 className="text-lg font-semibold mb-4">Vista previa del PDF</h3>
-                            <iframe src={pdfPreview} width="100%" height="500px" title="Vista previa PDF"></iframe>
-                            <div className="mt-4 flex justify-between">
-                                <button className="bg-gray-400 text-white py-2 px-4 rounded-md" onClick={handleBackToEdit}>Volver a Editar</button>
-                                <button className="bg-green-500 text-white py-2 px-4 rounded-md" onClick={handleDownloadPDF}>Descargar PDF</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {isSubmitted && pdfPreview && (
-                        <div className="mt-6">
-                            <label htmlFor="fileUpload" className="block text-sm font-medium text-gray-700 mb-2">Subir archivo firmado</label>
-                            <input type="file" id="fileUpload" accept="application/pdf" onChange={handleFileUpload} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-[#004080] file:text-white hover:file:bg-[#003060] file:rounded-md" />
-                        </div>
-                    )}
-
-                    {isSubmitted && (
-                        <div className="mt-4 flex justify-end space-x-4">
-                            <button type="button" disabled={!fileUploaded} onClick={handleFinalSubmit} className={`inline-flex justify-center rounded-md border border-transparent py-2 px-4 text-sm font-semibold text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${fileUploaded ? 'bg-green-600 hover:bg-green-500 focus:ring-green-500' : 'bg-gray-400'}`}>Enviar Solicitud Completa</button>
-                        </div>
-                    )}
+                    ) : null}
                 </form>
+
+                {isSubmitted && pdfPreview && (
+                    <div className="w-full max-w-lg bg-white shadow-lg rounded-lg p-6">
+                        <label htmlFor="fileUpload" className="block text-sm font-medium text-gray-700 mb-2">Subir archivo firmado</label>
+                        <input
+                            type="file"
+                            id="fileUpload"
+                            accept="application/pdf"
+                            onChange={handleFileUpload}
+                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-[#004080] file:text-white hover:file:bg-[#003060] file:rounded-md"
+                        />
+                        <div className="mt-4 flex justify-end space-x-4">
+                            <button
+                                type="button"
+                                disabled={!fileUploaded}
+                                onClick={handleFinalSubmit}
+                                className={`inline-flex justify-center rounded-md border border-transparent py-2 px-4 text-sm font-semibold text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${fileUploaded ? 'bg-green-600 hover:bg-green-500 focus:ring-green-500' : 'bg-gray-400'}`}
+                            >
+                                Enviar Solicitud Completa
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
