@@ -25,3 +25,8 @@ export const getAssetById = async (id) => {
     const response = await api.get(`/assets/${id}`);
     return response.data;
 };
+
+export const getFirstAvailableAsset = async (assetCategory) => {
+    const response = await api.get(`/assets/available/${assetCategory}`);
+    return response.data;
+};

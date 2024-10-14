@@ -6,13 +6,16 @@ import es from "date-fns/locale/es";
 import { createRequest } from "../services/requestService";
 import { saveAs } from 'file-saver';
 import { generateFilledPDF } from '../components/Asset/pdfUtils';
+import {useAuthContext} from "../hooks/useAuthContext.js";
+import {getUserById} from "../services/userService.jsx";
+import {getFirstAvailableAsset} from "../services/assetService.jsx";
 
 registerLocale("es", es);
 
 const initialRequestState = {
     estado: 'Espera',
-    idUsuario: 2021080289,
-    idActivo: 182732645,
+    idUsuario: 0,
+    idActivo: 0,
     archivoSolicitud: '',
     fechaInicio: '',
     FechaFin: ''
@@ -21,6 +24,7 @@ const initialRequestState = {
 export function AssetRequestPage() {
     const location = useLocation();
     const navigate = useNavigate();
+    const {user} = useAuthContext();
     const { id } = location.state || {};
     const [formData, setFormData] = useState({
         usoBien: "",
@@ -76,28 +80,24 @@ export function AssetRequestPage() {
             return;
         }
 
-        const userData = {
-            name: "Juan Pérez",
-            cedula: "123456789",
-            email: "juan.perez@example.com",
-            dependencia: "Informática",
-            celular: "8888-8888",
-            oficina: "101"
-        };
+        const userData = await getUserById(user);
 
-        const assetData = {
-            placa: "00123",
-            descripcion: "Laptop Dell",
-            serie: "SN12345",
-            marca: "Dell",
-            modelo: "Inspiron 15",
-            estado: "Óptimo",
-            accesorios: "Cargador, Mouse"
-        };
+        let assetData;
+
+        if(id === 1){
+            assetData = await getFirstAvailableAsset('Laptop');
+        }
+        else if(id === 2){
+            assetData = await getFirstAvailableAsset('Proyector');
+        }
+        else if(id === 3){
+            assetData = await getFirstAvailableAsset('Monitor');
+        }
 
         const pdfBytes = await generateFilledPDF(userData, formData, assetData, startDate, endDate);
         const pdfBlob = new Blob([pdfBytes], { type: "application/pdf" });
         const pdfUrl = URL.createObjectURL(pdfBlob);
+        setRequest({ ...request, idUsuario: user, idActivo: assetData.NumeroPlaca });
         setPdfPreview(pdfUrl);
         setIsFormLocked(true);
     };
