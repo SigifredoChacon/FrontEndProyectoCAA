@@ -6,9 +6,9 @@ import es from "date-fns/locale/es";
 import { createRequest } from "../services/requestService";
 import { saveAs } from 'file-saver';
 import { generateFilledPDF } from '../components/Asset/pdfUtils';
-import {useAuthContext} from "../hooks/useAuthContext.js";
-import {getUserById} from "../services/userService.jsx";
-import {getFirstAvailableAsset} from "../services/assetService.jsx";
+import { useAuthContext } from "../hooks/useAuthContext.js";
+import { getUserById } from "../services/userService.jsx";
+import { getFirstAvailableAsset } from "../services/assetService.jsx";
 
 registerLocale("es", es);
 
@@ -24,7 +24,7 @@ const initialRequestState = {
 export function AssetRequestPage() {
     const location = useLocation();
     const navigate = useNavigate();
-    const {user} = useAuthContext();
+    const { user } = useAuthContext();
     const { id } = location.state || {};
     const [formData, setFormData] = useState({
         usoBien: "",
@@ -84,13 +84,13 @@ export function AssetRequestPage() {
 
         let assetData;
 
-        if(id === 1){
+        if (id === 1) {
             assetData = await getFirstAvailableAsset('Laptop');
         }
-        else if(id === 2){
+        else if (id === 2) {
             assetData = await getFirstAvailableAsset('Proyector');
         }
-        else if(id === 3){
+        else if (id === 3) {
             assetData = await getFirstAvailableAsset('Monitor');
         }
 
@@ -136,31 +136,59 @@ export function AssetRequestPage() {
     };
 
     return (
-        <div className="min-h-screen flex bg-gray-100">
-            <div className="flex-1 flex flex-col items-center justify-center">
-                <h1 className="text-4xl font-bold text-gray-800 mb-4">{getTitle()}</h1>
+        <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100 p-4">
+            <div className="flex-1 flex flex-col items-center justify-center space-y-4 lg:space-y-6 p-4">
+                <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800">{getTitle()}</h1>
 
                 {pdfPreview && (
-                    <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6 mb-6">
+                    <div className="w-full max-w-lg md:max-w-2xl lg:max-w-3xl bg-white shadow-lg rounded-lg p-6 mb-6">
                         <h3 className="text-lg font-semibold mb-4 text-center">Vista previa del PDF</h3>
-                        <iframe src={pdfPreview} width="100%" height="800px" title="Vista previa PDF" className="rounded-md border border-gray-300"></iframe>
-                        <div className="mt-4 flex justify-between">
-                            <button className="bg-gray-400 text-white py-2 px-4 rounded-md" onClick={handleBackToEdit}>Volver a Editar</button>
-                            <button className="bg-green-500 text-white py-2 px-4 rounded-md" onClick={handleDownloadPDF}>Descargar PDF</button>
+
+                        {/* Mostrar vista previa en `iframe` solo en pantallas medianas o más grandes */}
+                        <div className="hidden md:block">
+                            <iframe
+                                src={pdfPreview}
+                                width="100%"
+                                height="400px"
+                                title="Vista previa PDF"
+                                className="rounded-md border border-gray-300 md:h-[600px] lg:h-[800px]"
+                            ></iframe>
+                        </div>
+
+                        {/* Mostrar enlace de descarga solo en pantallas pequeñas */}
+                        <div className="block md:hidden text-center">
+                            <label>
+                                Descargue el PDF para verlo
+                            </label>
+                        </div>
+
+                        <div className="mt-4 flex flex-col sm:flex-row justify-between">
+                            <button className="bg-gray-400 text-white py-2 px-4 rounded-md mb-4 sm:mb-0 sm:mr-2"
+                                    onClick={handleBackToEdit}>
+                                Volver a Editar
+                            </button>
+                            <button className="bg-green-500 text-white py-2 px-4 rounded-md"
+                                    onClick={handleDownloadPDF}>
+                                Descargar PDF
+                            </button>
                         </div>
                     </div>
                 )}
             </div>
 
-            <div className="flex-1 flex flex-col items-center justify-center bg-gray-50 p-8 space-y-6">
-                <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg mb-6">
-                    <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mb-6">Formulario de Solicitud</h2>
+
+            <div
+                className="flex-1 flex flex-col items-center justify-center bg-gray-50 p-4 lg:p-8 space-y-4 lg:space-y-6">
+                <form onSubmit={handleSubmit} className="bg-white p-4 lg:p-8 rounded-lg shadow-lg w-full max-w-lg">
+                    <h2 className="text-lg lg:text-xl font-semibold leading-7 text-gray-900 text-center mb-4">Formulario
+                        de Solicitud</h2>
 
                     {!pdfPreview ? (
                         <>
-                            <div className="grid grid-cols-1 gap-y-6">
+                            <div className="grid grid-cols-1 gap-y-4 lg:gap-y-6">
                                 <div>
-                                    <label htmlFor="usoBien" className="block text-sm font-medium text-gray-700">Uso del Bien</label>
+                                    <label htmlFor="usoBien" className="block text-sm font-medium text-gray-700">Uso del
+                                        Bien</label>
                                     <select
                                         name="usoBien"
                                         id="usoBien"
@@ -179,7 +207,8 @@ export function AssetRequestPage() {
                                 </div>
 
                                 <div>
-                                    <label htmlFor="observaciones" className="block text-sm font-medium text-gray-700">Observaciones</label>
+                                    <label htmlFor="observaciones"
+                                           className="block text-sm font-medium text-gray-700">Observaciones</label>
                                     <textarea
                                         name="observaciones"
                                         id="observaciones"
@@ -192,15 +221,27 @@ export function AssetRequestPage() {
                                     />
                                 </div>
 
-                                <div className="flex justify-center gap-4 mb-6">
-                                    <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} selectsStart startDate={startDate} endDate={endDate} placeholderText="Fecha de inicio" locale="es" className="border border-gray-300 rounded-md p-2" />
-                                    <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} selectsEnd startDate={startDate} endDate={endDate} placeholderText="Fecha de fin" locale="es" className="border border-gray-300 rounded-md p-2" />
+                                <div className="flex flex-col sm:flex-row justify-center gap-4 mb-4">
+                                    <DatePicker selected={startDate} onChange={(date) => setStartDate(date)}
+                                                selectsStart startDate={startDate} endDate={endDate}
+                                                placeholderText="Fecha de inicio" locale="es"
+                                                className="border border-gray-300 rounded-md p-2 w-full sm:w-auto"/>
+                                    <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} selectsEnd
+                                                startDate={startDate} endDate={endDate} placeholderText="Fecha de fin"
+                                                locale="es"
+                                                className="border border-gray-300 rounded-md p-2 w-full sm:w-auto"/>
                                 </div>
                             </div>
 
-                            <div className="mt-8 flex justify-end space-x-4">
-                                <button type="button" className="text-sm font-semibold text-gray-700 hover:text-gray-900" onClick={() => navigate('/categoryAssets')}>Cancelar</button>
-                                <button type="button" onClick={handleCreateRequest} className="inline-flex justify-center rounded-md border border-transparent bg-[#004080] py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-[#003060] focus:outline-none focus:ring-2 focus:ring-offset-2">Generar PDF</button>
+                            <div className="mt-8 flex flex-col sm:flex-row justify-center sm:justify-end gap-4">
+                                <button type="button"
+                                        className="text-sm font-semibold text-gray-700 hover:text-gray-900"
+                                        onClick={() => navigate('/categoryAssets')}>Cancelar
+                                </button>
+                                <button type="button" onClick={handleCreateRequest}
+                                        className="inline-flex justify-center rounded-md border border-transparent bg-[#004080] py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-[#003060] focus:outline-none focus:ring-2 focus:ring-offset-2">Generar
+                                    PDF
+                                </button>
                             </div>
                         </>
                     ) : null}
@@ -208,7 +249,8 @@ export function AssetRequestPage() {
 
                 {isSubmitted && pdfPreview && (
                     <div className="w-full max-w-lg bg-white shadow-lg rounded-lg p-6">
-                        <label htmlFor="fileUpload" className="block text-sm font-medium text-gray-700 mb-2">Subir archivo firmado</label>
+                        <label htmlFor="fileUpload" className="block text-sm font-medium text-gray-700 mb-2">Subir
+                            archivo firmado</label>
                         <input
                             type="file"
                             id="fileUpload"

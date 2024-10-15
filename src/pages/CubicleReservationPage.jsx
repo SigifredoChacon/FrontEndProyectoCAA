@@ -280,64 +280,34 @@ function CubiclesReservationPage() {
 
 
     return (
-        <div style={{maxWidth: '1800px', margin: '0 auto', padding: '0 20px'}}>
+        <div className="max-w-screen-2xl mx-auto px-5">
             <button
                 onClick={() => navigate('/')}
-                style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    position: 'absolute',
-                    top: '80px',
-                    left: '10px',
-                    padding: '5px',
-                }}
+                className="bg-none border-none cursor-pointer absolute top-20 left-2 p-1"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                     stroke="currentColor" style={{width: '32px', height: '32px'}}>
+                     stroke="currentColor" className="w-8 h-8">
                     <path strokeLinecap="round" strokeLinejoin="round"
                           d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                 </svg>
-
-
             </button>
-            <div style={{display: 'flex', flexDirection: 'row', height: '100vh', padding: '20px'}}>
+
+            <div className="flex flex-col md:flex-row h-screen p-5">
                 <Routes>
                     <Route path="createExternalUser"
                            element={<UserExternalFormCreate onUserCreated={handleUserCreated}/>}/>
                     <Route path="reserveUser" element={<ReservationForUser onUserSearched={handleUserSearched}/>}/>
                 </Routes>
 
-                <div style={{
-                    width: '20%',
-                    marginRight: '20px',
-                    backgroundColor: '#f0f0f0',
-                    padding: '10px',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-                }}>
-                    <h3 style={{
-                        textAlign: 'center',
-                        fontSize: '18px',
-                        marginBottom: '20px'
-                    }}>Cubículos Disponibles</h3>
-                    <ul style={{
-                        listStyleType: 'none',
-                        padding: '0',
-                        margin: '0'
-                    }}>
+                {/* Lista de cubículos */}
+                <div className="w-full md:w-1/5 md:mr-5 bg-gray-100 p-3 rounded-lg shadow-lg flex flex-col overflow-y-auto md:h-[90vh]">
+                    <h3 className="text-center text-lg mb-5 md:text-left whitespace-nowrap">Cubículos Disponibles</h3>
+                    <ul className="flex flex-row md:flex-col list-none p-0 m-0 space-x-3 md:space-x-0 md:space-y-2">
                         {cubicles.map((cubicle) => (
                             <li
                                 key={cubicle.idCubiculo}
                                 onClick={() => handleCubicleSelect(cubicle)}
-                                style={{
-                                    padding: '10px 20px',
-                                    margin: '10px 0',
-                                    cursor: 'pointer',
-                                    borderRadius: '4px',
-                                    backgroundColor: selectedCubicleR?.idCubiculo === cubicle.idCubiculo ? '#ddd' : '#fff',
-                                    boxShadow: selectedCubicleR?.idCubiculo === cubicle.idCubiculo ? 'inset 0 0 10px rgba(0, 0, 0, 0.2)' : 'none'
-                                }}
+                                className={`p-3 cursor-pointer rounded ${selectedCubicleR?.idCubiculo === cubicle.idCubiculo ? 'bg-gray-300 shadow-inner' : 'bg-white'}`}
                             >
                                 {cubicle.Nombre}
                             </li>
@@ -345,88 +315,47 @@ function CubiclesReservationPage() {
                     </ul>
                 </div>
 
-                <div style={{
-                    width: '80%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    backgroundColor: '#ffffff',
-                    padding: '20px',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                    flexGrow: 1,
-                    minHeight: 'min-content'  // Asegura que el contenedor sea lo suficientemente grande como para ajustarse al contenido mínimo
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginBottom: '20px'
-                    }}>
-                        <h2 style={{
-                            fontSize: '24px',
-                            margin: '0'
-                        }}>
+                {/* Contenedor del calendario */}
+                <div className="w-full md:w-4/5 flex flex-col bg-white p-5 rounded-lg shadow-lg flex-grow min-h-min">
+                    <div
+                        className="flex flex-col md:flex-row justify-between items-center mb-5 space-y-2 md:space-y-0 md:space-x-2">
+                        <h2 className="text-xl m-0 flex-grow">
                             {selectedCubicleR ? `Reservar Cubículo: ${selectedCubicleR.Nombre}` : 'Seleccionar Cubículo'}
                         </h2>
-                        <div>
-                            {(!(role == 'Estudiante') && role && !(role == 'Externo') && !(role == 'Profesor')) && (
+                        <div className="flex flex-col md:flex-row w-full md:w-auto space-y-2 md:space-y-0 md:space-x-2">
+                            {(!(role === 'Estudiante' || role === 'Externo' || role === 'Profesor')) && (
                                 <button
                                     onClick={handleCreateUserReservation}
-                                    style={{
-                                        padding: '10px 20px',
-                                        marginRight: '10px',
-                                        backgroundColor: '#004080',
-                                        color: '#fff',
-                                        border: 'none',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer'
-                                    }}>
-
+                                    className="px-4 py-2 bg-blue-800 text-white border-none rounded cursor-pointer w-full md:w-auto"
+                                >
                                     Reservar por Usuario
                                 </button>
                             )}
-                            {(!(role == 'Estudiante') && role && !(role == 'Externo') && !(role == 'Profesor')) && (
+                            {(!(role === 'Estudiante' || role === 'Externo' || role === 'Profesor')) && (
                                 <button
                                     onClick={handleCreateExternalReservation}
-                                    style={{
-                                        padding: '10px 20px',
-                                        marginRight: '10px',
-                                        backgroundColor: '#004080',
-                                        color: '#fff',
-                                        border: 'none',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer'
-                                    }}
+                                    className="px-4 py-2 bg-blue-800 text-white border-none rounded cursor-pointer w-full md:w-auto"
                                 >
                                     Reservar Externo
                                 </button>
                             )}
                             <button
                                 onClick={handleCubicleReservationCreated}
-                                style={{
-                                    padding: '10px 20px',
-                                    marginRight: '10px',
-                                    backgroundColor: '#ff4d4d',
-                                    color: '#fff',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer'
-                                }}>Cancelar
+                                className="px-4 py-2 bg-red-500 text-white border-none rounded cursor-pointer w-full md:w-auto"
+                            >
+                                Cancelar
                             </button>
                             <button
                                 onClick={handleSubmit}
-                                style={{
-                                    padding: '10px 20px',
-                                    backgroundColor: '#4caf50',
-                                    color: '#fff',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer'
-                                }}>Reservar
+                                className="px-4 py-2 bg-green-600 text-white border-none rounded cursor-pointer w-full md:w-auto"
+                            >
+                                Reservar
                             </button>
                         </div>
                     </div>
-                    <div style={{flexGrow: 1}}>
+
+                    {/* Contenido del calendario */}
+                    <div className="flex-grow mt-5 md:mt-0">
                         {selectedCubicleR ? (
                             <Calendar
                                 key={calendarKey}
@@ -438,45 +367,25 @@ function CubiclesReservationPage() {
                         )}
                     </div>
                 </div>
+
+                {/* Modal de creación de usuario externo */}
                 {isModalOpen && (
-                    <div style={{
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: 'rgba(0,0,0,0.5)',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        zIndex: 1000
-                    }}>
+                    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <UserExternalFormCreate onUserCreated={handleUserCreated} onCancel={handleCloseModal}/>
                     </div>
                 )}
 
+                {/* Modal de búsqueda de usuario */}
                 {isModalUserSearchedOpen && (
-                    <div style={{
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: 'rgba(0,0,0,0.5)',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        zIndex: 1000
-                    }}>
-                        <ReservationForUser
-                            onUserSearched={handleUserSearched}
-                            onCancel={handleCloseModalUser}
-                        />
+                    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <ReservationForUser onUserSearched={handleUserSearched} onCancel={handleCloseModalUser}/>
                     </div>
                 )}
             </div>
         </div>
     );
+
+
 }
 
 export default CubiclesReservationPage;

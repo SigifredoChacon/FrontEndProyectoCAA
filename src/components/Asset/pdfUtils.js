@@ -64,7 +64,14 @@ export const generateFilledPDF = async (userData, formData, assetData, startDate
     else secondPage.drawText('X', { x: 330.6, y: 691.6, size: fontSize, font });
 
 
-    secondPage.drawText(assetData.Descripcion, { x: 370, y: 700, size: fontSize, font });
+
+    const observationLinesDescription = wrapText(assetData.Descripcion || 'Sin observaciones', 45);
+    let yPositionDescription = 700;
+
+    observationLinesDescription.forEach((line) => {
+        secondPage.drawText(line, { x: 370, y: yPositionDescription, size: fontSize, font });
+        yPositionDescription -= 12;
+    });
 
     secondPage.drawText(startDate.toLocaleDateString(), { x: 150, y: 340, size: fontSize, font });
     secondPage.drawText(endDate.toLocaleDateString(), { x:440, y: 340, size: fontSize, font });

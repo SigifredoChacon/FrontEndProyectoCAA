@@ -3,7 +3,7 @@ import { format, startOfWeek, addDays, isSameWeek, startOfDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 import TimeSlot from './TimeSlot';
 import PropTypes from 'prop-types';
-import {getReservationByCubicleId, getReservationsByCubicleIdAndWeek} from "../../services/reservationService.jsx";
+import { getReservationsByCubicleIdAndWeek } from "../../services/reservationService.jsx";
 
 const timeSlots = ['07:30', '08:30', '09:30', '10:30', '11:30', '12:30', '13:30', '14:30', '15:30'];
 
@@ -16,23 +16,16 @@ const Calendar = ({ selectedCubicleId, onReservationsChange }) => {
     const startOfSelectedWeek = startOfWeek(selectedDate, { weekStartsOn: 1 });
     const daysOfWeek = Array.from({ length: 6 }, (_, i) => addDays(startOfSelectedWeek, i));
 
-
     useEffect(() => {
         const fetchReservations = async () => {
             try {
-
                 const startDate = format(startOfSelectedWeek, 'yyyy-MM-dd');
                 const endDate = format(addDays(startOfSelectedWeek, 6), 'yyyy-MM-dd');
-                console.log("Esta es la fecha de inicio: ", startDate);
-
-
                 const response = await getReservationsByCubicleIdAndWeek(selectedCubicleId, startDate, endDate);
-                console.log("Esta es la fecha de fin: ", endDate);
 
-                console.log("Estas son las reservaciones: ", response);
                 const formattedReservations = response.map(reservation => ({
                     ...reservation,
-                    day: new Date(reservation.Fecha),  // Asegurarse de que 'day' sea un objeto Date
+                    day: new Date(reservation.Fecha),
                 }));
 
                 setExistingReservations(formattedReservations);
@@ -96,15 +89,12 @@ const Calendar = ({ selectedCubicleId, onReservationsChange }) => {
     };
 
     const isReserved = (day, time) => {
-
         const currentTime = new Date(`1970-01-01T${time}:00`);
-
         const existingReservation = existingReservations.find((reservation) => {
             const reservationDay = new Date(reservation.Fecha);
             if (startOfDay(reservationDay).getTime() === startOfDay(day).getTime()) {
                 const startTime = new Date(`1970-01-01T${reservation.HoraInicio}:00`);
                 const endTime = new Date(`1970-01-01T${reservation.HoraFin}:00`);
-
                 return currentTime >= startTime && currentTime < endTime;
             }
             return false;
@@ -122,7 +112,7 @@ const Calendar = ({ selectedCubicleId, onReservationsChange }) => {
     };
 
     return (
-        <div className="calendar">
+        <div className="calendar max-w-full p-4">
             <div className="mb-5 flex flex-col items-center">
                 <label className="text-lg mb-2 font-bold text-gray-800">
                     Selecciona una fecha:
@@ -135,17 +125,18 @@ const Calendar = ({ selectedCubicleId, onReservationsChange }) => {
                     className="p-2 text-base rounded border border-gray-300 bg-white text-gray-800 focus:border-green-500 focus:outline-none"
                     disabled={reservations.length > 0 && selectedDay !== null}
                 />
-
             </div>
 
             <div className="overflow-x-auto">
-                <table className="w-full border-collapse bg-gray-100 rounded-lg shadow-md mt-5">
+                <table className="w-full min-w-[600px] border-collapse bg-gray-100 rounded-lg shadow-md mt-5 text-xs sm:text-sm lg:text-base">
                     <thead>
                     <tr>
                         <th></th>
                         {daysOfWeek.map((day, index) => (
-                            <th key={index}
-                                className="p-3 border border-gray-200 bg-blue-900 text-white text-sm font-bold uppercase">
+                            <th
+                                key={index}
+                                className="p-3 border border-gray-200 bg-blue-900 text-white font-bold uppercase text-center"
+                            >
                                 {format(day, 'EEEE dd/MM', { locale: es })}
                             </th>
                         ))}
@@ -158,8 +149,7 @@ const Calendar = ({ selectedCubicleId, onReservationsChange }) => {
                                 {time}
                             </td>
                             {daysOfWeek.map((day, colIndex) => {
-                                const isPastDate = day < startOfDay(new Date());  // Comparar si es una fecha pasada
-
+                                const isPastDate = day < startOfDay(new Date());
                                 return (
                                     <td key={colIndex} className="p-3 border border-gray-200 text-center">
                                         <TimeSlot
