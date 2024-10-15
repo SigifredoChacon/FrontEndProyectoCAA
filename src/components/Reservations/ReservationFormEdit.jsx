@@ -163,16 +163,19 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
     };
 
     return (
-        <div className="p-8 max-w-full mx-auto">
+        <div className="p-4 md:p-8 max-w-full mx-auto overflow-x-hidden">
             <div className="flex flex-col md:flex-row items-start justify-start">
-                <div className="flex-shrink-0 md:w-5/12 p-4 mt-8">
+                {/* Contenedor de detalles de la sala */}
+                <div className="flex-shrink-0 w-full md:w-5/12 p-4 mt-8">
                     {roomDetails ? (
                         <>
-                            <div className="text-center text-2xl font-bold mb-4 md:mb-2">
-                                {roomDetails.Nombre}
-                            </div>
+                            <div className="text-center text-2xl font-bold mb-4">{roomDetails.Nombre}</div>
                             <div className="w-full h-full overflow-hidden">
-                                <img src={roomDetails.imageUrl} alt={roomDetails.Nombre} className="w-full h-full object-contain rounded-lg max-w-full max-h-full" />
+                                <img
+                                    src={roomDetails.imageUrl}
+                                    alt={roomDetails.Nombre}
+                                    className="w-full h-full object-contain rounded-lg max-w-full"
+                                />
                             </div>
                             <strong className="mt-8 mb-4 block">Descripción de la sala:</strong>
                             <div className="mt-4 text-justify text-sm text-gray-700 w-full max-w-md max-h-32 overflow-y-auto">
@@ -192,68 +195,63 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
                     )}
                 </div>
 
-                <div className="flex-grow md:w-6/10 p-4">
-                    <div className="bg-white w-full shadow-md rounded-lg p-4 mb-4 h-full">
+                {/* Contenedor del calendario y opciones */}
+                <div className="flex-grow w-full md:w-7/12 p-4">
+                    <div className="bg-white w-full max-w-full mx-auto shadow-md rounded-lg p-4 mb-4 sm:max-w-md md:max-w-xl lg:max-w-2xl xl:max-w-4xl">
                         <CalendarRoomsNoEdit
                             selectedRoomId={reservation.idSala}
-                            onReservationsChange={() => {
-                            }}
+                            onReservationsChange={() => {}}
                             editable={false}
                             reservationId={reservation.idReservacion}
                         />
                     </div>
 
-                    <div className="flex flex-col md:flex-row mb-4">
-                        <div className="md:w-1/2 bg-gray-200 p-4 rounded-lg mb-4 md:mb-0 md:mr-2">
-                            <label className="block mb-2 font-bold">Refrigerio</label>
-                            <div>
-                                <label className="mr-4">
+                    <div className="flex flex-col gap-4 md:flex-row md:gap-6 mb-4">
+                        <div className="w-full md:w-1/2 bg-gray-100 p-3 rounded-lg shadow-sm">
+                            <label className="block mb-1 text-sm font-semibold text-gray-700">Refrigerio</label>
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-3 mt-1">
+                                <label className="inline-flex items-center">
                                     <input
                                         type="radio"
                                         name="refrigerio"
                                         value="si"
                                         onChange={handleSnackChange}
                                         checked={snack === true}
-                                        className="mr-2"
+                                        className="mr-1 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
                                     />
                                     Sí
                                 </label>
-                                <label>
+                                <label className="inline-flex items-center">
                                     <input
                                         type="radio"
                                         name="refrigerio"
                                         value="no"
                                         onChange={handleSnackChange}
                                         checked={snack === false}
-                                        className="mr-2"
+                                        className="mr-1 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
                                     />
                                     No
                                 </label>
                             </div>
                         </div>
-                        <div className="md:w-1/2 bg-gray-200 p-4 rounded-lg">
-                            <label className="block text-sm font-medium text-gray-700">Recursos Disponibles</label>
-                            {resources.length === 0 ? (
-                                <p className="text-sm text-gray-500">No hay más recursos disponibles para
-                                    seleccionar.</p>
-                            ) : (
-                                <select
-                                    name="idRecursos"
-                                    id="idRecursos"
-                                    value=""
-                                    onChange={handleChangeResource}
-                                    className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                >
-                                    <option value="">Seleccione un Recurso</option>
-                                    {resources.filter(recurso =>
-                                        !selectedResources.some(selected => selected.idRecursos === recurso.idRecursos)
-                                    ).map(recurso => (
-                                        <option key={recurso.idRecursos} value={recurso.idRecursos}>
-                                            {recurso.Nombre}
-                                        </option>
-                                    ))}
-                                </select>
-                            )}
+                        <div className="w-full md:w-1/2 bg-gray-100 p-3 rounded-lg shadow-sm">
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">Recursos Disponibles</label>
+                            <select
+                                name="idRecursos"
+                                id="idRecursos"
+                                value=""
+                                onChange={handleChangeResource}
+                                className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            >
+                                <option value="">Seleccione un Recurso</option>
+                                {resources.filter(recurso =>
+                                    !selectedResources.some(selected => selected.idRecursos === recurso.idRecursos)
+                                ).map(recurso => (
+                                    <option key={recurso.idRecursos} value={recurso.idRecursos}>
+                                        {recurso.Nombre}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                     </div>
 
@@ -265,7 +263,7 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
                                     <li key={recurso.idRecursos}>
                                         <button
                                             onClick={() => handleRemoveResource(recurso)}
-                                            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                                            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 w-full sm:w-auto"
                                         >
                                             {recurso.Nombre} &times;
                                         </button>
@@ -278,6 +276,7 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
                     </div>
 
                     <div className="bg-gray-200 p-4 rounded-lg mb-4">
+                        <h4 className="font-semibold mb-2">Observaciones</h4>
                         <textarea
                             className="w-full p-2 rounded-md border border-gray-300"
                             rows="4"
@@ -287,13 +286,13 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
                         />
                     </div>
 
-                    <div className="flex justify-end space-x-4">
+                    <div className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-4">
                         <button onClick={() => navigate('/')}
-                                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
+                                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-all w-full sm:w-auto">
                             Cancelar
                         </button>
                         <button onClick={handleUpdateRoomReservation}
-                                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+                                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-all w-full sm:w-auto">
                             Actualizar Reservación
                         </button>
                     </div>
@@ -301,6 +300,7 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
             </div>
         </div>
     );
+
 }
 
 export default ReservationFormEdit;
