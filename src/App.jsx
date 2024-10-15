@@ -40,11 +40,15 @@ import ProfilePage from "./pages/ProfilePage.jsx";
 import EditProfilePage from "./pages/EditProfilePage.jsx";
 import {CategoryAssetsPage} from "./pages/CategoryAssetsPage.jsx";
 import {AssetRequestPage} from "./pages/AssetRequestPage.jsx";
+import AllPersonalRequestPage from "./pages/AllPersonalRequestPage.jsx";
+import AllRequestPage from "./pages/AllRequestPage.jsx";
 
 
 
 const navigation = [
     {name: 'Mis reservaciones', href: '/personalReservations', current: false, allowedRoles: ['all']},
+    {name: 'Mis solicitudes', href: '/personalRequests', current: false, allowedRoles: ['all']},
+    {name: 'Solicitudes Generales', href: '/allRequests', current: false, allowedRoles: ['Administrador']},
     {name: 'Administrar Reservas', href: '/manageReservations', current: false, allowedRoles: ['Administrador']},
     {name: 'Activos', href: '/categoryAssets', current: false, allowedRoles: ['Administrador', 'Profesor']},
     {name: 'Administrar Activos', href: '/assets', current: false, allowedRoles: ['Administrador']},
@@ -465,6 +469,16 @@ function App() {
                 <Route path="/personalReservations/*" element={
                     <ProtectedRoute allowedRoles={['all']}>
                         <AllPersonalReservationPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/personalRequests/*" element={
+                    <ProtectedRoute allowedRoles={['all']}>
+                        <AllPersonalRequestPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/allRequests/*" element={
+                    <ProtectedRoute allowedRoles={['Administrador']}>
+                        <AllRequestPage/>
                     </ProtectedRoute>
                 }/>
                 <Route path="/resources/*" element={

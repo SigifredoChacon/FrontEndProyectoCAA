@@ -13,7 +13,7 @@ import {getFirstAvailableAsset} from "../services/assetService.jsx";
 registerLocale("es", es);
 
 const initialRequestState = {
-    estado: 'Espera',
+    estado: 'Pendiente',
     idUsuario: 0,
     idActivo: 0,
     archivoSolicitud: '',
