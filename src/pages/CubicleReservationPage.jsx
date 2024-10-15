@@ -283,7 +283,7 @@ function CubiclesReservationPage() {
         <div className="max-w-screen-2xl mx-auto px-5">
             <button
                 onClick={() => navigate('/')}
-                className="bg-none border-none cursor-pointer absolute top-20 left-2 p-1"
+                className="hidden sm:block bg-none border-none cursor-pointer absolute top-20 left-2 p-1"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                      stroke="currentColor" className="w-8 h-8">
@@ -291,6 +291,7 @@ function CubiclesReservationPage() {
                           d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                 </svg>
             </button>
+
 
             <div className="flex flex-col md:flex-row h-screen p-5">
                 <Routes>
@@ -300,7 +301,8 @@ function CubiclesReservationPage() {
                 </Routes>
 
                 {/* Lista de cubículos */}
-                <div className="w-full md:w-1/5 md:mr-5 bg-gray-100 p-3 rounded-lg shadow-lg flex flex-col overflow-y-auto md:h-[90vh]">
+                <div
+                    className="w-full md:w-1/5 md:mr-5 bg-gray-100 p-3 rounded-lg shadow-lg flex flex-col overflow-y-auto md:h-[90vh]">
                     <h3 className="text-center text-lg mb-5 md:text-left whitespace-nowrap">Cubículos Disponibles</h3>
                     <ul className="flex flex-row md:flex-col list-none p-0 m-0 space-x-3 md:space-x-0 md:space-y-2">
                         {cubicles.map((cubicle) => (
@@ -370,14 +372,16 @@ function CubiclesReservationPage() {
 
                 {/* Modal de creación de usuario externo */}
                 {isModalOpen && (
-                    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div
+                        className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <UserExternalFormCreate onUserCreated={handleUserCreated} onCancel={handleCloseModal}/>
                     </div>
                 )}
 
                 {/* Modal de búsqueda de usuario */}
                 {isModalUserSearchedOpen && (
-                    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div
+                        className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <ReservationForUser onUserSearched={handleUserSearched} onCancel={handleCloseModalUser}/>
                     </div>
                 )}

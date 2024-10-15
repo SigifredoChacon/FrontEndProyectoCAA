@@ -165,7 +165,6 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
     return (
         <div className="p-4 md:p-8 max-w-full mx-auto overflow-x-hidden">
             <div className="flex flex-col md:flex-row items-start justify-start">
-                {/* Contenedor de detalles de la sala */}
                 <div className="flex-shrink-0 w-full md:w-5/12 p-4 mt-8">
                     {roomDetails ? (
                         <>
@@ -195,7 +194,6 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
                     )}
                 </div>
 
-                {/* Contenedor del calendario y opciones */}
                 <div className="flex-grow w-full md:w-7/12 p-4">
                     <div className="bg-white w-full max-w-full mx-auto shadow-md rounded-lg p-4 mb-4 sm:max-w-md md:max-w-xl lg:max-w-2xl xl:max-w-4xl">
                         <CalendarRoomsNoEdit

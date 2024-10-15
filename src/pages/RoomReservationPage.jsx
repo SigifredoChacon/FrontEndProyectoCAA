@@ -311,12 +311,16 @@ export function RoomReservationPage() {
             </Routes>
             <button
                 onClick={() => navigate('/allRoomReservation')}
-                className="absolute top-20 left-2 p-2"
+                className="hidden sm:block absolute top-20 left-2 p-2 cursor-pointer"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                     stroke="currentColor" className="w-8 h-8">
+                    <path strokeLinecap="round" strokeLinejoin="round"
+                          d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                 </svg>
             </button>
+
+
             <div className="flex flex-col md:flex-row items-start justify-start">
                 <div className="flex-shrink-0 w-full md:w-5/12 p-4 mt-8">
                     <div className="text-center text-2xl font-bold mb-4">{selectedRoom.Nombre}</div>
