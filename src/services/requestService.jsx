@@ -41,3 +41,13 @@ export const sendJustification = async (idSolicitud,idUsuario, justificacion) =>
     });
     return response.data;
 };
+
+export const updateRequestWithFile = async (id, formData) => {
+    const response = await api.patch(`/applications/updateSignApplication/${id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+    return response.data;
+};
+

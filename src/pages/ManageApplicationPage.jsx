@@ -16,7 +16,7 @@ export function ManageApplicationPage() {
         { name: 'Activos', href: '/assets', current: false, svg: Computer},
         { name: 'Historial de Solicitudes', href: '/allRequests', current: false, svg: General},
         { name: 'Solicitudes Pendientes', href: '/pendingApplications', current: false, svg: Check },
-        { name: 'Solicitudes Por Firmar', href: '/assets', current: false, svg: Digital },
+        { name: 'Solicitudes Por Firmar', href: '/toSignApplication', current: false, svg: Digital },
 
     ];
     const navigate = useNavigate();

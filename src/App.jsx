@@ -44,6 +44,7 @@ import AllPersonalRequestPage from "./pages/AllPersonalRequestPage.jsx";
 import AllRequestPage from "./pages/AllRequestPage.jsx";
 import {ManageApplicationPage} from "./pages/ManageApplicationPage.jsx";
 import AllPendingApplicationPage from "./pages/AllPendingApplicationPage.jsx";
+import AllToSignApplicationPage from "./pages/AllToSignApplicationPage.jsx";
 
 
 
@@ -538,9 +539,14 @@ function App() {
                         <Dashboard type={'cubicle'}/>
                     </ProtectedRoute>
                 }/>
-            <Route path="/assets/*" element={
+                <Route path="/assets/*" element={
+                    <ProtectedRoute allowedRoles={['Administrador']}>
+                        <AssetsPage/>
+                    </ProtectedRoute>
+                }/>
+            <Route path="/toSignApplication/*" element={
                 <ProtectedRoute allowedRoles={['Administrador']}>
-                    <AssetsPage/>
+                    <AllToSignApplicationPage/>
                 </ProtectedRoute>
             }/>
 

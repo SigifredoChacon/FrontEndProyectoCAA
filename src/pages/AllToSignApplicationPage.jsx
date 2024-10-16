@@ -22,9 +22,10 @@ import ShowRequestByUserModal from "../components/Request/ShowRequestByUserModal
 import {getAssetById} from "../services/assetService.jsx";
 import {getUserById} from "../services/userService.jsx";
 import {deleteReservation, updateReservation} from "../services/reservationService.jsx";
+import SignApplicationModal from "../components/Request/SignApplicationModal.jsx";
 
 
-function AllPendingApplicationPage() {
+function AllToSignApplicationPage() {
     const { user } = useAuthContext();
     const navigate = useNavigate();
     const [requests, setRequests] = useState([]);
@@ -41,7 +42,7 @@ function AllPendingApplicationPage() {
         try {
             const data = await getRequest();
 
-            const pendingRequests = data.filter((request) => request.Estado === 'Pendiente');
+            const pendingRequests = data.filter((request) => request.Estado === 'Aceptada');
 
             const requestsWithDetails = await Promise.all(
                 pendingRequests.map(async (request) => {
@@ -68,7 +69,7 @@ function AllPendingApplicationPage() {
 
     const handleAcceptApplication = async () => {
         try{
-            await updateRequest(selectedApplication.idSolicitud, {estado: "Aceptada"});
+            await sendJustification(selectedApplication.idSolicitud,selectedApplication.idUsuario, null);
             await fetchRequests();
         }
         catch (error){
@@ -79,22 +80,6 @@ function AllPendingApplicationPage() {
         navigate('/pendingApplications')
     };
 
-    const handleRejectApplication = async (justification) => {
-        try{
-            console.log(justification)
-            await updateRequest(selectedApplication.idSolicitud, {estado: "Rechazada"});
-            await updateAsset(selectedApplication.idActivo, {condicion: 0});
-            await sendJustification(selectedApplication.idSolicitud,selectedApplication.idUsuario, justification);
-            await fetchRequests();
-        }
-        catch (error){
-            console.error('Error al rechazar la reservación:', error);
-        }
-        setSelectedApplication(null);
-        handleCloseModal();
-        navigate('/pendingApplications')
-
-    };
 
 
     const handleOpenModal = (archivoSolicitud, application) => {
@@ -149,7 +134,7 @@ function AllPendingApplicationPage() {
                                 <TableHeaderCell>Activo</TableHeaderCell>
                                 <TableHeaderCell>Cédula/Carnet</TableHeaderCell>
                                 <TableHeaderCell>Nombre de Usuario</TableHeaderCell>
-                                <TableHeaderCell>Documento PDF</TableHeaderCell>
+                                <TableHeaderCell>Firmar</TableHeaderCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -174,14 +159,13 @@ function AllPendingApplicationPage() {
                                     <TableCell style={{display: 'flex'}}>
                                         <button onClick={() => handleOpenModal(request.archivoSolicitud, request)}
                                                 className="mx-2 p-2 rounded-full hover:bg-gray-200">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                 viewBox="0 0 24 24"
-                                                 fill="currentColor"
-                                                 preserveAspectRatio="xMidYMid meet"
-                                                 style={{width: '28px', height: '48px', overflow: 'visible'}}>
-                                                <path
-                                                    d="M16 0c8.836556 0 16 7.163444 16 16s-7.163444 16-16 16-16-7.163444-16-16 7.163444-16 16-16zm0 2c-7.7319865 0-14 6.2680135-14 14s6.2680135 14 14 14 14-6.2680135 14-14-6.2680135-14-14-14zm1.3 18.5v2.6h-2.6v-2.6zm-1.3-11.5c2.209139 0 4 1.790861 4 4 0 1.8636009-1.2744465 3.4295388-2.9993376 3.873812l-.0006624 2.126188h-2v-4h1c1.1045695 0 2-.8954305 2-2s-.8954305-2-2-2c-1.0543618 0-1.9181651.8158778-1.9945143 1.8507377l-.0054857.1492623h-2c0-2.209139 1.790861-4 4-4z"/>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                 stroke-width="1.5" stroke="currentColor" className="size-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/>
                                             </svg>
+
+
                                         </button>
                                     </TableCell>
 
@@ -191,15 +175,15 @@ function AllPendingApplicationPage() {
                     </Table>
                 )}
             </Card>
-            <AcceptApplicationModal
+            <SignApplicationModal
                 open={isModalOpen}
                 handleClose={handleCloseModal}
                 archivoSolicitud={selectedArchivoSolicitud}
                 handleAcceptApplication={handleAcceptApplication}
-                handleRejectApplication={handleRejectApplication}
+                request={selectedApplication}
             />
         </div>
     );
 }
 
-export default AllPendingApplicationPage;
+export default AllToSignApplicationPage;
