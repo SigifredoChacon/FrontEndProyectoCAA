@@ -6,7 +6,7 @@ function ShowRequestByUserModal({ open, handleClose, archivoSolicitud }) {
 
     useEffect(() => {
         if (open && archivoSolicitud) {
-            // Construye la URL completa del PDF
+
             setPdfUrl(`${api.defaults.baseURL}/${archivoSolicitud.replace(/\\/g, '/')}`);
         }
     }, [open, archivoSolicitud]);
@@ -16,7 +16,21 @@ function ShowRequestByUserModal({ open, handleClose, archivoSolicitud }) {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-6 rounded-lg max-w-lg w-11/12 md:w-3/4 lg:w-2/3 shadow-lg">
-                <div className="relative w-full h-[80vh]">
+
+                <div className="block sm:hidden text-center text-gray-500 mb-4">
+                    <p>Por favor, utilice una pantalla más grande para ver el documento o descárguelo a
+                        continuación.</p>
+                    <a
+                        href={pdfUrl}
+                        download
+                        className="text-blue-500 underline hover:text-blue-600 mt-2 inline-block"
+                    >
+                        Descargar PDF
+                    </a>
+                </div>
+
+
+                <div className="relative w-full h-[80vh] hidden sm:block">
                     {pdfUrl ? (
                         <iframe
                             src={pdfUrl}
@@ -27,6 +41,8 @@ function ShowRequestByUserModal({ open, handleClose, archivoSolicitud }) {
                         <p className="text-gray-500 text-center">Cargando documento...</p>
                     )}
                 </div>
+
+
                 <div className="flex justify-end mt-4">
                     <button
                         onClick={handleClose}
@@ -36,6 +52,7 @@ function ShowRequestByUserModal({ open, handleClose, archivoSolicitud }) {
                     </button>
                 </div>
             </div>
+
         </div>
     );
 }

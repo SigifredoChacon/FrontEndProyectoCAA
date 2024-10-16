@@ -154,31 +154,32 @@ function AllPersonalRequestPage() {
                         </div>
                     )}
                 </div>
-                <div className="w-full flex justify-center mb-6">
-
+                <div className="w-full flex flex-col sm:flex-row justify-center mb-6 gap-4">
+                    {/* Filtro principal */}
                     <select
                         value={filterType}
                         onChange={handleFilterTypeChange}
-                        className="mr-4 w-64 border border-gray-300 px-4 py-2 rounded-lg bg-white text-gray-700 focus:outline-none focus:border-blue-400 transition duration-200"
+                        className="w-full sm:w-64 border border-gray-300 px-4 py-2 rounded-lg bg-white text-gray-700 focus:outline-none focus:border-blue-400 transition duration-200"
                     >
                         <option value="Nombre Activo">Nombre de Activo</option>
                         <option value="Estado">Estado de la Solicitud</option>
                     </select>
 
-
+                    {/* Opciones del segundo filtro, solo visible cuando se selecciona 'Estado' */}
                     {filterType === 'Estado' && (
                         <select
                             value={filterStatus}
                             onChange={handleFilterStatusChange}
-                            className="w-64 border border-gray-300 px-4 py-2 rounded-lg bg-white text-gray-700 focus:outline-none focus:border-blue-400 transition duration-200"
+                            className="w-full sm:w-64 border border-gray-300 px-3 py-2 rounded-lg bg-white text-gray-700 focus:outline-none focus:border-blue-400 transition duration-200"
                         >
-                            <option value="Pendiente">Pendiente</option>
-                            <option value="Aceptada">Aceptada</option>
-                            <option value="Rechazada">Rechazada</option>
-                            <option value="Firmado">Firmado</option>
+                            <option value="Pendiente" className="text-sm md:text-base">Pendiente</option>
+                            <option value="Aceptada" className="text-sm md:text-base">Aceptada</option>
+                            <option value="Rechazada" className="text-sm md:text-base">Rechazada</option>
+                            <option value="Firmado" className="text-sm md:text-base">Firmado</option>
                         </select>
                     )}
                 </div>
+
 
                 {!isOnCreateOrEditPage && (
                     <Table className="mt-8">
