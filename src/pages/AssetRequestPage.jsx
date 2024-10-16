@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import es from "date-fns/locale/es";
@@ -8,7 +8,7 @@ import { saveAs } from 'file-saver';
 import { generateFilledPDF } from '../components/Asset/pdfUtils';
 import { useAuthContext } from "../hooks/useAuthContext.js";
 import { getUserById } from "../services/userService.jsx";
-import { getFirstAvailableAsset } from "../services/assetService.jsx";
+import {getFirstAvailableAsset, updateAsset} from "../services/assetService.jsx";
 
 registerLocale("es", es);
 
@@ -38,6 +38,31 @@ export function AssetRequestPage() {
     const [file, setFile] = useState(null);
     const [isFormLocked, setIsFormLocked] = useState(false);
     const [pdfPreview, setPdfPreview] = useState(null);
+    const [currentAssetId, setCurrentAssetId] = useState(null);
+
+
+
+    useEffect(() => {
+        const handleUnload = () => {
+            const isCompleted = JSON.parse(localStorage.getItem("isRequestCompleted"));
+            if (currentAssetId && !isCompleted) {
+                updateAsset(currentAssetId, { condicion: 0 }); // Cambia a "Disponible" si se sale
+            }
+        };
+
+        // Detectar salida de la página y cierre del navegador
+        window.addEventListener("beforeunload", handleUnload);
+
+        // Limpiar el evento y cambiar el estado a "Disponible" cuando el usuario navegue a otra página
+        return () => {
+            window.removeEventListener("beforeunload", handleUnload);
+            const isCompleted = JSON.parse(localStorage.getItem("isRequestCompleted"));
+            if (currentAssetId && !isCompleted) {
+                updateAsset(currentAssetId, { condicion: 0 });
+            }
+        };
+    }, [currentAssetId]);
+
 
     const getTitle = () => {
         switch (id) {
@@ -100,6 +125,13 @@ export function AssetRequestPage() {
         setRequest({ ...request, idUsuario: user, idActivo: assetData.NumeroPlaca });
         setPdfPreview(pdfUrl);
         setIsFormLocked(true);
+
+        // Cambiar idEstado a 1 ("Prestado")
+        if (assetData?.NumeroPlaca) {
+            await updateAsset(assetData.NumeroPlaca, { condicion: 1 });
+            setCurrentAssetId(assetData.NumeroPlaca);
+        }
+
     };
 
     const handleDownloadPDF = () => {
@@ -107,11 +139,12 @@ export function AssetRequestPage() {
         setIsSubmitted(true);
     };
 
-    const handleBackToEdit = () => {
+    const handleBackToEdit = async() => {
         setIsFormLocked(false);
         setPdfPreview(null);
         setIsSubmitted(false);
         setFileUploaded(false);
+        await updateAsset(currentAssetId, { condicion: 0 });
     };
 
     const handleFinalSubmit = async () => {
@@ -126,6 +159,7 @@ export function AssetRequestPage() {
         try {
             const response = await createRequest(formData);
             if (response.status === 201) {
+                localStorage.setItem("isRequestCompleted", JSON.stringify(true)); // Guardar el estado de completado en localStorage
                 navigate('/categoryAssets');
             } else {
                 console.error("Error al crear la solicitud");

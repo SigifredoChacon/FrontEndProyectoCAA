@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getRequestByUserId, deleteRequest } from '../services/requestService.jsx';
+import {getRequestByUserId, deleteRequest, getRequestById} from '../services/requestService.jsx';
 import { useAuthContext } from '../hooks/useAuthContext.js';
 import {
     Card,
@@ -16,6 +16,7 @@ import {
 } from '@tremor/react';
 
 import ShowRequestByUserModal from "../components/Request/ShowRequestByUserModal.jsx";
+import {updateAsset} from "../services/assetService.jsx";
 
 function AllPersonalRequestPage() {
     const { user } = useAuthContext();
@@ -78,9 +79,13 @@ function AllPersonalRequestPage() {
     };
 
     const handleDeleteRequest = async (idSolicitud) => {
+
         try {
+            const requestdata = await getRequestById(idSolicitud);
             await deleteRequest(idSolicitud);
+            await updateAsset(requestdata.idActivo, {condicion: 0});
             setRequests(requests.filter((request) => request.idSolicitud !== idSolicitud));
+
         } catch (error) {
             console.error('Error al eliminar la solicitud:', error);
         }
