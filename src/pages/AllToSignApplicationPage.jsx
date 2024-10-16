@@ -77,7 +77,7 @@ function AllToSignApplicationPage() {
         }
         setSelectedApplication(null);
         handleCloseModal();
-        navigate('/pendingApplications')
+        navigate('/toSignApplication')
     };
 
 
@@ -95,18 +95,18 @@ function AllToSignApplicationPage() {
     };
 
     const location = useLocation();
-    const isOnCreateOrEditPage = location.pathname.startsWith("/personalRequests/edit/");
+    const isOnCreateOrEditPage = location.pathname.startsWith("/toSignApplication/edit/");
 
     return (
         <div style={{ maxWidth: '1800px', margin: '0 auto', padding: '0 20px' }}>
             {!isOnCreateOrEditPage && (
                 <h1 style={{ textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px' }}>
-                    Solicitudes Pendientes
+                    Solicitudes por Firmar
                 </h1>
             )}
             <Card style={{border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px'}}>
                 <Title>
-                    Solicitudes Pendientes
+                    Solicitudes por Firmar
                     <Badge style={{
                         marginLeft: '8px',
                         backgroundColor: '#00000010',
