@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { getAssets, deleteAsset, getAssetById } from '../../services/assetService';
 import {
@@ -18,6 +18,8 @@ function AssetList({ onEdit }) {
     const [assets, setAssets] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResult, setSearchResult] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1); // Página actual
+    const itemsPerPage = 10; // Cantidad de elementos por página
 
     useEffect(() => {
         fetchAssets();
@@ -64,6 +66,19 @@ function AssetList({ onEdit }) {
 
     const displayedAssets = searchResult !== null ? searchResult : assets;
 
+    const totalPages = Math.ceil(displayedAssets.length / itemsPerPage);
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+    const currentAssets = displayedAssets.slice(indexOfFirstItem, indexOfLastItem);
+
+    const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+        }
+    };
+
     return (
         <Card style={{border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px'}}>
             <Title>
@@ -81,7 +96,7 @@ function AssetList({ onEdit }) {
             <div className="w-full flex justify-center">
                 <div className="w-96">
                     <TextInput
-                        placeholder="Buscar por Cédula/Carnet"
+                        placeholder="Buscar por Numero de Placa"
                         value={searchTerm}
                         onChange={handleSearchChange}
                         className="search-input w-full text-center rounded-full px-4 py-3 border-2 border-gray-300 outline-none transition-colors duration-300 ease-in-out focus:border-green-500 bg-transparent"
@@ -126,7 +141,7 @@ function AssetList({ onEdit }) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {displayedAssets.map((asset) => (
+                    {currentAssets.map((asset) => (
                         <TableRow key={asset.NumeroPlaca}>
                             <TableCell>
                                 {asset.NumeroPlaca}
@@ -159,6 +174,23 @@ function AssetList({ onEdit }) {
                     ))}
                 </TableBody>
             </Table>
+            <div className="flex justify-center items-center mt-4 space-x-2">
+                <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1 rounded ${currentPage === 1 ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
+                >
+                    Anterior
+                </button>
+                <span>Página {currentPage} de {totalPages}</span>
+                <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-1 rounded ${currentPage === totalPages ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
+                >
+                    Siguiente
+                </button>
+            </div>
         </Card>
     );
 }

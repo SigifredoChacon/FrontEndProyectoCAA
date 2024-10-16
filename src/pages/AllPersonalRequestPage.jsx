@@ -29,6 +29,9 @@ function AllPersonalRequestPage() {
     const [filterType, setFilterType] = useState('Nombre Activo');
     const [filterStatus, setFilterStatus] = useState('Pendiente');
 
+    const [currentPage, setCurrentPage] = useState(1); // Página actual
+    const itemsPerPage = 10; // Cantidad de elementos por página
+
     useEffect(() => {
         fetchRequests();
     }, []);
@@ -101,6 +104,17 @@ function AllPersonalRequestPage() {
         setSelectedArchivoSolicitud(null);
     };
 
+    const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentRequests = filteredRequests.slice(indexOfFirstItem, indexOfLastItem);
+
+    const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+        }
+    };
+
     const location = useLocation();
     const isOnCreateOrEditPage = location.pathname.startsWith("/personalRequests/edit/");
 
@@ -161,6 +175,7 @@ function AllPersonalRequestPage() {
                             <option value="Pendiente">Pendiente</option>
                             <option value="Aceptada">Aceptada</option>
                             <option value="Rechazada">Rechazada</option>
+                            <option value="Firmado">Firmado</option>
                         </select>
                     )}
                 </div>
@@ -179,7 +194,7 @@ function AllPersonalRequestPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {filteredRequests.map((request) => (
+                            {currentRequests.map((request) => (
                                 <TableRow key={request.idSolicitud}>
                                     <TableCell>{request.idSolicitud}</TableCell>
                                     <TableCell>{new Date(request.FechaInicio).toLocaleDateString('es-ES', {
@@ -228,6 +243,24 @@ function AllPersonalRequestPage() {
                         </TableBody>
                     </Table>
                 )}
+                {/* Paginador */}
+                <div className="flex justify-center items-center mt-4 space-x-2">
+                    <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className={`px-3 py-1 rounded ${currentPage === 1 ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
+                    >
+                        Anterior
+                    </button>
+                    <span>Página {currentPage} de {totalPages}</span>
+                    <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className={`px-3 py-1 rounded ${currentPage === totalPages ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
+                    >
+                        Siguiente
+                    </button>
+                </div>
             </Card>
             <ShowRequestByUserModal
                 open={isModalOpen}

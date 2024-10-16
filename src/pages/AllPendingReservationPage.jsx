@@ -27,6 +27,8 @@ function AllPendingReservationPage() {
     const [reservations, setReservations] = useState([]);
     const [selectedReservation, setSelectedReservation] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1); // Página actual
+    const itemsPerPage = 10; // Cantidad de elementos por página
 
 
 
@@ -56,11 +58,15 @@ function AllPendingReservationPage() {
                 return { ...reservation, placeName, userName };
             }));
 
-            setReservations(reservationsWithDetails);
+
+            const sortedReservations = reservationsWithDetails.sort((a, b) => new Date(a.Fecha) - new Date(b.Fecha));
+
+            setReservations(sortedReservations);
         } catch (error) {
             console.error('Error al obtener las reservaciones:', error);
         }
     };
+
 
     const handleViewReservation = (reservation) => {
         setSelectedReservation(reservation);
@@ -99,6 +105,18 @@ function AllPendingReservationPage() {
         setIsModalOpen(false);
         setSelectedReservation(null);
         navigate('/pendingReservations')
+    };
+
+    // Maneja el cambio de página
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentReservations = reservations.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(reservations.length / itemsPerPage);
+
+    const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+        }
     };
 
     const location = useLocation();
@@ -167,7 +185,7 @@ function AllPendingReservationPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {reservations.map((reservation) => (
+                            {currentReservations.map((reservation) => (
                                 <TableRow key={reservation.idReservacion}>
                                     <TableCell>{reservation.idUsuario}</TableCell>
                                     <TableCell>{reservation.userName}</TableCell>
@@ -219,6 +237,24 @@ function AllPendingReservationPage() {
                                                 onReservationReject={handleRejectReservation}/>
                     </div>
                 )}
+                {/* Paginador */}
+                <div className="flex justify-center items-center mt-4 space-x-2">
+                    <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className={`px-3 py-1 rounded ${currentPage === 1 ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
+                    >
+                        Anterior
+                    </button>
+                    <span>Página {currentPage} de {totalPages}</span>
+                    <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className={`px-3 py-1 rounded ${currentPage === totalPages ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
+                    >
+                        Siguiente
+                    </button>
+                </div>
             </Card>
         </div>
     );

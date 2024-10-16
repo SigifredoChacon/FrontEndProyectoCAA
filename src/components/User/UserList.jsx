@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { getUsers, deleteUser, getUserById } from '../../services/userService';
 import {
@@ -18,6 +18,8 @@ function UserList({ onEdit }) {
     const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResult, setSearchResult] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1); // Página actual
+    const itemsPerPage = 10; // Cantidad de elementos por página
 
     useEffect(() => {
         fetchUsers();
@@ -62,7 +64,25 @@ function UserList({ onEdit }) {
         }
     };
 
+
     const displayedUsers = searchResult !== null ? searchResult : users;
+
+
+    const totalPages = Math.ceil(displayedUsers.length / itemsPerPage);
+
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+
+    const currentUsers = displayedUsers.slice(indexOfFirstItem, indexOfLastItem);
+
+    const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+        }
+    };
+
 
     return (
         <Card style={{border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px'}}>
@@ -126,7 +146,7 @@ function UserList({ onEdit }) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {displayedUsers.map((user) => (
+                    {currentUsers.map((user) => (
                         <TableRow key={user.CedulaCarnet}>
                             <TableCell>
                                 {user.CedulaCarnet}
@@ -159,6 +179,23 @@ function UserList({ onEdit }) {
                     ))}
                 </TableBody>
             </Table>
+            <div className="flex justify-center items-center mt-4 space-x-2">
+                <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1 rounded ${currentPage === 1 ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
+                >
+                    Anterior
+                </button>
+                <span>Página {currentPage} de {totalPages}</span>
+                <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-1 rounded ${currentPage === totalPages ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
+                >
+                    Siguiente
+                </button>
+            </div>
         </Card>
     );
 }
