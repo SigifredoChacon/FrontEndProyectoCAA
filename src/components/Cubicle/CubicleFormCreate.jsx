@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import PropTypes from 'prop-types'; // Importa PropTypes
 import {createCubicle} from '../../services/cubicleService.jsx';
+import Swal from "sweetalert2";
 
 
 const initialCubicleState = {
@@ -30,10 +31,27 @@ function CubicleFormCreate({onCubicleCreated}) {
             };
 
             await createCubicle(cubicleToCreate);
-            onCubicleCreated();
             setCubicle(initialCubicleState);
+            await Swal.fire({
+                title: '¡Éxito!',
+                text: 'Se ha creado el cubículo con éxito',
+                icon: 'success',
+                timer: 1000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            }).then(() => {
+                onCubicleCreated();
+            });
         } catch (error) {
-            console.error('Error al crear cubiculo:', error);
+            await Swal.fire({
+                title: '¡Error!',
+                text: 'Cubículo existente con ese nombre',
+                icon: 'error',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+
+            });
         }
     };
 

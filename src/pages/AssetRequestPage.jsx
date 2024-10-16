@@ -9,6 +9,7 @@ import { generateFilledPDF } from '../components/Asset/pdfUtils';
 import { useAuthContext } from "../hooks/useAuthContext.js";
 import { getUserById } from "../services/userService.jsx";
 import {getFirstAvailableAsset, updateAsset} from "../services/assetService.jsx";
+import Swal from "sweetalert2";
 
 registerLocale("es", es);
 
@@ -160,8 +161,19 @@ export function AssetRequestPage() {
         try {
             const response = await createRequest(formData);
             if (response.status === 201) {
-                localStorage.setItem("isRequestCompleted", JSON.stringify(true)); // Guardar el estado de completado en localStorage
-                navigate('/categoryAssets');
+
+                await Swal.fire({
+                    title: '¡Éxito!',
+                    text: 'Tu solicitud se ha enviado correctamente',
+                    icon: 'success',
+                    timer: 2500,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    willClose: () => {
+                        localStorage.setItem("isRequestCompleted", JSON.stringify(true)); // Guardar el estado de completado en localStorage
+                        navigate('/categoryAssets');
+                    }
+                });
             } else {
                 console.error("Error al crear la solicitud");
             }

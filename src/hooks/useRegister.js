@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import {createUser} from "../services/userService.jsx";
-
+import { createUser } from "../services/userService.jsx";
 
 export const useRegister = () => {
     const [loading, setLoading] = useState(false);
@@ -16,10 +15,23 @@ export const useRegister = () => {
             await createUser(user);
             setLoading(false);
             setIsRegister(true);
-
         } catch (err) {
             setLoading(false);
-            setError(err.response.data.message);
+
+            // Verifica si el error es de tipo "too_big" para cedulaCarnet
+            const errorData = err.response?.data?.message;
+            if (errorData && Array.isArray(errorData)) {
+                const tooBigError = errorData.find(
+                    (msg) => msg.code === "too_big" && msg.path.includes("cedulaCarnet")
+                );
+                if (tooBigError) {
+                    setError("El número de cédula es demasiado grande.");
+                } else {
+                    setError("Ocurrió un error al registrar el usuario.");
+                }
+            } else {
+                setError(err.response.data.message);
+            }
         }
     };
 

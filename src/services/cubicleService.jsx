@@ -17,7 +17,7 @@ export const updateCubicle = async (id, cubicle) => {
 
 export const deleteCubicle = async (id) => {
     const response = await api.delete(`/cubicles/${id}`);
-    return response.data;
+    return response;
 };
 
 export const getCubicleById = async (id) => {

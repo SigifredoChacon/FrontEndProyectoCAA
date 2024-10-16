@@ -242,7 +242,17 @@ export function RoomReservationPage() {
                 console.error('Error al crear Reservación:', error);
             }
         }
-
+        await Swal.fire({
+            title: '¡Reservado!',
+            text: 'Se ha realizado la reserva de tu sala con exito',
+            icon: 'success',
+            timer: 2500,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            willClose: () => {
+                navigate('/');
+            }
+        });
         handleRoomReservationCreated(); // Navega al home u otra vista una vez creada la reserva
         setReservation(initialRoomReservationState); // Reiniciar estado de la reserva
     };

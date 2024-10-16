@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { updateCubicle } from '../../services/cubicleService.jsx';
+import Swal from "sweetalert2";
 
 function CubicleFormEdit({ selectedCubicle, onCubicleUpdated }) {
     const [cubicle, setCubicle] = useState(selectedCubicle);
@@ -48,15 +49,39 @@ function CubicleFormEdit({ selectedCubicle, onCubicleUpdated }) {
             }, {});
 
             if (Object.keys(updatedFields).length > 0) {
-                console.log('Updating cubicle with data:', updatedFields);
-                console.log('Cubicle to update:', cubicleToUpdate.idCubiculo);
                 await updateCubicle(selectedCubicle.idCubiculo, updatedFields);
-                onCubicleUpdated();
+                await Swal.fire({
+                    title: '¡Éxito!',
+                    text: 'Se ha editado la información del cubículo con éxito',
+                    icon: 'success',
+                    timer: 1000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                }).then(() => {
+                    onCubicleUpdated();
+                });
             } else {
-                console.log('No changes detected, update not required.');
+                await Swal.fire({
+                    title: '¡Error!',
+                    text: 'No se detectaron cambios',
+                    icon: 'error',
+                    timer: 1000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+
+                });
             }
         } catch (error) {
-            console.error('Error al actualizar cubiculo:', error);
+            await Swal.fire({
+                title: '¡Error!',
+                text: 'Ya existe un cubículo con ese nombre',
+                icon: 'error',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+
+            });
+
         }
     };
 

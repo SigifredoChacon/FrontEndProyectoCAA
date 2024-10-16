@@ -12,6 +12,8 @@ import {
     Title,
     Badge
 } from '@tremor/react';
+import Swal from "sweetalert2";
+import {deleteCubicle} from "../../services/cubicleService.jsx";
 
 
 function ResourceList({ onEdit }) {
@@ -33,12 +35,43 @@ function ResourceList({ onEdit }) {
 
 
     const handleDelete = async (id) => {
-        try {
-            await deleteResource(id);
-            setResources(resources.filter((resource) => resource.idRecursos !== id));
-        } catch (error) {
-            console.error('Error al eliminar la recurso:', error);
-        }
+
+        Swal.fire({
+            title: '¡Eliminar!',
+            text: '¿Estás seguro de que deseas eliminar este recurso?',
+            icon: 'warning',
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+        }).then(async (result) => {  // Usa async aquí
+            if (result.isConfirmed) {
+                try {
+                    await deleteResource(id);
+                    setResources(resources.filter((resource) => resource.idRecursos !== id));
+
+                    await Swal.fire({
+                        title: '¡Eliminado!',
+                        text: 'Se ha eliminado el recurso con éxito',
+                        icon: 'success',
+                        timer: 1000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+
+                    });
+
+                } catch (error) {
+                    await Swal.fire({
+                        title: '¡Error!',
+                        text: error.response.data.message,
+                        icon: 'error',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+
+                    });
+
+                }
+            }
+        });
     };
 
 

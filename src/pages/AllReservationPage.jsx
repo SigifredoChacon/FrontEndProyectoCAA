@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { deleteReservation, getReservation} from '../services/reservationService.jsx';
 import {getNameRoomById, getRoomById} from '../services/roomService.jsx';
-import { getCubicleById } from '../services/cubicleService.jsx';
+import {deleteCubicle, getCubicleById} from '../services/cubicleService.jsx';
 import { usePersonalReservation } from '../hooks/usePersonalReservation.js';
 import { getUserById } from '../services/userService.jsx';
 import LockDayModal from '../components/Reservations/LockDayModal.jsx';
@@ -21,6 +21,7 @@ import {
 } from '@tremor/react';
 
 import ReservationFormEdit from '../components/Reservations/ReservationFormEdit.jsx';
+import Swal from "sweetalert2";
 
 function AllReservationPage() {
     const {selectedReservation, handleEditReservation, handleReservationUpdated } = usePersonalReservation();
@@ -90,12 +91,42 @@ function AllReservationPage() {
     };
 
     const handleDeleteReservation = async (idReservacion) => {
-        try {
-            await deleteReservation(idReservacion);
-            setReservations(reservations.filter((reservation) => reservation.idReservacion !== idReservacion));
-        } catch (error) {
-            console.error('Error al eliminar la reservación:', error);
-        }
+        Swal.fire({
+            title: '¡Eliminar!',
+            text: '¿Estás seguro de que deseas eliminar este cubículo?',
+            icon: 'warning',
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+        }).then(async (result) => {  // Usa async aquí
+            if (result.isConfirmed) {
+                try {
+                    await deleteReservation(idReservacion);
+                    setReservations(reservations.filter((reservation) => reservation.idReservacion !== idReservacion));
+
+                    await Swal.fire({
+                        title: '¡Eliminado!',
+                        text: 'Se ha eliminado la reservación con éxito',
+                        icon: 'success',
+                        timer: 1000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+
+                    });
+
+                } catch (error) {
+                    await Swal.fire({
+                        title: '¡Error!',
+                        text: 'No se ha podido eliminar la reservación',
+                        icon: 'error',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+
+                    });
+
+                }
+            }
+        });
     };
 
 

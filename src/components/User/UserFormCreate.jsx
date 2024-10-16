@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {createUser} from '../../services/userService';
 import {getRoles} from "../../services/roleService.jsx";
+import Swal from "sweetalert2";
 
 const initialUserState = {
     cedulaCarnet: 0,
@@ -54,10 +55,28 @@ function UserFormCreate({onUserCreated}) {
 
 
             await createUser(userToCreate);
-            onUserCreated();
             setUser(initialUserState);
+            await Swal.fire({
+                title: '¡Éxito!',
+                text: 'Se ha creado el usuario con éxito',
+                icon: 'success',
+                timer: 1000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            }).then(() => {
+                onUserCreated(); // Llamada para redirigir a la lista de usuarios después de la alerta
+            });
+
         } catch (error) {
-            console.error('Error al crear usuario:', error);
+            await Swal.fire({
+                title: '¡Error!',
+                text: error.response.data.message,
+                icon: 'error',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+
+            });
         }
     };
 

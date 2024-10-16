@@ -2,10 +2,13 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { updateUser } from '../../services/userService';
 import {getRoles} from "../../services/roleService.jsx";
+import Swal from "sweetalert2";
+import {useNavigate} from "react-router-dom";
 
 function UserFormEdit({ selectedUser, onUserUpdated}) {
     const [user, setUser] = useState(selectedUser);
     const [roles, setRoles] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setUser(selectedUser);
@@ -59,10 +62,19 @@ function UserFormEdit({ selectedUser, onUserUpdated}) {
             }
 
             if (Object.keys(updatedFields).length > 0) {
-                console.log('Updating user with data:', updatedFields);
-                console.log('User to update:', userToUpdate.CedulaCarnet);
+
                 await updateUser(selectedUser.CedulaCarnet, updatedFields);
-                onUserUpdated();
+                await Swal.fire({
+                    title: '¡Éxito!',
+                    text: 'Se ha editado la información del usuario con éxito',
+                    icon: 'success',
+                    timer: 1000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                }).then(() => {
+                    onUserUpdated(); // Llamada para redirigir a la lista de usuarios después de la alerta
+                });
+
 
             } else {
                 console.log('No changes detected, update not required.');

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { updateResource } from '../../services/resourceService.jsx';
+import Swal from "sweetalert2";
 
 function ResourceFormEdit({ selectedResource, onResourceUpdated }) {
     const [resource, setResource] = useState(selectedResource);
@@ -32,15 +33,39 @@ function ResourceFormEdit({ selectedResource, onResourceUpdated }) {
             }, {});
 
             if (Object.keys(updatedFields).length > 0) {
-                console.log('Updating resource with data:', updatedFields);
-                console.log('Resource to update:', resourceToUpdate.idRecursos);
+
                 await updateResource(selectedResource.idRecursos, updatedFields);
-                onResourceUpdated();
+                await Swal.fire({
+                    title: '¡Éxito!',
+                    text: 'Se ha editado la información del recurso con éxito',
+                    icon: 'success',
+                    timer: 1000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                }).then(() => {
+                    onResourceUpdated();
+                });
             } else {
-                console.log('No changes detected, update not required.');
+                await Swal.fire({
+                    title: '¡Error!',
+                    text: 'No se detectaron cambios',
+                    icon: 'error',
+                    timer: 1000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+
+                });
             }
         } catch (error) {
-            console.error('Error al actualizar recurso:', error);
+            await Swal.fire({
+                title: '¡Error!',
+                text: 'Ya existe un recurso con ese nombre',
+                icon: 'error',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+
+            });
         }
     };
 

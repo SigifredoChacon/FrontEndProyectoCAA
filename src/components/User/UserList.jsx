@@ -29,7 +29,7 @@ function UserList({ onEdit }) {
     const fetchUsers = async () => {
         try {
             const data = await getUsers();
-            setUsers(data);
+            setUsers(data.data);
         } catch (error) {
             console.error('Error al obtener usuarios:', error);
         }
