@@ -11,7 +11,7 @@ export const getRequestByUserId = async (id) => {
 export const createRequest = async (request) => {
     const response = await api.post('/applications', request, {
         headers: {
-            'Content-Type': 'multipart/form-data', // Para manejar FormData
+            'Content-Type': 'multipart/form-data',
         },
     });
     return response;

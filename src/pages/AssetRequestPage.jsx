@@ -28,7 +28,8 @@ export function AssetRequestPage() {
     const { id } = location.state || {};
     const [formData, setFormData] = useState({
         usoBien: "",
-        observaciones: ""
+        observaciones: "",
+        accesorios: ""
     });
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
@@ -255,6 +256,21 @@ export function AssetRequestPage() {
                                     />
                                 </div>
 
+                                <div>
+                                    <label htmlFor="accesorios"
+                                           className="block text-sm font-medium text-gray-700">Accesorios</label>
+                                    <textarea
+                                        name="accesorios"
+                                        id="accesorios"
+                                        value={formData.accesorios}
+                                        onChange={handleChange}
+                                        placeholder="Ej: Teclado, mouse, etc."
+                                        required
+                                        disabled={isFormLocked}
+                                        className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    />
+                                </div>
+                                Fecha de uso:
                                 <div className="flex flex-col sm:flex-row justify-center gap-4 mb-4">
                                     <DatePicker selected={startDate} onChange={(date) => setStartDate(date)}
                                                 selectsStart startDate={startDate} endDate={endDate}

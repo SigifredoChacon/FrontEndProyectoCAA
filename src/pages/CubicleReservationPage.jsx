@@ -10,7 +10,6 @@ import UserExternalFormCreate from "../components/User/UserExternalFormCreate.js
 import Swal from "sweetalert2";
 import ReservationForUser from "../components/Reservations/ReservationForUser.jsx";
 
-
 const initialCubicleReservationState = {
     fecha: '',
     horaInicio: '',

@@ -20,8 +20,6 @@ import {
 } from '@tremor/react';
 import ViewPendingReservation from "../components/Reservations/ViewPendingReservation.jsx";
 
-
-
 function AllPendingReservationPage() {
     const navigate = useNavigate();
     const [reservations, setReservations] = useState([]);
@@ -29,9 +27,6 @@ function AllPendingReservationPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1); // Página actual
     const itemsPerPage = 10; // Cantidad de elementos por página
-
-
-
 
     useEffect(() => {
         fetchReservations();
@@ -96,9 +91,7 @@ function AllPendingReservationPage() {
 
         setSelectedReservation(null);
         navigate('/pendingReservations')
-
     };
-
 
     const handleCloseModal = () => {
 
