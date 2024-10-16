@@ -112,10 +112,10 @@ function AssetList({ onEdit }) {
                             Placa
                         </TableHeaderCell>
                         <TableHeaderCell>
-                            Nombre
+                            Descripción
                         </TableHeaderCell>
                         <TableHeaderCell>
-                            Descripción
+                            Observaciones
                         </TableHeaderCell>
                         <TableHeaderCell>
                             Modelo

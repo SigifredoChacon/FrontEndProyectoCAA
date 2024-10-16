@@ -4,6 +4,7 @@ import {getRequestByUserId, deleteRequest, getRequest, updateRequest} from '../s
 import {updateAsset} from "../services/assetService.jsx";
 import { useAuthContext } from '../hooks/useAuthContext.js';
 import AcceptApplicationModal from "../components/Request/AcceptApplicationModal.jsx";
+import {sendJustification} from "../services/requestService.jsx";
 import {
     Card,
     Table,
@@ -30,6 +31,7 @@ function AllPendingApplicationPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedArchivoSolicitud, setSelectedArchivoSolicitud] = useState(null);
     const [selectedApplication, setSelectedApplication] = useState(null);
+
 
     useEffect(() => {
         fetchRequests();
@@ -76,11 +78,12 @@ function AllPendingApplicationPage() {
         navigate('/pendingApplications')
     };
 
-    const handleRejectApplication = async () => {
+    const handleRejectApplication = async (justification) => {
         try{
-
+            console.log(justification)
             await updateRequest(selectedApplication.idSolicitud, {estado: "Rechazada"});
             await updateAsset(selectedApplication.idActivo, {condicion: 0});
+            await sendJustification(selectedApplication.idSolicitud,selectedApplication.idUsuario, justification);
         }
         catch (error){
             console.error('Error al rechazar la reservación:', error);

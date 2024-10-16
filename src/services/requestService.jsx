@@ -33,3 +33,11 @@ export const getRequestById = async (id) => {
     const response = await api.get(`/applications/${id}`);
     return response.data;
 };
+export const sendJustification = async (idSolicitud,idUsuario, justificacion) => {
+    const response = await api.post('/applications/sendJustification', {
+        idSolicitud,
+        idUsuario,
+        justificacion
+    });
+    return response.data;
+};
