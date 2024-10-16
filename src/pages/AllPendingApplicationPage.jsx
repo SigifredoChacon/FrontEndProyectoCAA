@@ -22,6 +22,8 @@ import ShowRequestByUserModal from "../components/Request/ShowRequestByUserModal
 import {getAssetById} from "../services/assetService.jsx";
 import {getUserById} from "../services/userService.jsx";
 import {deleteReservation, updateReservation} from "../services/reservationService.jsx";
+import Swal from "sweetalert2";
+import {deleteCubicle} from "../services/cubicleService.jsx";
 
 
 function AllPendingApplicationPage() {
@@ -67,32 +69,98 @@ function AllPendingApplicationPage() {
     };
 
     const handleAcceptApplication = async () => {
-        try{
-            await updateRequest(selectedApplication.idSolicitud, {estado: "Aceptada"});
-            await fetchRequests();
-        }
-        catch (error){
-            console.error('Error al aceptar la reservación:', error);
-        }
-        setSelectedApplication(null);
-        handleCloseModal();
-        navigate('/pendingApplications')
+
+        await Swal.fire({
+            title: '¡Aceptar solicitud!',
+            text: '¿Estás seguro de que deseas aceptar esta solicitud? ' +
+                ' Una vez aceptada, no podrás revertir esta acción.',
+            icon: 'warning',
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+        }).then(async (result) => {  // Usa async aquí
+            if (result.isConfirmed) {
+                try {
+                    await updateRequest(selectedApplication.idSolicitud, {estado: "Aceptada"});
+                    await fetchRequests();
+                    setSelectedApplication(null);
+                    handleCloseModal();
+                    navigate('/pendingApplications')
+
+                    await Swal.fire({
+                        title: '¡Solicitud Aceptada!',
+                        text: 'Se ha aceptado la solicitud con éxito ',
+                        icon: 'success',
+                        timer: 1000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+
+                    });
+
+
+
+                } catch (error) {
+                    await Swal.fire({
+                        title: '¡Error!',
+                        text: 'Hubo un problema, No se pudo aceptar la solicitud',
+                        icon: 'error',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+
+                    });
+
+                }
+            }
+        });
     };
 
     const handleRejectApplication = async (justification) => {
-        try{
-            console.log(justification)
-            await updateRequest(selectedApplication.idSolicitud, {estado: "Rechazada"});
-            await updateAsset(selectedApplication.idActivo, {condicion: 0});
-            await sendJustification(selectedApplication.idSolicitud,selectedApplication.idUsuario, justification);
-            await fetchRequests();
-        }
-        catch (error){
-            console.error('Error al rechazar la reservación:', error);
-        }
-        setSelectedApplication(null);
-        handleCloseModal();
-        navigate('/pendingApplications')
+
+        await Swal.fire({
+            title: '¡Rechazar solicitud!',
+            text: '¿Estás seguro de que deseas rechazar esta solicitud? ' +
+                ' Una vez rechazada, no podrás revertir esta acción.',
+            icon: 'warning',
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+        }).then(async (result) => {  // Usa async aquí
+            if (result.isConfirmed) {
+                try {
+                    await updateRequest(selectedApplication.idSolicitud, {estado: "Rechazada"});
+                    await updateAsset(selectedApplication.idActivo, {condicion: 0});
+                    await sendJustification(selectedApplication.idSolicitud,selectedApplication.idUsuario, justification);
+                    await fetchRequests();
+                    setSelectedApplication(null);
+                    handleCloseModal();
+                    navigate('/pendingApplications')
+
+                    await Swal.fire({
+                        title: '¡Solicitud Rechazada!',
+                        text: 'Se ha rechazado la solicitud con éxito ' +
+                            'Se le ha informado al usuario vía correo electrónico',
+                        icon: 'success',
+                        timer: 2500,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+
+                    });
+
+
+
+                } catch (error) {
+                    await Swal.fire({
+                        title: '¡Error!',
+                        text: 'Hubo un problema, No se pudo rechazar la solicitud',
+                        icon: 'error',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+
+                    });
+
+                }
+            }
+        });
 
     };
 
