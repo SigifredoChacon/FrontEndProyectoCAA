@@ -22,7 +22,6 @@ function AcceptApplicationModal({ open, handleClose, archivoSolicitud, handleAcc
         } else {
             setError('');
             handleRejectApplication(justification);
-            handleClose();
         }
     };
 
