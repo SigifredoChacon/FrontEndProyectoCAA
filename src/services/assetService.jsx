@@ -18,7 +18,7 @@ export const updateAsset = async (id, asset) => {
 
 export const deleteAsset = async (id) => {
     const response = await api.delete(`/assets/${id}`);
-    return response.data;
+    return response;
 };
 
 export const getAssetById = async (id) => {

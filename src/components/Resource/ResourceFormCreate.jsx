@@ -31,7 +31,7 @@ function ResourceFormCreate({onResourceCreated}) {
             setResource(initialResourceState);
             await Swal.fire({
                 title: '¡Éxito!',
-                text: 'Se ha creado el cubículo con éxito',
+                text: 'Se ha creado el recurso con éxito',
                 icon: 'success',
                 timer: 1000,
                 timerProgressBar: true,

@@ -19,6 +19,7 @@ import {
     Button,
 } from '@tremor/react';
 import ViewPendingReservation from "../components/Reservations/ViewPendingReservation.jsx";
+import Swal from "sweetalert2";
 
 function AllPendingReservationPage() {
     const navigate = useNavigate();
@@ -70,26 +71,66 @@ function AllPendingReservationPage() {
 
     const handleAcceptReservation = async () => {
 
+        setSelectedReservation(null);
+
         try{
             await updateReservation(selectedReservation.idReservacion, {estado: true});
+            await Swal.fire({
+                title: '¡Éxito!',
+                text: 'Se ha aceptado la reservación con éxito' +
+                    'Se le ha notificado al usuario por correo',
+                icon: 'success',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+            });
+            await fetchReservations();
         }
         catch (error){
-            console.error('Error al aceptar la reservación:', error);
+            await Swal.fire({
+                title: '¡Error!',
+                text: 'No se ha podido aceptar la solicitud',
+                icon: 'error',
+                timer: 1000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+
+            });
         }
-        setSelectedReservation(null);
+
         navigate('/pendingReservations')
 
     };
 
     const handleRejectReservation = async () => {
 
+        setSelectedReservation(null);
+
         try{
             await deleteReservation(selectedReservation.idReservacion);
+            await Swal.fire({
+                title: '¡Éxito!',
+                text: 'Se ha rechazado la reservación con éxito' +
+                    'Se le ha notificado al usuario por correo',
+                icon: 'success',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+            });
+            await fetchReservations();
         }catch (error){
-            console.error('Error al rechazar la reservación:', error);
+            await Swal.fire({
+                title: '¡Error!',
+                text: 'No se ha podido rechazar la solicitud',
+                icon: 'error',
+                timer: 1000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+
+            });
         }
 
-        setSelectedReservation(null);
+
         navigate('/pendingReservations')
     };
 

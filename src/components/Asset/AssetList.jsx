@@ -13,6 +13,8 @@ import {
     Badge,
     TextInput
 } from '@tremor/react';
+import Swal from "sweetalert2";
+import {deleteCubicle} from "../../services/cubicleService.jsx";
 
 function AssetList({ onEdit }) {
     const [assets, setAssets] = useState([]);
@@ -38,12 +40,42 @@ function AssetList({ onEdit }) {
 
     const handleDelete = async (id) => {
 
-        try {
-            await deleteAsset(id);
-            setAssets(assets.filter((asset) => asset.NumeroPlaca !== id));
-        } catch (error) {
-            console.error('Error al eliminar activo:', error);
-        }
+        Swal.fire({
+            title: '¡Eliminar!',
+            text: '¿Estás seguro de que deseas eliminar este Activo?',
+            icon: 'warning',
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+        }).then(async (result) => {  // Usa async aquí
+            if (result.isConfirmed) {
+                try {
+                    await deleteAsset(id);
+                    setAssets(assets.filter((asset) => asset.NumeroPlaca !== id));
+
+                    await Swal.fire({
+                        title: '¡Eliminado!',
+                        text: 'Se ha eliminado el activo con éxito',
+                        icon: 'success',
+                        timer: 1000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+
+                    });
+
+                } catch (error) {
+                    await Swal.fire({
+                        title: '¡Error!',
+                        text: error.response.data.message,
+                        icon: 'error',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+
+                    });
+
+                }
+            }
+        });
     };
 
 

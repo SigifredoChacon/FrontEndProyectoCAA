@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {createAsset} from '../../services/assetService';
 import {getStates} from "../../services/stateService.jsx";
 import {getCategories} from "../../services/categoryService.jsx";
+import Swal from "sweetalert2";
 
 const initialAssetState = {
     numeroPlaca: 0,
@@ -66,10 +67,27 @@ function AssetFormCreate({onAssetCreated}) {
 
 
             await createAsset(assetToCreate);
-            onAssetCreated();
             setAsset(initialAssetState);
+            await Swal.fire({
+                title: '¡Éxito!',
+                text: 'Se ha creado el activo con éxito',
+                icon: 'success',
+                timer: 1000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            }).then(() => {
+                onAssetCreated();
+            });
         } catch (error) {
-            console.error('Error al crear activo:', error);
+            await Swal.fire({
+                title: '¡Error!',
+                text: error.response.data.message,
+                icon: 'error',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+
+            });
         }
     };
 
