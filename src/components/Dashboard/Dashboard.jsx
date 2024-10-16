@@ -147,49 +147,49 @@ const Dashboard = ({ type }) => {
     };
 
     return (
-        <div className="container mx-auto px-10 py-6" ref={dashboardRef}>
+        <div className="container mx-auto px-4 sm:px-10 py-6" ref={dashboardRef}>
+            {/* Botón de regreso */}
             <button
                 onClick={() => navigate('/dashboard')}
-                style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    position: 'absolute',
-                    top: '80px',
-                    left: '10px',
-                    padding: '5px',
-                }}
+                className="hidden sm:block absolute top-17 left-2 p-1 cursor-pointer"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                     stroke="currentColor" style={{width: '32px', height: '32px'}}>
+                     stroke="currentColor" className="w-8 h-8">
                     <path strokeLinecap="round" strokeLinejoin="round"
                           d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                 </svg>
-
-
             </button>
-            <h1 className="text-center text-2xl font-bold my-4">Reporte
-                de {type === 'room' ? 'Salas' : 'Cubículos'}</h1>
 
-            <div className="flex justify-center items-center space-x-4 mb-6">
-                <button className="px-4 py-2 bg-green-500 text-white rounded-md no-print" onClick={exportToPDF}>
+            {/* Título */}
+            <h1 className="text-center text-xl sm:text-2xl font-bold my-4">
+                Reporte de {type === 'room' ? 'Salas' : 'Cubículos'}
+            </h1>
+
+            {/* Botón de exportar y filtros */}
+            <div
+                className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
+                <button className="px-4 py-2 bg-green-500 text-white rounded-md no-print w-full sm:w-auto"
+                        onClick={exportToPDF}>
                     Exportar a PDF
                 </button>
+                <div className="flex justify-center space-x-2 sm:space-x-4 w-full sm:w-auto">
+                    <button className="px-4 py-2 bg-blue-500 text-white rounded-md w-full sm:w-auto"
+                            onClick={() => setTimePeriod('week')}>
+                        Semana
+                    </button>
+                    <button className="px-4 py-2 bg-blue-500 text-white rounded-md w-full sm:w-auto"
+                            onClick={() => setTimePeriod('month')}>
+                        Mes
+                    </button>
+                    <button className="px-4 py-2 bg-blue-500 text-white rounded-md w-full sm:w-auto"
+                            onClick={() => setTimePeriod('year')}>
+                        Año
+                    </button>
+                </div>
             </div>
 
-            <div className="flex justify-center space-x-4 mb-6">
-                <button className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                        onClick={() => setTimePeriod('week')}>Semana
-                </button>
-                <button className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                        onClick={() => setTimePeriod('month')}>Mes
-                </button>
-                <button className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                        onClick={() => setTimePeriod('year')}>Año
-                </button>
-            </div>
-
-            <div className="flex justify-center gap-4 mb-6">
+            {/* Selectores de fecha */}
+            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-6">
                 {timePeriod === 'week' && (
                     <>
                         <DatePicker
@@ -199,7 +199,7 @@ const Dashboard = ({ type }) => {
                             startDate={startDate}
                             endDate={endDate}
                             placeholderText="Fecha de inicio"
-                            className="border border-gray-300 rounded-md p-2"
+                            className="border border-gray-300 rounded-md p-2 w-full sm:w-auto"
                         />
                         <DatePicker
                             selected={endDate}
@@ -208,7 +208,7 @@ const Dashboard = ({ type }) => {
                             startDate={startDate}
                             endDate={endDate}
                             placeholderText="Fecha de fin"
-                            className="border border-gray-300 rounded-md p-2"
+                            className="border border-gray-300 rounded-md p-2 w-full sm:w-auto"
                         />
                     </>
                 )}
@@ -219,7 +219,7 @@ const Dashboard = ({ type }) => {
                         dateFormat="MM/yyyy"
                         showMonthYearPicker
                         placeholderText="Selecciona el mes"
-                        className="border border-gray-300 rounded-md p-2"
+                        className="border border-gray-300 rounded-md p-2 w-full sm:w-auto"
                     />
                 )}
                 {timePeriod === 'year' && (
@@ -229,13 +229,14 @@ const Dashboard = ({ type }) => {
                         showYearPicker
                         dateFormat="yyyy"
                         placeholderText="Selecciona el año"
-                        className="border border-gray-300 rounded-md p-2"
+                        className="border border-gray-300 rounded-md p-2 w-full sm:w-auto"
                     />
                 )}
             </div>
 
-            <div className="flex justify-center gap-10 mb-6">
-                <div className="w-[45%] p-4 border border-gray-200 rounded-lg shadow-md">
+            {/* Gráficos */}
+            <div className="flex flex-col sm:flex-row justify-center gap-6 mb-6">
+                <div className="w-full sm:w-[45%] p-4 border border-gray-200 rounded-lg shadow-md">
                     <h2 className="text-center text-lg font-semibold mb-2">
                         Uso de {type === 'room' ? 'Salas' : 'Cubículos'} (Total de reservas: {totalReservations})
                     </h2>
@@ -253,9 +254,10 @@ const Dashboard = ({ type }) => {
                     }}/>
                 </div>
 
-                <div className="w-[45%] p-4 border border-gray-200 rounded-lg shadow-md relative">
-                    <h2 className="text-center text-lg font-semibold mb-4">Valoración
-                        de {type === 'room' ? 'Salas' : 'Cubículos'}</h2>
+                <div className="w-full sm:w-[45%] p-4 border border-gray-200 rounded-lg shadow-md relative">
+                    <h2 className="text-center text-lg font-semibold mb-4">
+                        Valoración de {type === 'room' ? 'Salas' : 'Cubículos'}
+                    </h2>
                     <button
                         className="absolute top-2 right-2 px-2 py-1 bg-blue-500 text-white rounded-md no-print"
                         onClick={openModal}
@@ -277,6 +279,7 @@ const Dashboard = ({ type }) => {
                 </div>
             </div>
 
+            {/* Modal de comentarios */}
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-6 rounded-lg max-w-lg w-full">
@@ -316,6 +319,7 @@ const Dashboard = ({ type }) => {
             )}
         </div>
     );
+
 };
 
 export default Dashboard;
