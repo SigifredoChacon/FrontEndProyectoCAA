@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {createResource} from '../../services/resourceService.jsx';
+import Swal from "sweetalert2";
 
 
 const initialResourceState = {
@@ -27,10 +28,27 @@ function ResourceFormCreate({onResourceCreated}) {
             };
 
             await createResource(resourceToCreate);
-            onResourceCreated();
             setResource(initialResourceState);
+            await Swal.fire({
+                title: '¡Éxito!',
+                text: 'Se ha creado el cubículo con éxito',
+                icon: 'success',
+                timer: 1000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            }).then(() => {
+                onResourceCreated();
+            });
         } catch (error) {
-            console.error('Error al crear recurso:', error);
+            await Swal.fire({
+                title: '¡Error!',
+                text: 'Recurso existente con ese nombre',
+                icon: 'error',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+
+            });
         }
     };
 

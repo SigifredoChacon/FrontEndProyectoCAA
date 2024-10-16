@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import PropTypes from 'prop-types';
 import {createRoom} from '../../services/roomService.jsx';
+import Swal from "sweetalert2";
 
 const initialRoomState = {
     imagen: null,
@@ -32,10 +33,27 @@ function RoomFormCreate({onRoomCreated}) {
             formData.append('estado', room.estado);
 
             await createRoom(formData);
-            onRoomCreated();
-            setRoom(initialRoomState); 
+            setRoom(initialRoomState);
+            await Swal.fire({
+                title: '¡Éxito!',
+                text: 'Se ha creado la sala con éxito',
+                icon: 'success',
+                timer: 1000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            }).then(() => {
+                onRoomCreated(); // Llamada para redirigir a la lista de usuarios después de la alerta
+            });
         } catch (error) {
-            console.error('Error al crear sala:', error);
+            await Swal.fire({
+                title: '¡Error!',
+                text: 'Sala existente con ese nombre',
+                icon: 'error',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+
+            });
         }
     };
 

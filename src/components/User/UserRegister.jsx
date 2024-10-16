@@ -10,6 +10,7 @@ const initialUserState = {
     nombre: '',
     correoEmail: '',
     contrasena: '',
+    estado: true,
     idRol: 0,
 };
 
@@ -49,10 +50,11 @@ function UserRegister({role}) {
         else if (!loading && isRegister && role === 'Profesor') {
             Swal.fire({
                 title: '¡Registro exitoso!',
-                text: 'Para poder acceder a todas las funcionalidade de la plataforma, por favor, espera a que un administrador te apruebe , por el momento puedes reservar salas 🤗',
+                text: 'Para poder acceder a todas las funcionalidades de la plataforma, por favor, espera a que un administrador te apruebe , por el momento puedes reservar salas 🤗',
                 icon: 'info',
                 showConfirmButton: true,
-                confirmButtonText: 'Aceptar',  // Texto del botón
+                confirmButtonText: 'Aceptar',
+                allowOutsideClick: false,
             }).then((result) => {
                 if (result.isConfirmed) {  // Verifica si el usuario presionó el botón de confirmación
                     navigate('/login');  // Redirige a la página de inicio de sesión

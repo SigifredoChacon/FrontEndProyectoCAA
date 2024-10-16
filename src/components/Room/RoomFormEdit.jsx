@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { updateRoom } from '../../services/roomService.jsx';
+import Swal from "sweetalert2";
 
 
 function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
@@ -41,8 +42,6 @@ function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
 
             const formData = new FormData();
             if (Object.keys(updatedFields).length > 0) {
-                console.log('Updating room with data:', updatedFields);
-
 
                 Object.keys(updatedFields).forEach(key => {
                     formData.append(key, updatedFields[key]);
@@ -53,14 +52,39 @@ function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
                     formData.append('Imagen', room.imagen);
                 }
 
-                console.log('Room to update:', roomToUpdate.idSala);
                 await updateRoom(selectedRoom.idSala, formData);
-                onRoomUpdated();
+                await Swal.fire({
+                    title: '¡Éxito!',
+                    text: 'Se ha editado la información de la sala con éxito',
+                    icon: 'success',
+                    timer: 1000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                }).then(() => {
+                    onRoomUpdated();
+                });
+
             } else {
-                console.log('No changes detected, update not required.');
+                await Swal.fire({
+                    title: '¡Error!',
+                    text: 'No se detectaron cambios',
+                    icon: 'error',
+                    timer: 1000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+
+                });
             }
         } catch (error) {
-            console.error('Error al actualizar sala:', error);
+            await Swal.fire({
+                title: '¡Error!',
+                text: 'Ya existe una sala con ese nombre',
+                icon: 'error',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+
+            });
         }
     };
 

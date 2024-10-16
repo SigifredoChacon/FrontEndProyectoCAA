@@ -12,6 +12,8 @@ import {
     Title,
     Badge
 } from '@tremor/react';
+import Swal from "sweetalert2";
+import {deleteRoom} from "../../services/roomService.jsx";
 
 
 function CubicleList({ onEdit, reload }) {
@@ -33,12 +35,42 @@ function CubicleList({ onEdit, reload }) {
 
 
     const handleDelete = async (id) => {
-        try {
-            await deleteCubicle(id);
-            setCubicles(cubicles.filter((cubicle) => cubicle.idCubiculo !== id));
-        } catch (error) {
-            console.error('Error al eliminar la cubiculo:', error);
-        }
+        Swal.fire({
+            title: '¡Eliminar!',
+            text: '¿Estás seguro de que deseas eliminar este cubículo?',
+            icon: 'warning',
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+        }).then(async (result) => {  // Usa async aquí
+            if (result.isConfirmed) {
+                try {
+                    await deleteCubicle(id);
+                    setCubicles(cubicles.filter((cubicle) => cubicle.idCubiculo !== id));
+
+                    await Swal.fire({
+                        title: '¡Eliminado!',
+                        text: 'Se ha eliminado el cubículo con éxito',
+                        icon: 'success',
+                        timer: 1000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+
+                    });
+
+                } catch (error) {
+                    await Swal.fire({
+                        title: '¡Error!',
+                        text: error.response.data.message,
+                        icon: 'error',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+
+                    });
+
+                }
+            }
+        });
     };
 
 

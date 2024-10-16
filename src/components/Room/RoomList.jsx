@@ -6,6 +6,8 @@ import {
     Title,
     Badge
 } from '@tremor/react';
+import Swal from "sweetalert2";
+import {deleteReservation} from "../../services/reservationService.jsx";
 
 function RoomList({ onEdit, reload}) {
     const [rooms, setRooms] = useState([]);
@@ -31,12 +33,42 @@ function RoomList({ onEdit, reload}) {
 
 
     const handleDelete = async (id) => {
-        try {
-            await deleteRoom(id);
-            setRooms(rooms.filter((room) => room.idSala !== id));
-        } catch (error) {
-            console.error('Error al eliminar la sala:', error);
-        }
+
+        Swal.fire({
+            title: '¡Eliminar!',
+            text: '¿Estás seguro de que deseas eliminar esta sala?',
+            icon: 'warning',
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+        }).then(async (result) => {  // Usa async aquí
+            if (result.isConfirmed) {
+                try {
+                    await deleteRoom(id);
+                    setRooms(rooms.filter((room) => room.idSala !== id));
+
+                    await Swal.fire({
+                        title: '¡Eliminada!',
+                        text: 'Se ha eliminado la sala con éxito',
+                        icon: 'success',
+                        timer: 1000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+
+                    });
+
+                } catch (error) {
+                    await Swal.fire({
+                        title: '¡Error!',
+                        text: error.response.data.message,
+                        icon: 'error',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+
+                    });
+                }
+            }
+        });
     };
 
 

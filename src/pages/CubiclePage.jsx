@@ -5,6 +5,8 @@ import CubicleFormCreate from '../components/Cubicle/CubicleFormCreate.jsx';
 import CubicleFormEdit from '../components/Cubicle/CubicleFormEdit.jsx';
 import { useCubicleEdit } from '../hooks/useCubicleEdit.js';
 import { lockCubicle, unLockCubicle } from '../services/cubicleService.jsx';
+import Swal from "sweetalert2";
+import {lockRoom} from "../services/roomService.jsx";
 
 function CubiclesPage() {
     const { selectedCubicle, handleEditCubicle, handleCubicleUpdated } = useCubicleEdit();
@@ -33,13 +35,31 @@ function CubiclesPage() {
             await unLockCubicle();
             setIsCubicleLocked(false);
             localStorage.setItem('isCubicleLocked', 'false');
+            setRefresh(prev => !prev);
         } else {
-            await lockCubicle();
-            setIsCubicleLocked(true);
-            localStorage.setItem('isCubicleLocked', 'true');
+
+            Swal.fire({
+                title: '¡Bloquear Cubículos!',
+                text: '¿Estás seguro de que deseas bloquear todos los cubículos?',
+                icon: 'warning',
+                showConfirmButton: true,
+                confirmButtonText: 'Aceptar',
+            }).then(async (result) => {  // Usa async aquí
+                if (result.isConfirmed) {
+                    try {
+                        await lockCubicle();
+                        setIsCubicleLocked(true);
+                        localStorage.setItem('isCubicleLocked', 'true');
+                        setRefresh(prev => !prev);
+
+                    } catch (error) {
+                        console.error('Error al bloquear la sala:');
+                    }
+                }
+            });
         }
 
-        setRefresh(prev => !prev);
+
     };
 
     const handleEdit = (cubicle) => {

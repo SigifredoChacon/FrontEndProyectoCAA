@@ -1,4 +1,9 @@
-import {deleteReservationByDate, createReservation, getReservationByDate} from '../../services/reservationService';
+import {
+    deleteReservationByDate,
+    createReservation,
+    getReservationByDate,
+    deleteReservation
+} from '../../services/reservationService';
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useAuthContext} from "../../hooks/useAuthContext.js";
@@ -7,6 +12,7 @@ import {getRooms} from "../../services/roomService.jsx";
 import {addDays, format} from "date-fns";
 import {sendAllEmail} from "../../services/userService.jsx";
 import {es} from "date-fns/locale";
+import Swal from "sweetalert2";
 
 const initialReservationState = {
     fecha: '',
@@ -58,41 +64,84 @@ function LockDayModal({ onCancel }) {
     };
 
     const handleLockDay = async () => {
-        const descriptionDate = format(date, 'dd MMMM yyyy', { locale: es });
-        const newDescripcion = `Le informamos que la fecha ${descriptionDate} ha sido bloqueada debido a motivos administrativos. Lamentamos los inconvenientes que esto pueda causar. En caso de que hubiese alguna reservación programada para dicha fecha, esta ha sido cancelada de manera automática. Agradecemos su comprensión.`;
 
-        setDescripcion(newDescripcion);
-        try {
-            // Formateamos la fecha correctamente antes de la consulta
-            const formattedDate = format(date, 'yyyy-MM-dd');
+        await Swal.fire({
+            title: '¡Vas a Bloquear una fecha!',
+            text: '¿Estás seguro de que deseas bloquear esta fecha en especifico?',
+            icon: 'warning',
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+        }).then(async (result) => {  // Usa async aquí
+            if (result.isConfirmed) {
+                try {
+                    const descriptionDate = format(date, 'dd MMMM yyyy', { locale: es });
+                    const newDescripcion = `Le informamos que la fecha ${descriptionDate} ha sido bloqueada debido a motivos administrativos. Lamentamos los inconvenientes que esto pueda causar. En caso de que hubiese alguna reservación programada para dicha fecha, esta ha sido cancelada de manera automática. Agradecemos su comprensión.`;
+                    setDescripcion(newDescripcion);
 
-            const nextDay = format(addDays(date, 1), 'yyyy-MM-dd');
+                    try {
+                        // Formateamos la fecha correctamente antes de la consulta
+                        const formattedDate = format(date, 'yyyy-MM-dd');
 
-            // Obtenemos las reservas de esa fecha
-            const reservations = await getReservationByDate(formattedDate);
+                        const nextDay = format(addDays(date, 1), 'yyyy-MM-dd');
+
+                        // Obtenemos las reservas de esa fecha
+                        const reservations = await getReservationByDate(formattedDate);
 
 
-            if (reservations.length > 0) {
-                await deleteReservationByDate(formattedDate);
+                        if (reservations.length > 0) {
+                            await deleteReservationByDate(formattedDate);
+                        }
+
+
+                        // Creamos las reservas para los cubículos y salas
+                        await makeCubicleReservation(nextDay);
+                        await makeRoomReservation(nextDay);
+
+                        await Swal.fire({
+                            title: '¡Bloqueado!',
+                            text: 'Se han bloqueado las salas y cubículos para la fecha seleccionada',
+                            icon: 'success',
+                            timer: 1000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+
+                        });
+
+                        try {
+                            await sendAllEmail({ asunto, descripcion: newDescripcion });
+                            alert('Se les ha informado a todos los usuarios via Email');
+                        } catch (error) {
+                            alert('Error al enviar email');
+                        }
+
+                        onCancel();
+                    } catch (error) {
+                        await Swal.fire({
+                            title: '¡Error!',
+                            text: 'No se ha podido bloquear este día',
+                            icon: 'error',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+
+                        });
+                    }
+
+
+                } catch (error) {
+                    await Swal.fire({
+                        title: '¡Error!',
+                        text: 'No se ha podido bloquear este día',
+                        icon: 'error',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+
+                    });
+
+                }
             }
-
-
-            // Creamos las reservas para los cubículos y salas
-            await makeCubicleReservation(nextDay);
-            await makeRoomReservation(nextDay);
-
-            try {
-                await sendAllEmail({ asunto, descripcion: newDescripcion });
-                alert('Email enviado correctamente');
-            } catch (error) {
-                console.error('Error al enviar email:', error);
-                alert('Error al enviar email');
-            }
-
-            onCancel();
-        } catch (error) {
-            console.error(error);
-        }
+        });
     };
 
 

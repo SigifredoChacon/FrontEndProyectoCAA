@@ -179,6 +179,18 @@ function CubiclesReservationPage() {
             }
         }
 
+        await Swal.fire({
+            title: '¡Reservado!',
+            text: 'Se ha realizado la reserva de tu cubículo con éxito',
+            icon: 'success',
+            timer: 2500,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            willClose: () => {
+                navigate('/');
+            }
+        });
+
         handleCubicleReservationCreated();
         setReservation(initialCubicleReservationState);
     }

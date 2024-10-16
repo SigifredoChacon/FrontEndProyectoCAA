@@ -2,7 +2,7 @@ import api from '../utils/api';
 
 export const getUsers = async () => {
     const response = await api.get('/users');
-    return response.data;
+    return response;
 };
 
 export const createUser = async (user) => {

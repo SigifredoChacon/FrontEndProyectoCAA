@@ -22,6 +22,7 @@ import {
 
 import ReservationFormEdit from '../components/Reservations/ReservationFormEdit.jsx';
 import ShareReservationModal from '../components/Reservations/ShareReservationModal.jsx';
+import Swal from "sweetalert2";
 
 function AllPersonalReservationPage() {
     const { user } = useAuthContext();
@@ -69,12 +70,41 @@ function AllPersonalReservationPage() {
     };
 
     const handleDeleteReservation = async (idReservacion) => {
-        try {
-            await deleteReservation(idReservacion);
-            setReservations(reservations.filter((reservation) => reservation.idReservacion !== idReservacion));
-        } catch (error) {
-            console.error('Error al eliminar la reservación:', error);
-        }
+
+            Swal.fire({
+                title: '¡Eliminar!',
+                text: '¿Estás seguro de que deseas eliminar esta reserva?',
+                icon: 'warning',
+                showConfirmButton: true,
+                confirmButtonText: 'Aceptar',
+            }).then(async (result) => {  // Usa async aquí
+                if (result.isConfirmed) {
+                    try {
+                        await deleteReservation(idReservacion);  // Espera a que se complete la eliminación
+                        setReservations(reservations.filter((reservation) => reservation.idReservacion !== idReservacion));
+
+                        await Swal.fire({
+                            title: '¡Eliminado!',
+                            text: 'Se ha eliminado la reservación con éxito',
+                            icon: 'success',
+                            timer: 1000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+                            willClose: () => {
+                                navigate('/personalReservations');
+                            }
+                        });
+
+                        navigate('/personalReservations');  // Redirige después de la eliminación
+                    } catch (error) {
+                        console.error("Error al eliminar la reservación:", error);
+                    }
+                }
+            });
+
+
+
+
     };
 
     const handleOpenModal = (reservation) => {

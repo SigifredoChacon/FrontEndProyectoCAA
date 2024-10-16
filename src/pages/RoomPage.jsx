@@ -4,7 +4,8 @@ import RoomList from '../components/Room/RoomList.jsx';
 import RoomFormCreate from '../components/Room/RoomFormCreate.jsx';
 import RoomFormEdit from '../components/Room/RoomFormEdit.jsx';
 import { useRoomEdit } from '../hooks/useRoomEdit.js';
-import { lockRoom, unLockRoom } from '../services/roomService.jsx';
+import {deleteRoom, lockRoom, unLockRoom} from '../services/roomService.jsx';
+import Swal from "sweetalert2";
 
 function RoomsPage() {
     const { selectedRoom, handleEditRoom, handleRoomUpdated } = useRoomEdit();
@@ -34,13 +35,33 @@ function RoomsPage() {
             await unLockRoom();
             setIsRoomLocked(false);
             localStorage.setItem('isRoomLocked', 'false');
+            setRefresh(prev => !prev);
         } else {
-            await lockRoom();
-            setIsRoomLocked(true);
-            localStorage.setItem('isRoomLocked', 'true');
+            Swal.fire({
+                title: '¡Bloquear Salas!',
+                text: '¿Estás seguro de que deseas bloquear todas las salas?',
+                icon: 'warning',
+                showConfirmButton: true,
+                confirmButtonText: 'Aceptar',
+            }).then(async (result) => {  // Usa async aquí
+                if (result.isConfirmed) {
+                    try {
+                        await lockRoom();
+                        setIsRoomLocked(true);
+                        localStorage.setItem('isRoomLocked', 'true');
+                        setRefresh(prev => !prev);
+
+                    } catch (error) {
+                        console.error('Error al bloquear la sala:');
+                    }
+                }
+            });
+
         }
 
-        setRefresh(prev => !prev);
+
+
+
     };
 
     const handleEdit = (room) => {

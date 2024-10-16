@@ -46,7 +46,6 @@ import {AssetRequestPage} from "./pages/AssetRequestPage.jsx";
 const navigation = [
     {name: 'Mis reservaciones', href: '/personalReservations', current: false, allowedRoles: ['all']},
     {name: 'Administrar Reservas', href: '/manageReservations', current: false, allowedRoles: ['Administrador']},
-    {name: 'Activos', href: '/categoryAssets', current: false, allowedRoles: ['Administrador', 'Profesor']},
     {name: 'Administrar Activos', href: '/assets', current: false, allowedRoles: ['Administrador']},
 
 ];
