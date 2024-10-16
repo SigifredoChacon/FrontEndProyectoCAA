@@ -20,16 +20,11 @@ import {
 } from '@tremor/react';
 import ViewPendingReservation from "../components/Reservations/ViewPendingReservation.jsx";
 
-
-
 function AllPendingReservationPage() {
     const navigate = useNavigate();
     const [reservations, setReservations] = useState([]);
     const [selectedReservation, setSelectedReservation] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-
-
 
     useEffect(() => {
         fetchReservations();
@@ -90,9 +85,7 @@ function AllPendingReservationPage() {
 
         setSelectedReservation(null);
         navigate('/pendingReservations')
-
     };
-
 
     const handleCloseModal = () => {
 

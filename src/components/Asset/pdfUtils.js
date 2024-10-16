@@ -63,6 +63,8 @@ export const generateFilledPDF = async (userData, formData, assetData, startDate
     if(assetData.NombreEstado === 'Optimo') secondPage.drawText('X', { x: 265.9, y: 691, size: fontSize, font });
     else secondPage.drawText('X', { x: 330.6, y: 691.6, size: fontSize, font });
 
+    secondPage.drawText(formData.accesorios, { x: 230, y: 490, size: fontSize, font });
+
 
 
     const observationLinesDescription = wrapText(assetData.Descripcion || 'Sin observaciones', 45);

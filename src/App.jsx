@@ -42,16 +42,16 @@ import {CategoryAssetsPage} from "./pages/CategoryAssetsPage.jsx";
 import {AssetRequestPage} from "./pages/AssetRequestPage.jsx";
 import AllPersonalRequestPage from "./pages/AllPersonalRequestPage.jsx";
 import AllRequestPage from "./pages/AllRequestPage.jsx";
+import {ManageApplicationPage} from "./pages/ManageApplicationPage.jsx";
+import AllPendingApplicationPage from "./pages/AllPendingApplicationPage.jsx";
 
 
 
 const navigation = [
     {name: 'Mis reservaciones', href: '/personalReservations', current: false, allowedRoles: ['all']},
-    {name: 'Mis solicitudes', href: '/personalRequests', current: false, allowedRoles: ['all']},
-    {name: 'Solicitudes Generales', href: '/allRequests', current: false, allowedRoles: ['Administrador']},
     {name: 'Administrar Reservas', href: '/manageReservations', current: false, allowedRoles: ['Administrador']},
-    {name: 'Activos', href: '/categoryAssets', current: false, allowedRoles: ['Administrador', 'Profesor']},
-    {name: 'Administrar Activos', href: '/assets', current: false, allowedRoles: ['Administrador']},
+    {name: 'Mis solicitudes', href: '/personalRequests', current: false, allowedRoles: ['Administrador', 'Profesor']},
+    {name: 'Administrar Activos', href: '/manageApplications', current: false, allowedRoles: ['Administrador']},
 
 ];
 
@@ -481,6 +481,7 @@ function App() {
                         <AllRequestPage/>
                     </ProtectedRoute>
                 }/>
+
                 <Route path="/resources/*" element={
                     <ProtectedRoute allowedRoles={['Administrador']}>
                         <ResourcesPage/>
@@ -491,6 +492,12 @@ function App() {
                         <ManageReservationsPage/>
                     </ProtectedRoute>}
                 />
+                <Route path="/manageApplications/*" element={
+                    <ProtectedRoute allowedRoles={['Administrador']}>
+                        <ManageApplicationPage/>
+                    </ProtectedRoute>
+                }/>
+
                 <Route path="/categoryAssets/*" element={
                     <ProtectedRoute allowedRoles={['Administrador', 'Profesor']}>
                         <CategoryAssetsPage/>
@@ -509,6 +516,11 @@ function App() {
                 <Route path="/pendingReservations/*" element={
                     <ProtectedRoute allowedRoles={['Administrador']}>
                         <AllPendingReservationPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/pendingApplications/*" element={
+                    <ProtectedRoute allowedRoles={['Administrador']}>
+                        <AllPendingApplicationPage/>
                     </ProtectedRoute>
                 }/>
                 <Route path="/dashboard/*" element={
