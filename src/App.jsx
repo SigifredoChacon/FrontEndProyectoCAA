@@ -52,7 +52,7 @@ const navigation = [
     {name: 'Mis reservaciones', href: '/personalReservations', current: false, allowedRoles: ['all']},
     {name: 'Administrar Reservas', href: '/manageReservations', current: false, allowedRoles: ['Administrador']},
     {name: 'Mis solicitudes', href: '/personalRequests', current: false, allowedRoles: ['Administrador', 'Profesor']},
-    {name: 'Administrar Activos', href: '/manageApplications', current: false, allowedRoles: ['Administrador']},
+    {name: 'Administrar Solicitudes', href: '/manageApplications', current: false, allowedRoles: ['Administrador']},
 
 ];
 
