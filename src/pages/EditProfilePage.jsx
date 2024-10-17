@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { updateUser } from '../services/userService';
 import {getRoles} from "../services/roleService.jsx";
 import {useLocation, useNavigate} from "react-router-dom";
+import {updateCubicle} from "../services/cubicleService.jsx";
+import Swal from "sweetalert2";
 
 function EditProfilePage() {
     const navigate = useNavigate();
@@ -46,16 +48,39 @@ function EditProfilePage() {
             }, {});
 
             if (Object.keys(updatedFields).length > 0) {
-                console.log('Updating user:', updatedFields);
+
                 await updateUser(selectedUser.CedulaCarnet, updatedFields);
+                await Swal.fire({
+                    title: '¡Éxito!',
+                    text: 'Se ha editado tu información',
+                    icon: 'success',
+                    timer: 1500,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                })
                 navigate('/profile');
 
-
             } else {
-                console.log('No changes detected, update not required.');
+                await Swal.fire({
+                    title: '¡Error!',
+                    text: 'No se detectaron cambios',
+                    icon: 'error',
+                    timer: 1000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+
+                });
             }
         } catch (error) {
-            console.error('Error al actualizar usuario:', error);
+            await Swal.fire({
+                title: '¡Error!',
+                text: error.response.data.message,
+                icon: 'error',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+
+            });
         }
     };
 

@@ -18,7 +18,7 @@ export const login = async (user) => {
 
 export const updateUser = async (id, user) => {
     const response = await api.patch(`/users/${id}`, user);
-    return response.data;
+    return response;
 };
 
 export const deleteUser = async (id) => {

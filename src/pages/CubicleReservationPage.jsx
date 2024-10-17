@@ -19,6 +19,7 @@ const initialCubicleReservationState = {
     observaciones: '',
     refrigerio: false,
     estado: true,
+    encuestaCompletada: false,
 };
 
 function groupConsecutiveTimes(timeSlots) {

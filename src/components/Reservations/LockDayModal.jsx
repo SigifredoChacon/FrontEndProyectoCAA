@@ -24,6 +24,7 @@ const initialReservationState = {
     observaciones: 'Bloqueo de día por mantenimiento o actividad especial',
     refrigerio: false,
     estado: true,
+    encuestaCompletada: true,
 };
 
 function LockDayModal({ onCancel }) {

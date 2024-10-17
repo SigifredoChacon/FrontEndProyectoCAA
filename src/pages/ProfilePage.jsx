@@ -4,12 +4,15 @@ import {Route, Routes, useNavigate} from "react-router-dom";
 import { getUserById } from "../services/userService.jsx";
 import { useAuthContext } from "../hooks/useAuthContext.js";
 import EditProfilePage from "./EditProfilePage.jsx";
+import Swal from "sweetalert2";
+import ChangePasswordModal from "../components/User/ChangePasswordModal.jsx";
 
 function ProfilePage() {
     const navigate = useNavigate();
     const { logout } = useLogout();
     const { user } = useAuthContext();
     const [userLog, setUserLog] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         // Solo llama a la API si 'user' tiene un valor válido
@@ -32,16 +35,33 @@ function ProfilePage() {
     }
 
 
-    const handleClick = () => {
+    const handleClick = async () => {
         logout();
-        navigate('/', { replace: true });
-        window.location.reload();
+        await Swal.fire({
+            title: '¡Sesión cerrada!',
+            text: 'Se ha cerrado la sesión con éxito',
+            icon: 'success',
+            timer: 1500,
+            timerProgressBar: true,
+            showConfirmButton: false
+        }).then(() => {
+            navigate('/', { replace: true });
+            window.location.reload();
+        });
+
     };
 
     const handleEditProfile = () => {
         navigate('/editProfile', { state: { userLog } }); // Pasar userLog en el estado de la navegación
     };
 
+    const handleOpenModal = (reservation) => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
 
 
 
@@ -72,7 +92,7 @@ function ProfilePage() {
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Teléfono</label>
-                            <p className="mt-1 bg-gray-200 p-2 rounded">{userLog.Telefono}</p>
+                            <p className="mt-1 bg-gray-200 p-2 rounded">{userLog?.Telefono ? userLog.Telefono : "N/A"}</p>
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Teléfono 2</label>
@@ -92,7 +112,7 @@ function ProfilePage() {
 
                     {/* Buttons and Image centered */}
                     <div className="flex flex-col items-center space-y-4 mt-4">
-                        <button className="w-full py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300">Cambiar contraseña</button>
+                        <button onClick={handleOpenModal} className="w-full py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300">Cambiar contraseña</button>
                         <button onClick={handleEditProfile} className="w-full py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300">Editar perfil</button>
                         <button onClick={handleClick} className="w-full py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300">Cerrar sesión</button>
 
@@ -108,8 +128,13 @@ function ProfilePage() {
                 </div>
 
             </div>
-
+            <ChangePasswordModal
+                open={isModalOpen}
+                handleClose={handleCloseModal}
+                user={user}
+                />
         </div>
+
     );
 }
 
