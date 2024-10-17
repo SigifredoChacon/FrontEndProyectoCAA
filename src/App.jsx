@@ -45,6 +45,7 @@ import AllRequestPage from "./pages/AllRequestPage.jsx";
 import {ManageApplicationPage} from "./pages/ManageApplicationPage.jsx";
 import AllPendingApplicationPage from "./pages/AllPendingApplicationPage.jsx";
 import AllToSignApplicationPage from "./pages/AllToSignApplicationPage.jsx";
+import {getUserById} from "./services/userService.jsx";
 
 
 
@@ -63,11 +64,8 @@ function classNames(...classes) {
 }
 
 function Navbar() {
-    const {logout} = useLogout()
     const {user} = useAuthContext()
-    const handleClick = () => {
-        logout()
-    }
+    
     return (
         <Disclosure as="nav" style={{ backgroundColor: '#002855' }}>
             {({ open }) => (
@@ -218,6 +216,7 @@ function Navbar() {
 function HomePage() {
     const navigate = useNavigate();
     const { role } = useAuthContext();
+    const { user } = useAuthContext();
     const expiredReservations = useReservationChecker();  // Hook personalizado para obtener las reservas expiradas
     const [activeReservation, setActiveReservation] = useState(null);
     const [rating, setRating] = useState(0);  // Estado para la calificación con estrellas
@@ -256,6 +255,29 @@ function HomePage() {
         await updateReservation(activeReservation.idReservacion, { encuestaCompletada: true });
         setIsValorationOpen(false);
     };
+
+    const handleClickAssets = async () => {
+        const userInfo = await getUserById(user);
+
+        if (userInfo.CorreoInstitucional && userInfo.Telefono && userInfo.Telefono2 && userInfo.Direccion) {
+            navigate('/categoryAssets');
+        } else {
+            await Swal.fire({
+                title: '¡Error!',
+                text: 'Debes completar tu información personal para poder reservar activos',
+                icon: 'error',
+                showCancelButton: true,
+                confirmButtonText: 'Ir a perfil',
+                cancelButtonText: 'Cerrar',
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate('/profile');  // Cambia '/userProfile' a la ruta de perfil de usuario
+                }
+            });
+        }
+    };
+
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-100">
@@ -315,7 +337,7 @@ function HomePage() {
 
             {role !== 'Estudiante' && role && (
                 <button
-                    onClick={() => navigate('/categoryAssets')}
+                    onClick={handleClickAssets}
                     className="mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none relative w-full max-w-6xl h-48 md:h-56 lg:h-80 xl:h-96 lg:max-w-full"
                     style={{
                         fontSize: 'clamp(2rem, 5vw, 8rem)',

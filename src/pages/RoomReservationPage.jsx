@@ -19,6 +19,8 @@ const initialRoomReservationState = {
     refrigerio: false,
     idRecursos: [],
     estado: true,
+    encuestaCompletada: false,
+
 };
 
 function groupConsecutiveTimes(timeSlots) {
