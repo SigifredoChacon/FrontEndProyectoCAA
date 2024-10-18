@@ -317,15 +317,21 @@ function CubiclesReservationPage() {
                     className="w-full md:w-1/5 md:mr-5 bg-gray-100 p-3 rounded-lg shadow-lg flex flex-col overflow-y-auto md:h-[90vh]">
                     <h3 className="text-center text-lg mb-5 md:text-left whitespace-nowrap">Cubículos Disponibles</h3>
                     <ul className="flex flex-row md:flex-col list-none p-0 m-0 space-x-3 md:space-x-0 md:space-y-2">
-                        {cubicles.map((cubicle) => (
-                            <li
-                                key={cubicle.idCubiculo}
-                                onClick={() => handleCubicleSelect(cubicle)}
-                                className={`p-3 cursor-pointer rounded ${selectedCubicleR?.idCubiculo === cubicle.idCubiculo ? 'bg-gray-300 shadow-inner' : 'bg-white'}`}
-                            >
-                                {cubicle.Nombre}
-                            </li>
-                        ))}
+                        {cubicles.map((cubicle) => {
+                            console.log(cubicle); // Verifica que cubicle contiene los atributos esperados
+                            return (
+                                <li
+                                    key={cubicle.idCubiculo}
+                                    onClick={() => handleCubicleSelect(cubicle)}
+                                    className={`relative p-3 cursor-pointer rounded ${selectedCubicleR?.idCubiculo === cubicle.idCubiculo ? 'bg-gray-300 shadow-inner' : 'bg-white'}`}
+                                >
+                                    {cubicle.Nombre}
+                                    <span className="absolute bottom-1 right-2 text-sm text-gray-500">
+                        {cubicle.Ventana ? 'Con ventana' : 'Sin ventana'}
+                    </span>
+                                </li>
+                            );
+                        })}
                     </ul>
                 </div>
 
@@ -337,7 +343,7 @@ function CubiclesReservationPage() {
                             {selectedCubicleR ? `Reservar Cubículo: ${selectedCubicleR.Nombre}` : 'Seleccionar Cubículo'}
                         </h2>
                         <div className="flex flex-col md:flex-row w-full md:w-auto space-y-2 md:space-y-0 md:space-x-2">
-                            {(!(role === 'Estudiante' || role === 'Externo' || role === 'Profesor' || role==='AdministradorSolicitudes')) && (
+                            {(!(role === 'Estudiante' || role === 'Externo' || role === 'Profesor' || role === 'AdministradorSolicitudes')) && (
                                 <button
                                     onClick={handleCreateUserReservation}
                                     className="px-4 py-2 bg-blue-800 text-white border-none rounded cursor-pointer w-full md:w-auto"
@@ -345,7 +351,7 @@ function CubiclesReservationPage() {
                                     Reservar por Usuario
                                 </button>
                             )}
-                            {(!(role === 'Estudiante' || role === 'Externo' || role === 'Profesor' || role==='AdministradorSolicitudes')) && (
+                            {(!(role === 'Estudiante' || role === 'Externo' || role === 'Profesor' || role === 'AdministradorSolicitudes')) && (
                                 <button
                                     onClick={handleCreateExternalReservation}
                                     className="px-4 py-2 bg-blue-800 text-white border-none rounded cursor-pointer w-full md:w-auto"
