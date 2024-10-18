@@ -449,7 +449,7 @@ export function RoomReservationPage() {
                     )}
 
                     <div className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-4">
-                        {(!(role === 'Estudiante') && role && !(role === 'Externo') && !(role === 'Profesor')) && (
+                        {(!(role === 'Estudiante') && role && !(role === 'Externo') && !(role === 'Profesor') && !(role==='AdministradorSolicitudes')) && (
                             <button
                                 onClick={handleCreateUserReservation}
                                 className="px-4 py-2 sm:px-5 sm:py-2.5 bg-blue-700 text-white rounded-md hover:bg-blue-800 transition-all w-full sm:w-auto"
@@ -457,7 +457,7 @@ export function RoomReservationPage() {
                                 Reservar por Usuario
                             </button>
                         )}
-                        {(!(role === 'Estudiante') && role && !(role === 'Externo') && !(role === 'Profesor')) && (
+                        {(!(role === 'Estudiante') && role && !(role === 'Externo') && !(role === 'Profesor') && !(role==='AdministradorSolicitudes')) && (
                             <button
                                 onClick={handleCreateExternalReservation}
                                 className="px-4 py-2 sm:px-5 sm:py-2.5 bg-blue-700 text-white rounded-md hover:bg-blue-800 transition-all w-full sm:w-auto"

@@ -337,7 +337,7 @@ function CubiclesReservationPage() {
                             {selectedCubicleR ? `Reservar Cubículo: ${selectedCubicleR.Nombre}` : 'Seleccionar Cubículo'}
                         </h2>
                         <div className="flex flex-col md:flex-row w-full md:w-auto space-y-2 md:space-y-0 md:space-x-2">
-                            {(!(role === 'Estudiante' || role === 'Externo' || role === 'Profesor')) && (
+                            {(!(role === 'Estudiante' || role === 'Externo' || role === 'Profesor' || role==='AdministradorSolicitudes')) && (
                                 <button
                                     onClick={handleCreateUserReservation}
                                     className="px-4 py-2 bg-blue-800 text-white border-none rounded cursor-pointer w-full md:w-auto"
@@ -345,7 +345,7 @@ function CubiclesReservationPage() {
                                     Reservar por Usuario
                                 </button>
                             )}
-                            {(!(role === 'Estudiante' || role === 'Externo' || role === 'Profesor')) && (
+                            {(!(role === 'Estudiante' || role === 'Externo' || role === 'Profesor' || role==='AdministradorSolicitudes')) && (
                                 <button
                                     onClick={handleCreateExternalReservation}
                                     className="px-4 py-2 bg-blue-800 text-white border-none rounded cursor-pointer w-full md:w-auto"

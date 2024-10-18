@@ -51,9 +51,9 @@ import {getUserById} from "./services/userService.jsx";
 
 const navigation = [
     {name: 'Mis reservaciones', href: '/personalReservations', current: false, allowedRoles: ['all']},
-    {name: 'Administrar Reservas', href: '/manageReservations', current: false, allowedRoles: ['Administrador']},
-    {name: 'Mis solicitudes', href: '/personalRequests', current: false, allowedRoles: ['Administrador', 'Profesor']},
-    {name: 'Administrar Solicitudes', href: '/manageApplications', current: false, allowedRoles: ['Administrador']},
+    {name: 'Administrar Reservas', href: '/manageReservations', current: false, allowedRoles: ['Administrador','AdministradorReservaciones']},
+    {name: 'Mis solicitudes', href: '/personalRequests', current: false, allowedRoles: ['Administrador', 'Profesor','AdministradorSolicitudes','AdministradorReservaciones']},
+    {name: 'Administrar Solicitudes', href: '/manageApplications', current: false, allowedRoles: ['Administrador','AdministradorSolicitudes']},
 
 ];
 
@@ -465,27 +465,27 @@ function App() {
                 <Route path="/" element={<HomePage/>}/>
 
                 <Route path="/users/*" element={
-                    <ProtectedRoute allowedRoles={['Administrador']}>
+                    <ProtectedRoute allowedRoles={['Administrador', 'AdministradorReservaciones','AdministradorSolicitudes']}>
                         <UsersPage/>
                     </ProtectedRoute>
                 }/>
                 <Route path="/rooms/*" element={
-                    <ProtectedRoute allowedRoles={['Administrador']}>
+                    <ProtectedRoute allowedRoles={['Administrador','AdministradorReservaciones']}>
                         <RoomsPage/>
                     </ProtectedRoute>
                 }/>
                 <Route path="/cubicles/*" element={
-                    <ProtectedRoute allowedRoles={['Administrador']}>
+                    <ProtectedRoute allowedRoles={['Administrador','AdministradorReservaciones']}>
                         <CubiclesPage/>
                     </ProtectedRoute>
                 }/>
                 <Route path="/reservationsCubicle/*" element={
-                    <ProtectedRoute allowedRoles={['Administrador', 'Profesor']}>
+                    <ProtectedRoute allowedRoles={['Administrador', 'Profesor','AdministradorReservaciones','AdministradorSolicitudes']}>
                         <CubicleReservationPage/>
                     </ProtectedRoute>
                 }/>
                 <Route path="/generalEmails" element={
-                    <ProtectedRoute allowedRoles={['Administrador']}>
+                    <ProtectedRoute allowedRoles={['Administrador','AdministradorReservaciones']}>
                         <EmailPage/>
                     </ProtectedRoute>
                 }/>
@@ -500,69 +500,69 @@ function App() {
                     </ProtectedRoute>
                 }/>
                 <Route path="/allRequests/*" element={
-                    <ProtectedRoute allowedRoles={['Administrador']}>
+                    <ProtectedRoute allowedRoles={['Administrador','AdministradorSolicitudes']}>
                         <AllRequestPage/>
                     </ProtectedRoute>
                 }/>
 
                 <Route path="/resources/*" element={
-                    <ProtectedRoute allowedRoles={['Administrador']}>
+                    <ProtectedRoute allowedRoles={['Administrador','AdministradorReservaciones']}>
                         <ResourcesPage/>
                     </ProtectedRoute>
                 }/>
                 <Route path="/manageReservations/*" element={
-                    <ProtectedRoute allowedRoles={['Administrador']}>
+                    <ProtectedRoute allowedRoles={['Administrador','AdministradorReservaciones']}>
                         <ManageReservationsPage/>
                     </ProtectedRoute>}
                 />
                 <Route path="/manageApplications/*" element={
-                    <ProtectedRoute allowedRoles={['Administrador']}>
+                    <ProtectedRoute allowedRoles={['Administrador','AdministradorSolicitudes']}>
                         <ManageApplicationPage/>
                     </ProtectedRoute>
                 }/>
 
                 <Route path="/categoryAssets/*" element={
-                    <ProtectedRoute allowedRoles={['Administrador', 'Profesor']}>
+                    <ProtectedRoute allowedRoles={['Administrador', 'Profesor','AdministradorSolicitudes']}>
                         <CategoryAssetsPage/>
                     </ProtectedRoute>}
                 />
                 <Route path="/assetsRequest/*" element={
-                    <ProtectedRoute allowedRoles={['Administrador', 'Profesor']}>
+                    <ProtectedRoute allowedRoles={['Administrador', 'Profesor','AdministradorSolicitudes']}>
                         <AssetRequestPage/>
                     </ProtectedRoute>}
                 />
                 <Route path="/allReservations/*" element={
-                    <ProtectedRoute allowedRoles={['Administrador']}>
+                    <ProtectedRoute allowedRoles={['Administrador','AdministradorReservaciones']}>
                         <AllReservationPage/>
                     </ProtectedRoute>
                 }/>
                 <Route path="/pendingReservations/*" element={
-                    <ProtectedRoute allowedRoles={['Administrador']}>
+                    <ProtectedRoute allowedRoles={['Administrador','AdministradorReservaciones']}>
                         <AllPendingReservationPage/>
                     </ProtectedRoute>
                 }/>
                 <Route path="/pendingApplications/*" element={
-                    <ProtectedRoute allowedRoles={['Administrador']}>
+                    <ProtectedRoute allowedRoles={['Administrador','AdministradorSolicitudes']}>
                         <AllPendingApplicationPage/>
                     </ProtectedRoute>
                 }/>
                 <Route path="/dashboard/*" element={
-                    <ProtectedRoute allowedRoles={['Administrador']}>
+                    <ProtectedRoute allowedRoles={['Administrador','AdministradorReservaciones']}>
                         <DashboardSelection/>
                     </ProtectedRoute>
                 }/>
                 <Route path="/dashboard/rooms" element={
-                    <ProtectedRoute allowedRoles={['Administrador']}>
+                    <ProtectedRoute allowedRoles={['Administrador','AdministradorReservaciones']}>
                         <Dashboard type={'room'}/>
                     </ProtectedRoute>
                 }/>
                 <Route path="/dashboard/cubicles" element={
-                    <ProtectedRoute allowedRoles={['Administrador']}>
+                    <ProtectedRoute allowedRoles={['Administrador','AdministradorReservaciones']}>
                         <Dashboard type={'cubicle'}/>
                     </ProtectedRoute>
                 }/>
                 <Route path="/assets/*" element={
-                    <ProtectedRoute allowedRoles={['Administrador']}>
+                    <ProtectedRoute allowedRoles={['Administrador','AdministradorSolicitudes']}>
                         <AssetsPage/>
                     </ProtectedRoute>
                 }/>

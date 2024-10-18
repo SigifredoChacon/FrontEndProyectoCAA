@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useLogIn } from "../hooks/useLogIn.js";
 import { useNavigate, Link } from "react-router-dom"; // Importar Link
 import Swal from 'sweetalert2';
+import SignApplicationModal from "../components/Request/SignApplicationModal.jsx";
+import RecoverPasswordModal from "../components/User/RecoverPasswordModal.jsx";
 
 function LogIn() {
     const [email, setEmail] = useState('');
@@ -9,6 +11,7 @@ function LogIn() {
     const { logIn, error, loading, isAuthenticated } = useLogIn();
     const navigate = useNavigate();
     const [localError, setLocalError] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -32,6 +35,13 @@ function LogIn() {
             });
         }
     }, [error, loading, isAuthenticated, navigate]);
+
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -78,6 +88,16 @@ function LogIn() {
                             className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                     </div>
+                    <div className="text-center mb-4">
+                        <span className="text-gray-600">¿No recuerdas la Contraseña?</span>{' '}
+                        <span
+                            onClick={handleOpenModal}
+                            className="text-blue-600 hover:underline cursor-pointer"
+                        >
+        Recuperar Contraseña
+    </span>
+                    </div>
+
                 </div>
 
                 {localError && (
@@ -87,7 +107,7 @@ function LogIn() {
                 )}
 
                 <div className="mt-8 flex justify-end space-x-4">
-                    <button
+                <button
                         type="submit"
                         className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
@@ -95,6 +115,10 @@ function LogIn() {
                     </button>
                 </div>
             </form>
+            <RecoverPasswordModal
+                open={isModalOpen}
+                handleClose={handleCloseModal}
+            />
         </div>
     );
 }

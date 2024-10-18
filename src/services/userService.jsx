@@ -33,4 +33,17 @@ export const getUserById = async (id) => {
 export const sendAllEmail = async (email) => {
     const response = await api.post('/users/generalEmails', email);
     return response.data;
-}
+};
+export const updatePassword = async (id) => {
+    const response = await api.post(`/users/updatePassword/${id}`);
+    return response.data;
+};
+export const sendAdminEmails = async (cedulaCarnet, nombre, correoEmail) => {
+
+    const response = await api.post('/users/verifyRol', {
+        cedulaCarnet,
+        nombre,
+        correoEmail
+    });
+    return response.data;
+};

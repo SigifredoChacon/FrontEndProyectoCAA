@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {createUser} from '../../services/userService';
+import {createUser, sendAdminEmails} from '../../services/userService';
 import {getByRoleName} from "../../services/roleService.jsx";
 import {useRegister} from "../../hooks/useRegister.js";
 import Swal from "sweetalert2";
@@ -10,7 +10,7 @@ const initialUserState = {
     nombre: '',
     correoEmail: '',
     contrasena: '',
-    estado: true,
+    estado: false,
     idRol: 0,
 };
 
@@ -56,8 +56,9 @@ function UserRegister({role}) {
                 confirmButtonText: 'Aceptar',
                 allowOutsideClick: false,
             }).then((result) => {
-                if (result.isConfirmed) {  // Verifica si el usuario presionó el botón de confirmación
-                    navigate('/login');  // Redirige a la página de inicio de sesión
+                if (result.isConfirmed) {
+                    sendAdminEmails(user.cedulaCarnet, user.nombre, user.correoEmail);
+                    navigate('/login');
                 }
             });
         }
@@ -93,6 +94,7 @@ function UserRegister({role}) {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
+
             <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
                 <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mb-6">Registrarse</h2>
 
@@ -175,7 +177,7 @@ function UserRegister({role}) {
                         className="text-sm font-semibold text-gray-700 hover:text-gray-900"
                         onClick={() => {
                             setUser(initialUserState);
-                            onUserCreated();
+                            navigate('/register');
                         }}
                     >
                         Cancelar
@@ -192,7 +194,6 @@ function UserRegister({role}) {
 
     );
 }
-
 
 
 export default UserRegister;
