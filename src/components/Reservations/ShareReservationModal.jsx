@@ -13,6 +13,8 @@ const ShareReservationModal = ({ open, handleClose, handleShare, reservation }) 
         handleShare(emailList, reservation);
         setEmails('');
         handleClose();
+
+
     };
 
     const handleModalClose = () => {
@@ -50,7 +52,7 @@ const ShareReservationModal = ({ open, handleClose, handleShare, reservation }) 
                     variant="outlined"
                     value={emails}
                     onChange={handleChange}
-                    helperText="Ingrese los correos separados por comas"
+                    helperText="Ingrese los correos separados por comas, además que sean correos validos ya que sino, no se enviara la reservación correctamente"
                     margin="normal"
                     sx={{ mb: 3 }} // Margen inferior para separar del botón
                 />

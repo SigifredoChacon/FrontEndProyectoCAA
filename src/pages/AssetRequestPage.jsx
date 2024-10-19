@@ -101,37 +101,54 @@ export function AssetRequestPage() {
     };
 
     const handleCreateRequest = async () => {
+
         setRequest({ ...request, fechaInicio: startDate, FechaFin: endDate });
-        if (!startDate || !endDate) {
-            alert("Por favor completa el formulario antes de generar el PDF.");
-            return;
-        }
+        try {
+            if (!startDate || !endDate) {
+                Swal.fire({
+                    title: '¡Error!',
+                    text: 'Completa el formulario para continuar',
+                    icon: 'error',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Aceptar',
+                });
+                return;
+            }
 
-        const userData = await getUserById(user);
+            const userData = await getUserById(user);
 
-        let assetData;
+            let assetData;
 
-        if (id === 1) {
-            assetData = await getFirstAvailableAsset('Laptop');
-        }
-        else if (id === 2) {
-            assetData = await getFirstAvailableAsset('Proyector');
-        }
-        else if (id === 3) {
-            assetData = await getFirstAvailableAsset('Monitor');
-        }
+            if (id === 1) {
+                assetData = await getFirstAvailableAsset('Laptop');
+            } else if (id === 2) {
+                assetData = await getFirstAvailableAsset('Proyector');
+            } else if (id === 3) {
+                assetData = await getFirstAvailableAsset('Monitor');
+            }
 
-        const pdfBytes = await generateFilledPDF(userData, formData, assetData, startDate, endDate);
-        const pdfBlob = new Blob([pdfBytes], { type: "application/pdf" });
-        const pdfUrl = URL.createObjectURL(pdfBlob);
-        setRequest({ ...request, idUsuario: user, idActivo: assetData.NumeroPlaca });
-        setPdfPreview(pdfUrl);
-        setIsFormLocked(true);
+            const pdfBytes = await generateFilledPDF(userData, formData, assetData, startDate, endDate);
+            const pdfBlob = new Blob([pdfBytes], {type: "application/pdf"});
+            const pdfUrl = URL.createObjectURL(pdfBlob);
+            setRequest({...request, idUsuario: user, idActivo: assetData.NumeroPlaca});
+            setPdfPreview(pdfUrl);
+            setIsFormLocked(true);
 
-        // Cambiar idEstado a 1 ("Prestado")
-        if (assetData?.NumeroPlaca) {
-            await updateAsset(assetData.NumeroPlaca, { condicion: 1 });
-            setCurrentAssetId(assetData.NumeroPlaca);
+            // Cambiar idEstado a 1 ("Prestado")
+            if (assetData?.NumeroPlaca) {
+                await updateAsset(assetData.NumeroPlaca, {condicion: 1});
+                setCurrentAssetId(assetData.NumeroPlaca);
+            }
+        } catch (error) {
+                Swal.fire({
+                    title: '¡Error!',
+                    text: 'No hay activos disponibles',
+                    icon: 'error',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Aceptar',
+                });
+
+
         }
 
     };
@@ -245,7 +262,7 @@ export function AssetRequestPage() {
                                         disabled={isFormLocked}
                                         className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     >
-                                        <option value="">Seleccione una opción</option>
+
                                         <option value="1">Nivel interno</option>
                                         <option value="2">Nivel externo dentro del país</option>
                                         <option value="3">Nivel externo fuera del país</option>

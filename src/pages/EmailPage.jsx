@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { sendAllEmail } from "../services/userService.jsx";
 import { useNavigate } from 'react-router-dom';
+import Swal from "sweetalert2";
 
 function EmailPage() {
     const [asunto, setAsunto] = useState('');
@@ -10,11 +11,26 @@ function EmailPage() {
     const handleSendEmail = async () => {
         try {
             await sendAllEmail({ asunto, descripcion });
-            alert('Email enviado correctamente');
-            navigate('/');
+            Swal.fire({
+                title: '¡Se envió el correo de manera exitosa!',
+                text: 'Sera redirigido a la página principal',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true,
+                willClose: () => {
+                    navigate('/');
+                }
+
+            })
         } catch (error) {
-            console.error('Error al enviar email:', error);
-            alert('Error al enviar email');
+            Swal.fire({
+                title: '¡Error!',
+                text: 'No se digitó información para enviar el correo',
+                icon: 'error',
+                showConfirmButton: true,
+                confirmButtonText: 'Aceptar',
+            })
         }
     };
 

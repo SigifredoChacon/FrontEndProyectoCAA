@@ -225,7 +225,7 @@ function CubiclesReservationPage() {
         setReservations([]);
         setSelectedCubicle(null);
         setCalendarKey(prevKey => prevKey + 1);
-        navigate('/');
+        //navigate('/');
     };
 
     const handleAddCubicleReservation = () => {
