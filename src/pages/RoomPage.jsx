@@ -51,8 +51,26 @@ function RoomsPage() {
                         localStorage.setItem('isRoomLocked', 'true');
                         setRefresh(prev => !prev);
 
+                        await Swal.fire({
+                            title: '¡Bloqueado!',
+                            text: 'Se han bloqueado las salas correctamente',
+                            icon: 'success',
+                            timer: 1000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+
+                        });
+
                     } catch (error) {
-                        console.error('Error al bloquear la sala:');
+                        await Swal.fire({
+                            title: '¡Error!',
+                            text: 'No se han podido bloquear las salas',
+                            icon: 'error',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+
+                        });
                     }
                 }
             });

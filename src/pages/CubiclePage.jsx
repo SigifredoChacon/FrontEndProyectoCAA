@@ -52,8 +52,26 @@ function CubiclesPage() {
                         localStorage.setItem('isCubicleLocked', 'true');
                         setRefresh(prev => !prev);
 
+                        await Swal.fire({
+                            title: '¡Bloqueado!',
+                            text: 'Se han bloqueado los cubículos correctamente',
+                            icon: 'success',
+                            timer: 1000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+
+                        });
+
                     } catch (error) {
-                        console.error('Error al bloquear la sala:');
+                        await Swal.fire({
+                            title: '¡Error!',
+                            text: 'No se han podido bloquear los cubículos',
+                            icon: 'error',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+
+                        });
                     }
                 }
             });

@@ -98,7 +98,7 @@ function CubicleFormCreate({onCubicleCreated}) {
                     </div>
                     <div>
                         <label htmlFor="estado" className="block text-sm font-medium text-gray-700">
-                            Ventana
+                            Estado
                         </label>
                         <select
                             name="estado"
