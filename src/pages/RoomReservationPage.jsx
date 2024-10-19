@@ -135,7 +135,7 @@ export function RoomReservationPage() {
 
         setReservation(initialRoomReservationState);
         setReservations([]);
-
+        navigate('/allRoomReservation');
     };
 
     const handleCreateRoomReservation = async () => {
