@@ -312,21 +312,25 @@ function CubiclesReservationPage() {
                     <Route path="reserveUser" element={<ReservationForUser onUserSearched={handleUserSearched}/>}/>
                 </Routes>
 
-                {/* Lista de cubículos */}
+
                 <div
-                    className="w-full md:w-1/5 md:mr-5 bg-gray-100 p-3 rounded-lg shadow-lg flex flex-col overflow-y-auto md:h-[90vh]">
-                    <h3 className="text-center text-lg mb-5 md:text-left whitespace-nowrap">Cubículos Disponibles</h3>
-                    <ul className="flex flex-row md:flex-col list-none p-0 m-0 space-x-3 md:space-x-0 md:space-y-2">
+                    className="w-full md:w-1/5 md:mr-5 bg-gray-100 p-3 rounded-lg shadow-lg flex flex-col overflow-hidden md:h-[90vh]">
+                    <h3 className="text-center text-lg mb-5 md:text-left whitespace-nowrap sticky top-0 bg-gray-100 z-10">
+                        Cubículos Disponibles
+                    </h3>
+                    <ul className="flex flex-row md:flex-col list-none p-0 m-0 space-x-3 md:space-x-0 md:space-y-2 overflow-y-auto">
                         {cubicles.map((cubicle) => {
-                            console.log(cubicle); // Verifica que cubicle contiene los atributos esperados
                             return (
                                 <li
                                     key={cubicle.idCubiculo}
                                     onClick={() => handleCubicleSelect(cubicle)}
-                                    className={`relative p-3 cursor-pointer rounded ${selectedCubicleR?.idCubiculo === cubicle.idCubiculo ? 'bg-gray-300 shadow-inner' : 'bg-white'}`}
+                                    className={`relative p-3 cursor-pointer rounded h-28 md:h-24 ${selectedCubicleR?.idCubiculo === cubicle.idCubiculo ? 'bg-gray-300 shadow-inner' : 'bg-white'}`}
                                 >
-                                    {cubicle.Nombre}
-                                    <span className="absolute bottom-1 right-2 text-sm text-gray-500">
+                    <span className="block text-center font-medium mb-2 md:mb-0.5">
+                        {cubicle.Nombre}
+                    </span>
+                                    <span
+                                        className="absolute bottom-0 left-0 right-0 text-xs md:text-sm text-gray-600 px-2 py-1 text-center w-full">
                         {cubicle.Ventana ? 'Con ventana' : 'Sin ventana'}
                     </span>
                                 </li>
@@ -334,6 +338,7 @@ function CubiclesReservationPage() {
                         })}
                     </ul>
                 </div>
+
 
                 {/* Contenedor del calendario */}
                 <div className="w-full md:w-4/5 flex flex-col bg-white p-5 rounded-lg shadow-lg flex-grow min-h-min">
