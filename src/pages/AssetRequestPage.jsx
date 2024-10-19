@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import es from "date-fns/locale/es";
@@ -42,13 +42,14 @@ export function AssetRequestPage() {
     const [pdfPreview, setPdfPreview] = useState(null);
     const [currentAssetId, setCurrentAssetId] = useState(null);
 
-
+    localStorage.setItem("isRequestCompleted", JSON.stringify(false));
 
     useEffect(() => {
         const handleUnload = () => {
             const isCompleted = JSON.parse(localStorage.getItem("isRequestCompleted"));
             if (currentAssetId && !isCompleted) {
-                updateAsset(currentAssetId, { condicion: 0 }); // Cambia a "Disponible" si se sale
+                updateAsset(currentAssetId, { condicion: 0 });
+                localStorage.setItem("isRequestCompleted", JSON.stringify(false));
             }
         };
 
@@ -61,6 +62,7 @@ export function AssetRequestPage() {
             const isCompleted = JSON.parse(localStorage.getItem("isRequestCompleted"));
             if (currentAssetId && !isCompleted) {
                 updateAsset(currentAssetId, { condicion: 0 });
+                localStorage.setItem("isRequestCompleted", JSON.stringify(false));
             }
         };
     }, [currentAssetId]);
