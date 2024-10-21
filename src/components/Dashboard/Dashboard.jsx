@@ -151,7 +151,7 @@ const Dashboard = ({ type }) => {
             {/* Botón de regreso */}
             <button
                 onClick={() => navigate('/dashboard')}
-                className="hidden sm:block absolute top-17 left-2 p-1 cursor-pointer"
+                className="hidden sm:block absolute no-print top-17 left-2 p-1 cursor-pointer"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                      stroke="currentColor" className="w-8 h-8">
