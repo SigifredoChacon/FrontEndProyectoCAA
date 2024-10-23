@@ -1,7 +1,10 @@
 import api from '../utils/api';
 
-export const getReservation = async () => {
-    const response = await api.get('/reservations');
+export const getReservation = async (page = 1, itemsPerPage = 10) => {
+    const response = await api.get('/reservations', {
+            params: { page, itemsPerPage }
+        }
+        );
     return response.data;
 };
 
@@ -31,10 +34,16 @@ export const getReservationById = async (id) => {
     return response.data;
 };
 
-export const getReservationByUserId = async (id) => {
-    const response = await api.get(`/reservations/getbyUserId/${id}`);
+export const getReservationByUserId = async (user, page = 1, itemsPerPage = 10) => {
+    const response = await api.get(`/reservations/getbyUserId/${user}`, {
+        params: { page, itemsPerPage }
+    });
     return response.data;
 };
+export const getReservationByUserIdComplete = async (user) => {
+    const response = await api.get(`/reservations/reservationsCompleted/${user}`);
+    return response.data;
+}
 export const getReservationByCubicleId = async (id) => {
     const response = await api.get(`/reservations/getbyCubicleId/${id}`);
     return response.data;

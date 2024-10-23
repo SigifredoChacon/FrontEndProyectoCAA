@@ -17,16 +17,14 @@ import {
     TableRow,
     Title,
     Badge,
-    TextInput,
 } from '@tremor/react';
-
 import ReservationFormEdit from '../components/Reservations/ReservationFormEdit.jsx';
 import ShareReservationModal from '../components/Reservations/ShareReservationModal.jsx';
 import Swal from "sweetalert2";
 
 function AllPersonalReservationPage() {
     const { user } = useAuthContext();
-    const {selectedReservation, handleEditReservation, handleReservationUpdated } = usePersonalReservation();
+    const { selectedReservation, handleEditReservation, handleReservationUpdated } = usePersonalReservation();
     const navigate = useNavigate();
     const [reservations, setReservations] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,15 +32,19 @@ function AllPersonalReservationPage() {
 
     const [currentPage, setCurrentPage] = useState(1); // Página actual
     const itemsPerPage = 10; // Cantidad de elementos por página
+    const [totalPages, setTotalPages] = useState(1); // Total de páginas
 
     useEffect(() => {
-        fetchReservations();
-    }, []);
+        fetchReservations(currentPage);
+    }, [currentPage]);
 
-    const fetchReservations = async () => {
+    const fetchReservations = async (page=1 ) => {
         try {
-            const data = await getReservationByUserId(user);
-            const reservationsWithDetails = await Promise.all(data.map(async (reservation) => {
+            // Llamada al servicio con paginación
+            const data = await getReservationByUserId(user, page, itemsPerPage);
+            console.log(data)
+            console.log(page, itemsPerPage)
+            const reservationsWithDetails = await Promise.all(data.reservations.map(async (reservation) => {
                 let placeName = '';
 
                 if (reservation.idCubiculo) {
@@ -57,25 +59,27 @@ function AllPersonalReservationPage() {
 
             const today = new Date();
 
-
+            // Separar las reservaciones por fecha
             const upcomingReservations = reservationsWithDetails.filter(reservation => new Date(reservation.Fecha) >= today);
             const pastReservations = reservationsWithDetails.filter(reservation => new Date(reservation.Fecha) < today);
 
-
+            // Ordenar las próximas reservaciones de más cercanas a más lejanas
             upcomingReservations.sort((a, b) => new Date(a.Fecha) - new Date(b.Fecha));
-            pastReservations.sort((a, b) => new Date(b.Fecha) - new Date(a.Fecha)); // Opcionalmente de más reciente a más antigua
+            // Ordenar las reservaciones pasadas de más recientes a más antiguas
+            pastReservations.sort((a, b) => new Date(b.Fecha) - new Date(a.Fecha));
 
             const sortedReservations = [...upcomingReservations, ...pastReservations];
 
             setReservations(sortedReservations);
+            setTotalPages(data.totalPages); // Asegúrate de asignar correctamente el total de páginas
         } catch (error) {
             console.error('Error al obtener las reservaciones:', error);
         }
     };
 
 
-    const handleEditPersonalReservation = (reservation) => {
 
+    const handleEditPersonalReservation = (reservation) => {
         handleEditReservation(reservation);
         navigate(`/personalReservations/edit/${reservation.idReservacion}`);
     };
@@ -86,41 +90,36 @@ function AllPersonalReservationPage() {
     };
 
     const handleDeleteReservation = async (idReservacion) => {
+        Swal.fire({
+            title: '¡Eliminar!',
+            text: '¿Estás seguro de que deseas eliminar esta reserva?',
+            icon: 'warning',
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await deleteReservation(idReservacion);
+                    setReservations(reservations.filter((reservation) => reservation.idReservacion !== idReservacion));
 
-            Swal.fire({
-                title: '¡Eliminar!',
-                text: '¿Estás seguro de que deseas eliminar esta reserva?',
-                icon: 'warning',
-                showConfirmButton: true,
-                confirmButtonText: 'Aceptar',
-            }).then(async (result) => {  // Usa async aquí
-                if (result.isConfirmed) {
-                    try {
-                        await deleteReservation(idReservacion);  // Espera a que se complete la eliminación
-                        setReservations(reservations.filter((reservation) => reservation.idReservacion !== idReservacion));
+                    await Swal.fire({
+                        title: '¡Eliminado!',
+                        text: 'Se ha eliminado la reservación con éxito',
+                        icon: 'success',
+                        timer: 1000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                        willClose: () => {
+                            navigate('/personalReservations');
+                        }
+                    });
 
-                        await Swal.fire({
-                            title: '¡Eliminado!',
-                            text: 'Se ha eliminado la reservación con éxito',
-                            icon: 'success',
-                            timer: 1000,
-                            timerProgressBar: true,
-                            showConfirmButton: false,
-                            willClose: () => {
-                                navigate('/personalReservations');
-                            }
-                        });
-
-                        navigate('/personalReservations');  // Redirige después de la eliminación
-                    } catch (error) {
-                        console.error("Error al eliminar la reservación:", error);
-                    }
+                    navigate('/personalReservations');
+                } catch (error) {
+                    console.error("Error al eliminar la reservación:", error);
                 }
-            });
-
-
-
-
+            }
+        });
     };
 
     const handleOpenModal = (reservation) => {
@@ -137,11 +136,9 @@ function AllPersonalReservationPage() {
         if (!reservationToShare) return;
 
         try {
-
             const userData = await getUserById(user);
             const userName = userData.Nombre;
 
-            // Crea el objeto con la información que necesitas enviar al backend
             const reservationData = {
                 correosDestinatarios: emails,
                 nombreRemitente: userName,
@@ -152,7 +149,6 @@ function AllPersonalReservationPage() {
                 refrigerio: reservationToShare.Refrigerio,
             };
 
-            // Llama al servicio que envía los datos al backend
             await shareReservation(reservationData);
 
             Swal.fire({
@@ -161,8 +157,7 @@ function AllPersonalReservationPage() {
                 showConfirmButton: false,
                 timer: 1500,
                 timerProgressBar: true,
-
-            })
+            });
             handleCloseModal();
         } catch (error) {
             Swal.fire({
@@ -171,46 +166,37 @@ function AllPersonalReservationPage() {
                 icon: 'error',
                 showConfirmButton: true,
                 confirmButtonText: 'Aceptar',
-            })
+            });
         }
     };
-
-    // Maneja el cambio de página
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentReservations = reservations.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(reservations.length / itemsPerPage);
 
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages) {
             setCurrentPage(newPage);
+            fetchReservations(newPage);
         }
     };
-
 
     const location = useLocation();
     const isOnCreateOrEditPage = location.pathname.startsWith("/personalReservations/edit/");
 
-
     return (
-        <div style={{maxWidth: '1800px', margin: '0 auto', padding: '0 20px'}}>
+        <div style={{ maxWidth: '1800px', margin: '0 auto', padding: '0 20px' }}>
             <button
                 onClick={() => navigate('/')}
                 className="hidden sm:block absolute top-20 left-2 p-1 cursor-pointer"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                     stroke="currentColor" className="w-8 h-8">
-                    <path strokeLinecap="round" strokeLinejoin="round"
-                          d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
             </button>
 
             {!isOnCreateOrEditPage && (
-                <h1 style={{textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px'}}>
+                <h1 style={{ textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px' }}>
                     Mis Reservaciones
                 </h1>
             )}
-            <Card style={{border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px'}}>
+            <Card style={{ border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px' }}>
                 <Title>
                     Mis Reservaciones
                     <Badge style={{
@@ -226,12 +212,10 @@ function AllPersonalReservationPage() {
                     </Badge>
                 </Title>
 
-                {/* Configuración de las rutas */}
                 <Routes>
                     <Route
                         path="edit/:id"
-                        element={<ReservationFormEdit selectedPersonalReservation={selectedReservation}
-                                                      onReservationUpdated={handleReservationCreated}/>}
+                        element={<ReservationFormEdit selectedPersonalReservation={selectedReservation} onReservationUpdated={handleReservationCreated} />}
                     />
                 </Routes>
 
@@ -251,7 +235,7 @@ function AllPersonalReservationPage() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {currentReservations.map((reservation) => (
+                                {reservations.map((reservation) => (
                                     <TableRow key={reservation.idReservacion}>
                                         <TableCell>{new Date(reservation.Fecha).toLocaleDateString('es-ES', {
                                             day: 'numeric',
@@ -270,27 +254,23 @@ function AllPersonalReservationPage() {
                                                 new Date().getHours() < parseInt(reservation.HoraInicio.split(':')[0])) ? (
                                                 <>
                                                     {reservation.idSala && (
-                                                        <button
-                                                            onClick={() => handleEditPersonalReservation(reservation)}
-                                                            style={{marginRight: '8px'}}>
+                                                        <button onClick={() => handleEditPersonalReservation(reservation)} style={{ marginRight: '8px' }}>
                                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-                                                                <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712Z"/>
-                                                                <path d="M19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z"/>
-                                                                <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z"/>
+                                                                <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712Z" />
+                                                                <path d="M19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+                                                                <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
                                                             </svg>
                                                         </button>
                                                     )}
-                                                    <button
-                                                        onClick={() => handleDeleteReservation(reservation.idReservacion)}
-                                                        style={{marginRight: '8px'}}>
+                                                    <button onClick={() => handleDeleteReservation(reservation.idReservacion)} style={{ marginRight: '8px' }}>
                                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-                                                            <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z"/>
-                                                            <path fillRule="evenodd" d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087Zm6.133 2.845a.75.75 0 0 1 1.06 0l1.72 1.72 1.72-1.72a.75.75 0 1 1 1.06 1.06l-1.72 1.72 1.72 1.72a.75.75 0 1 1-1.06 1.06L12 15.685l-1.72 1.72a.75.75 0 1 1-1.06-1.06l1.72-1.72-1.72-1.72a.75.75 0 0 1 0-1.06Z" clipRule="evenodd"/>
+                                                            <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
+                                                            <path fillRule="evenodd" d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087Zm6.133 2.845a.75.75 0 0 1 1.06 0l1.72 1.72 1.72-1.72a.75.75 0 1 1 1.06 1.06l-1.72 1.72 1.72 1.72a.75.75 0 1 1-1.06 1.06L12 15.685l-1.72 1.72a.75.75 0 1 1-1.06-1.06l1.72-1.72-1.72-1.72a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
                                                         </svg>
                                                     </button>
                                                     <button onClick={() => handleOpenModal(reservation)}>
                                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-                                                            <path fillRule="evenodd" d="M15.75 4.5a3 3 0 1 1 .825 2.066l-8.421 4.679a3.002 3.002 0 0 1 0 1.51l8.421 4.679a3 3 0 1 1-.729 1.31l-8.421-4.678a3 3 0 1 1 0-4.132l8.421-4.679a3 3 0 0 1-.096-.755Z" clipRule="evenodd"/>
+                                                            <path fillRule="evenodd" d="M15.75 4.5a3 3 0 1 1 .825 2.066l-8.421 4.679a3.002 3.002 0 0 1 0 1.51l8.421 4.679a3 3 0 1 1-.729 1.31l-8.421-4.678a3 3 0 1 1 0-4.132l8.421-4.679a3 3 0 0 1-.096-.755Z" clipRule="evenodd" />
                                                         </svg>
                                                     </button>
                                                 </>
@@ -298,8 +278,6 @@ function AllPersonalReservationPage() {
                                                 <span>Acciones no disponibles</span>
                                             )}
                                         </TableCell>
-
-
                                     </TableRow>
                                 ))}
                             </TableBody>

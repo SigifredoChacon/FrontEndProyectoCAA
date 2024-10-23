@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { getReservationByUserId } from '../services/reservationService';
+import {getReservationByUserId, getReservationByUserIdComplete} from '../services/reservationService';
 import {useAuthContext} from "./useAuthContext.js";
 
 const useReservationChecker = () => {
@@ -10,7 +10,10 @@ const useReservationChecker = () => {
         // Función para verificar si una reserva ya ha expirado
         const checkReservations = async () => {
             try {
-                const reservations = await getReservationByUserId(user);
+
+                const reservations = await getReservationByUserIdComplete(user);
+
+                console.log(reservations)
                 const now = new Date();
 
                 const expired = reservations.filter(reservation => {
