@@ -11,7 +11,7 @@ export function CategoryAssetsPage() {
     ];
 
     return (
-        <div className="flex items-center justify-center min-h-screen -mt-16">
+        <div className="flex items-center justify-center min-h-screen p-6">
             <button
                 onClick={() => navigate('/')}
                 className="hidden sm:block absolute top-20 left-2 p-1 cursor-pointer"
