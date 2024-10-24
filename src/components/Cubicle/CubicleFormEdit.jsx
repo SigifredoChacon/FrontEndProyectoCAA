@@ -88,7 +88,7 @@ function CubicleFormEdit({ selectedCubicle, onCubicleUpdated }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        handleUpdateCubicle(); // Llama a la función de actualización
+        handleUpdateCubicle();
     };
 
     return (

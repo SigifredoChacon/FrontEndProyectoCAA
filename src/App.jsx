@@ -217,17 +217,16 @@ function HomePage() {
     const navigate = useNavigate();
     const { role } = useAuthContext();
     const { user } = useAuthContext();
-    const expiredReservations = useReservationChecker();  // Hook personalizado para obtener las reservas expiradas
+    const expiredReservations = useReservationChecker();
     const [activeReservation, setActiveReservation] = useState(null);
-    const [rating, setRating] = useState(0);  // Estado para la calificación con estrellas
-    const [observaciones, setObservaciones] = useState('');  // Estado para las observaciones
-    const [isValorationOpen, setIsValorationOpen] = useState(false);  // Controla si el formulario está abierto
+    const [rating, setRating] = useState(0);
+    const [observaciones, setObservaciones] = useState('');
+    const [isValorationOpen, setIsValorationOpen] = useState(false);
 
-    // Mostrar el formulario si hay reservas expiradas
     useEffect(() => {
         if (expiredReservations.length > 0) {
-            setActiveReservation(expiredReservations[0]);  // Mostrar la primera reserva expirada
-            setIsValorationOpen(true);  // Abre el formulario de valoración
+            setActiveReservation(expiredReservations[0]);
+            setIsValorationOpen(true);
         }
     }, [expiredReservations]);
 
@@ -237,7 +236,7 @@ function HomePage() {
             await createValoration({
                 idSala: activeReservation.idSala,
                 idCubiculo: activeReservation.idCubiculo,
-                nota: rating,  // Guardamos el rating
+                nota: rating,
                 observaciones
             });
             await updateReservation(activeReservation.idReservacion, { encuestaCompletada: true });
@@ -272,7 +271,7 @@ function HomePage() {
                 allowOutsideClick: false,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    navigate('/profile');  // Cambia '/userProfile' a la ruta de perfil de usuario
+                    navigate('/profile');
                 }
             });
         }
@@ -412,7 +411,7 @@ function HomePage() {
                                 border: '1px solid #ccc',
                                 marginBottom: '20px'
                             }}
-                            rows={4}  // Puedes ajustar el número de filas
+                            rows={4}
                         />
 
                         {/* Botones Confirmar y Cancelar */}

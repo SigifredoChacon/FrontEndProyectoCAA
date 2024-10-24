@@ -20,8 +20,8 @@ function AssetList({ onEdit }) {
     const [assets, setAssets] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResult, setSearchResult] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1); // Página actual
-    const itemsPerPage = 10; // Cantidad de elementos por página
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         fetchAssets();
@@ -46,7 +46,7 @@ function AssetList({ onEdit }) {
             icon: 'warning',
             showConfirmButton: true,
             confirmButtonText: 'Aceptar',
-        }).then(async (result) => {  // Usa async aquí
+        }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
                     await deleteAsset(id);

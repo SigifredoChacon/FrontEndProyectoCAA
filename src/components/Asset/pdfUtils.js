@@ -14,30 +14,30 @@ export const generateFilledPDF = async (userData, formData, assetData, startDate
     const fontSize = 10;
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-    // Función para dividir texto en líneas de máximo 117 caracteres
+
     const wrapText = (text, maxCharsPerLine) => {
         const words = text.split(' ');
         const lines = [];
         let line = '';
 
         words.forEach((word) => {
-            const testLine = line + (line ? ' ' : '') + word; // Asegura espacios entre palabras
+            const testLine = line + (line ? ' ' : '') + word;
             if (testLine.length <= maxCharsPerLine) {
                 line = testLine;
             } else {
-                lines.push(line); // Guarda la línea actual
-                line = word; // Comienza una nueva línea con la palabra que no cabía
+                lines.push(line);
+                line = word;
             }
         });
 
         if (line.length > 0) {
-            lines.push(line); // Agrega la última línea si tiene contenido
+            lines.push(line);
         }
 
         return lines;
     };
 
-    // Ajustar el texto de observaciones a 117 caracteres por línea
+
     const observationLines = wrapText(formData.observaciones || 'Sin observaciones', 117);
     let yPosition = 390;
 

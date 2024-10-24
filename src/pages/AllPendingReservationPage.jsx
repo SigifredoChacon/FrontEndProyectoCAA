@@ -1,4 +1,4 @@
-import ReactModal from 'react-modal'; // Importamos react-modal
+import ReactModal from 'react-modal';
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import {deleteReservation, getPendingReservation, updateReservation} from '../services/reservationService.jsx';
@@ -26,8 +26,8 @@ function AllPendingReservationPage() {
     const [reservations, setReservations] = useState([]);
     const [selectedReservation, setSelectedReservation] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1); // Página actual
-    const itemsPerPage = 10; // Cantidad de elementos por página
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         fetchReservations();
@@ -141,7 +141,6 @@ function AllPendingReservationPage() {
         navigate('/pendingReservations')
     };
 
-    // Maneja el cambio de página
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentReservations = reservations.slice(indexOfFirstItem, indexOfLastItem);

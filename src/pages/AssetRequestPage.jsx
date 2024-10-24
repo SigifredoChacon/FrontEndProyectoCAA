@@ -53,10 +53,8 @@ export function AssetRequestPage() {
             }
         };
 
-        // Detectar salida de la página y cierre del navegador
         window.addEventListener("beforeunload", handleUnload);
 
-        // Limpiar el evento y cambiar el estado a "Disponible" cuando el usuario navegue a otra página
         return () => {
             window.removeEventListener("beforeunload", handleUnload);
             const isCompleted = JSON.parse(localStorage.getItem("isRequestCompleted"));
@@ -100,13 +98,14 @@ export function AssetRequestPage() {
     const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmitted(true);
+
     };
 
     const handleCreateRequest = async () => {
 
         setRequest({ ...request, fechaInicio: startDate, FechaFin: endDate });
         try {
-            if (!startDate || !endDate) {
+            if (!startDate || !endDate || formData.usoBien === ""){
                 Swal.fire({
                     title: '¡Error!',
                     text: 'Completa el formulario para continuar',
@@ -136,7 +135,6 @@ export function AssetRequestPage() {
             setPdfPreview(pdfUrl);
             setIsFormLocked(true);
 
-            // Cambiar idEstado a 1 ("Prestado")
             if (assetData?.NumeroPlaca) {
                 await updateAsset(assetData.NumeroPlaca, {condicion: 1});
                 setCurrentAssetId(assetData.NumeroPlaca);
@@ -149,8 +147,6 @@ export function AssetRequestPage() {
                     showConfirmButton: true,
                     confirmButtonText: 'Aceptar',
                 });
-
-
         }
 
     };
@@ -189,7 +185,7 @@ export function AssetRequestPage() {
                     timerProgressBar: true,
                     showConfirmButton: false,
                     willClose: () => {
-                        localStorage.setItem("isRequestCompleted", JSON.stringify(true)); // Guardar el estado de completado en localStorage
+                        localStorage.setItem("isRequestCompleted", JSON.stringify(true));
                         navigate('/categoryAssets');
                     }
                 });
@@ -210,7 +206,6 @@ export function AssetRequestPage() {
                     <div className="w-full max-w-lg md:max-w-2xl lg:max-w-3xl bg-white shadow-lg rounded-lg p-6 mb-6">
                         <h3 className="text-lg font-semibold mb-4 text-center">Vista previa del PDF</h3>
 
-                        {/* Mostrar vista previa en `iframe` solo en pantallas medianas o más grandes */}
                         <div className="hidden md:block">
                             <iframe
                                 src={pdfPreview}
@@ -221,7 +216,6 @@ export function AssetRequestPage() {
                             ></iframe>
                         </div>
 
-                        {/* Mostrar enlace de descarga solo en pantallas pequeñas */}
                         <div className="block md:hidden text-center">
                             <label>
                                 Descargue el PDF para verlo
@@ -264,7 +258,7 @@ export function AssetRequestPage() {
                                         disabled={isFormLocked}
                                         className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     >
-
+                                        <option value="" disabled selected>Seleccione una opción</option>
                                         <option value="1">Nivel interno</option>
                                         <option value="2">Nivel externo dentro del país</option>
                                         <option value="3">Nivel externo fuera del país</option>

@@ -124,7 +124,7 @@ const CalendarRooms = ({ selectedRoomId, onReservationsChange }) => {
                     type="date"
                     value={format(selectedDate, 'yyyy-MM-dd')}
                     onChange={handleDateChange}
-                    min={format(new Date(), 'yyyy-MM-dd')}  // Aquí establecemos la fecha mínima como hoy
+                    min={format(new Date(), 'yyyy-MM-dd')}
                     className="p-2 text-base rounded border border-gray-300 bg-white text-gray-800 focus:border-green-500 focus:outline-none"
                     disabled={reservations.length > 0 && selectedDay !== null}
                 />
@@ -150,7 +150,7 @@ const CalendarRooms = ({ selectedRoomId, onReservationsChange }) => {
                                 {time}
                             </td>
                             {daysOfWeek.map((day, colIndex) => {
-                                const isPastDate = day < startOfDay(new Date());  // Comparar si es una fecha pasada
+                                const isPastDate = day < startOfDay(new Date());
 
                                 return (
                                     <td key={colIndex} className="p-3 border border-gray-200 text-center">

@@ -13,7 +13,7 @@ const TimeSlot = ({ day, time, isReserved, onReserve, disabled }) => {
                 text: 'Para poder realizar una reservación, por favor, inicia sesión 🤗',
                 icon: 'warning',
                 showConfirmButton: true,
-                confirmButtonText: 'Aceptar',  // Texto del botón
+                confirmButtonText: 'Aceptar',
             });
             return;
         }

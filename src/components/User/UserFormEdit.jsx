@@ -72,7 +72,7 @@ function UserFormEdit({ selectedUser, onUserUpdated}) {
                     timerProgressBar: true,
                     showConfirmButton: false
                 }).then(() => {
-                    onUserUpdated(); // Llamada para redirigir a la lista de usuarios después de la alerta
+                    onUserUpdated();
                 });
 
 

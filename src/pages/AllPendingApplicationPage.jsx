@@ -77,7 +77,7 @@ function AllPendingApplicationPage() {
             icon: 'warning',
             showConfirmButton: true,
             confirmButtonText: 'Aceptar',
-        }).then(async (result) => {  // Usa async aquí
+        }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
                     await updateRequest(selectedApplication.idSolicitud, {estado: "Aceptada"});
@@ -123,7 +123,7 @@ function AllPendingApplicationPage() {
             icon: 'warning',
             showConfirmButton: true,
             confirmButtonText: 'Aceptar',
-        }).then(async (result) => {  // Usa async aquí
+        }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
                     await updateRequest(selectedApplication.idSolicitud, {estado: "Rechazada"});

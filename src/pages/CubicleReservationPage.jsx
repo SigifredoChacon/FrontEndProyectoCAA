@@ -132,16 +132,16 @@ function CubiclesReservationPage() {
                 cancelButtonText: 'Cancelar',
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    // Si el usuario confirma, proceder con la reserva con `estado: 0`
-                    await makeCubicleReservation(groupedTimes, selectedDay, 0); // 0 indica que está pendiente de aprobación
+
+                    await makeCubicleReservation(groupedTimes, selectedDay, 0);
                 } else {
-                    // Si cancela, no se hace nada
+
                     console.log("Reserva cancelada por el usuario");
                 }
             });
         } else {
-            // Si no es sábado, proceder con la reserva normalmente (estado 1)
-            await makeCubicleReservation(groupedTimes, selectedDay, 1); // 1 indica que está activa
+
+            await makeCubicleReservation(groupedTimes, selectedDay, 1);
         }
 
     };
@@ -202,7 +202,7 @@ function CubiclesReservationPage() {
                 text: 'Para poder realizar una reservación, por favor, inicia sesión 🤗',
                 icon: 'warning',
                 showConfirmButton: true,
-                confirmButtonText: 'Aceptar',  // Texto del botón
+                confirmButtonText: 'Aceptar',
             });
             return;
         }
@@ -225,7 +225,6 @@ function CubiclesReservationPage() {
         setReservations([]);
         setSelectedCubicle(null);
         setCalendarKey(prevKey => prevKey + 1);
-        //navigate('/');
     };
 
     const handleAddCubicleReservation = () => {
@@ -235,12 +234,11 @@ function CubiclesReservationPage() {
     };
 
     const handleCreateExternalReservation = () => {
-        setIsModalOpen(true); // Abrir el modal
+        setIsModalOpen(true);
     };
 
-    // Función para cerrar el modal
     const handleCloseModal = () => {
-        setIsModalOpen(false); // Cerrar el modal
+        setIsModalOpen(false);
     };
 
 
@@ -254,21 +252,19 @@ function CubiclesReservationPage() {
                 idUsuario: idExternalRef.current,
             }));
 
-            setIsModalOpen(false); // Cerrar el modal después de crear el usuario
+            setIsModalOpen(false);
             navigate('/reservationsCubicle');
         } else {
             console.warn("Se intentó asignar un ID externo undefined.");
         }
     };
 
-    //Funcion para el modal de la reservacion para un usuario ya registrado
     const handleCreateUserReservation = () => {
-        setIsModalUserSearchedOpen(true); // Abrir el modal
+        setIsModalUserSearchedOpen(true);
     };
 
-    // Función para cerrar el modal
     const handleCloseModalUser = () => {
-        setIsModalUserSearchedOpen(false); // Cerrar el modal
+        setIsModalUserSearchedOpen(false);
     };
 
 
@@ -282,7 +278,7 @@ function CubiclesReservationPage() {
                 idUsuario: idExternalRef.current,
             }));
 
-            setIsModalUserSearchedOpen(false); // Cerrar el modal después de crear el usuario
+            setIsModalUserSearchedOpen(false);
             navigate('/reservationsCubicle');
         } else {
             console.warn("Se intentó asignar un ID externo undefined.");

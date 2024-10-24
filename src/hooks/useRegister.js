@@ -18,7 +18,7 @@ export const useRegister = () => {
         } catch (err) {
             setLoading(false);
 
-            // Verifica si el error es de tipo "too_big" para cedulaCarnet
+
             const errorData = err.response?.data?.message;
             if (errorData && Array.isArray(errorData)) {
                 const tooBigError = errorData.find(

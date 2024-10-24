@@ -30,9 +30,9 @@ function AllPersonalReservationPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [reservationToShare, setReservationToShare] = useState(null);
 
-    const [currentPage, setCurrentPage] = useState(1); // Página actual
-    const itemsPerPage = 10; // Cantidad de elementos por página
-    const [totalPages, setTotalPages] = useState(1); // Total de páginas
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+    const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
         fetchReservations(currentPage);
@@ -40,7 +40,6 @@ function AllPersonalReservationPage() {
 
     const fetchReservations = async (page=1 ) => {
         try {
-            // Llamada al servicio con paginación
             const data = await getReservationByUserId(user, page, itemsPerPage);
             console.log(data)
             console.log(page, itemsPerPage)
@@ -59,19 +58,17 @@ function AllPersonalReservationPage() {
 
             const today = new Date();
 
-            // Separar las reservaciones por fecha
+
             const upcomingReservations = reservationsWithDetails.filter(reservation => new Date(reservation.Fecha) >= today);
             const pastReservations = reservationsWithDetails.filter(reservation => new Date(reservation.Fecha) < today);
 
-            // Ordenar las próximas reservaciones de más cercanas a más lejanas
             upcomingReservations.sort((a, b) => new Date(a.Fecha) - new Date(b.Fecha));
-            // Ordenar las reservaciones pasadas de más recientes a más antiguas
             pastReservations.sort((a, b) => new Date(b.Fecha) - new Date(a.Fecha));
 
             const sortedReservations = [...upcomingReservations, ...pastReservations];
 
             setReservations(sortedReservations);
-            setTotalPages(data.totalPages); // Asegúrate de asignar correctamente el total de páginas
+            setTotalPages(data.totalPages);
         } catch (error) {
             console.error('Error al obtener las reservaciones:', error);
         }

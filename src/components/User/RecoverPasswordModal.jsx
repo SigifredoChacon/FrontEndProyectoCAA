@@ -14,7 +14,7 @@ const ResetPasswordModal = ({ open, handleClose }) => {
         }
 
         try {
-            // Llama a la función de actualización de contraseña con la cédula o carnet
+
             await updatePassword(cedulaCarnet);
 
             Swal.fire({

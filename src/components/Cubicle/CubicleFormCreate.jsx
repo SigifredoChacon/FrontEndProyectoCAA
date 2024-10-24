@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import PropTypes from 'prop-types'; // Importa PropTypes
+import PropTypes from 'prop-types';
 import {createCubicle} from '../../services/cubicleService.jsx';
 import Swal from "sweetalert2";
 

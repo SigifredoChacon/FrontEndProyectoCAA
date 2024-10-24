@@ -18,8 +18,8 @@ function UserList({ onEdit }) {
     const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResult, setSearchResult] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1); // Página actual
-    const itemsPerPage = 10; // Cantidad de elementos por página
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         fetchUsers();

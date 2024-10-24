@@ -43,7 +43,7 @@ function RoomsPage() {
                 icon: 'warning',
                 showConfirmButton: true,
                 confirmButtonText: 'Aceptar',
-            }).then(async (result) => {  // Usa async aquí
+            }).then(async (result) => {
                 if (result.isConfirmed) {
                     try {
                         await lockRoom();
@@ -84,7 +84,7 @@ function RoomsPage() {
 
     const handleEdit = (room) => {
         handleEditRoom(room);
-        navigate(`/rooms/edit/${room.idSala}`); // Navegar a la ruta de edición de usuario
+        navigate(`/rooms/edit/${room.idSala}`);
     };
 
     const location = useLocation();

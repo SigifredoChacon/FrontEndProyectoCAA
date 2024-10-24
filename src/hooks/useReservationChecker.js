@@ -7,7 +7,6 @@ const useReservationChecker = () => {
     const [expiredReservations, setExpiredReservations] = useState([]);
 
     useEffect(() => {
-        // Función para verificar si una reserva ya ha expirado
         const checkReservations = async () => {
             try {
 
@@ -17,14 +16,14 @@ const useReservationChecker = () => {
                 const now = new Date();
 
                 const expired = reservations.filter(reservation => {
-                    const reservationDate = new Date(reservation.Fecha);  // Cambia esto si el campo de fecha tiene otro nombre
-                    const endTime = reservation.HoraFin;  // Suponiendo que HoraFin existe
+                    const reservationDate = new Date(reservation.Fecha);
+                    const endTime = reservation.HoraFin;
                     const [hours, minutes] = endTime.split(':');
                     reservationDate.setHours(hours);
                     reservationDate.setMinutes(minutes);
 
                     // Verificamos si la reserva ya ha pasado
-                    return reservationDate < now && !reservation.EncuestaCompletada;  // Cambia esto según tu modelo
+                    return reservationDate < now && !reservation.EncuestaCompletada;
                 });
 
                 setExpiredReservations(expired);
@@ -33,15 +32,12 @@ const useReservationChecker = () => {
             }
         };
 
-        // Llamamos a la función cada cierto tiempo (por ejemplo, cada hora)
         const intervalId = setInterval(checkReservations, 60 * 60 * 1000);  // Cada 1 hora
 
-        // Verificamos al menos una vez cuando se monta el componente
         checkReservations();
 
-        // Limpiar el intervalo cuando se desmonte el componente
         return () => clearInterval(intervalId);
-    }, [user]);  // El efecto depende del id del usuario
+    }, [user]);
 
     return expiredReservations;
 };

@@ -6,7 +6,7 @@ import { updateReservation } from "../../services/reservationService.jsx";
 import { getResources } from "../../services/resourcesService.jsx";
 import { getRoomById } from "../../services/roomService.jsx";
 import CalendarRoomsNoEdit from "../Calendar/CalendarRoomsNoEdit.jsx";
-import Swal from "sweetalert2";  // Importa el servicio para obtener la sala
+import Swal from "sweetalert2";
 
 export function ReservationFormEdit({ selectedPersonalReservation, onReservationUpdated }) {
     const location = useLocation();
@@ -92,7 +92,6 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
 
             setSelectedResources([...selectedResources, selectedRecurso]);
 
-            // Eliminar el recurso seleccionado de la lista de recursos disponibles
             const updatedResources = resources.filter(
                 (recurso) => recurso.idRecursos !== selectedRecursoId
             );

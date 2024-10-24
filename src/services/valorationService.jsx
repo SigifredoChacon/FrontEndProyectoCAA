@@ -1,6 +1,5 @@
 import api from '../utils/api';
 
-// Crear una nueva valoración
 export const createValoration = async (valoration) => {
     try {
         const response = await api.post('/valorations', valoration);
@@ -11,7 +10,6 @@ export const createValoration = async (valoration) => {
     }
 };
 
-// Obtener todas las valoraciones
 export const getAllValorations = async () => {
     try {
         const response = await api.get('/valorations');
@@ -22,13 +20,11 @@ export const getAllValorations = async () => {
     }
 };
 
-// Obtener valoraciones por sala
 export const getValorationsByRoomId = async (roomId) => {
     const response = await api.get(`/valoraciones/room/${roomId}`);
     return response.data;
 };
 
-// Obtener valoraciones por cubículo
 export const getValorationsByCubicleId = async (cubicleId) => {
     const response = await api.get(`/valoraciones/cubicle/${cubicleId}`);
     return response.data;

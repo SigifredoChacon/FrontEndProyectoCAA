@@ -72,7 +72,7 @@ function LockDayModal({ onCancel }) {
             icon: 'warning',
             showConfirmButton: true,
             confirmButtonText: 'Aceptar',
-        }).then(async (result) => {  // Usa async aquí
+        }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
                     const descriptionDate = format(date, 'dd MMMM yyyy', { locale: es });
@@ -80,12 +80,12 @@ function LockDayModal({ onCancel }) {
                     setDescripcion(newDescripcion);
 
                     try {
-                        // Formateamos la fecha correctamente antes de la consulta
+
                         const formattedDate = format(date, 'yyyy-MM-dd');
 
                         const nextDay = format(addDays(date, 1), 'yyyy-MM-dd');
 
-                        // Obtenemos las reservas de esa fecha
+
                         const reservations = await getReservationByDate(formattedDate);
 
 
@@ -94,7 +94,7 @@ function LockDayModal({ onCancel }) {
                         }
 
 
-                        // Creamos las reservas para los cubículos y salas
+
                         await makeCubicleReservation(nextDay);
                         await makeRoomReservation(nextDay);
 
@@ -182,7 +182,7 @@ function LockDayModal({ onCancel }) {
                     const ReservationToCreate = {
                         ...reservation,
                         idSala: room.idSala,
-                        fecha: formattedDate, // Usamos la fecha correctamente formateada
+                        fecha: formattedDate,
                     };
 
                     console.log("Creando reservación para la sala:", room.idSala);

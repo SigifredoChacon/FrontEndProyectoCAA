@@ -145,7 +145,7 @@ export function RoomReservationPage() {
                 text: 'Para poder realizar una reservación, por favor, inicia sesión 🤗',
                 icon: 'warning',
                 showConfirmButton: true,
-                confirmButtonText: 'Aceptar',  // Texto del botón
+                confirmButtonText: 'Aceptar',
             });
             return;
         }
@@ -163,7 +163,6 @@ export function RoomReservationPage() {
 
         const groupedTimes = groupConsecutiveTimes(timeSlots);
 
-        // Verifica si tienes al menos una reserva en `reservations`
         if (reservations.length === 0) {
             Swal.fire({
                 title: 'Error',
@@ -208,7 +207,7 @@ export function RoomReservationPage() {
         }
     };
 
-// Nueva función para hacer la reserva
+
     const makeRoomReservation = async (groupedTimes, selectedDay, estado) => {
         for (let group of groupedTimes) {
             const horaInicio = group[0];
@@ -234,7 +233,7 @@ export function RoomReservationPage() {
                     idRecursos: selectedResources.map((recurso) => recurso.idRecursos),
                     refrigerio: snack,
                     observaciones: observations,
-                    estado: estado, // Estado de la reserva (0 para pendiente, 1 para aprobada)
+                    estado: estado,
                 };
 
                 console.log(RoomReservationToCreate);
@@ -255,18 +254,17 @@ export function RoomReservationPage() {
                 navigate('/');
             }
         });
-        handleRoomReservationCreated(); // Navega al home u otra vista una vez creada la reserva
-        setReservation(initialRoomReservationState); // Reiniciar estado de la reserva
+        handleRoomReservationCreated();
+        setReservation(initialRoomReservationState);
     };
 
 
     const handleCreateExternalReservation = () => {
-        setIsModalOpen(true); // Abrir el modal
+        setIsModalOpen(true);
     };
 
-    // Función para cerrar el modal
     const handleCloseModal = () => {
-        setIsModalOpen(false); // Cerrar el modal
+        setIsModalOpen(false);
     };
 
     const handleUserCreated = (idExternal) => {
@@ -279,22 +277,19 @@ export function RoomReservationPage() {
                 idUsuario: idExternalRef.current,
             }));
 
-            setIsModalOpen(false); // Cerrar el modal después de crear el usuario
-
-            // Navegar de vuelta a la página de reservas, manteniendo la información de la sala
+            setIsModalOpen(false);
             navigate('/reservationsRoom', { state: { selectedRoom } });
         } else {
             console.warn("Se intentó asignar un ID externo undefined.");
         }
     };
-    //Funcion para el modal de la reservacion para un usuario ya registrado
+
     const handleCreateUserReservation = () => {
-        setIsModalUserSearchedOpen(true); // Abrir el modal
+        setIsModalUserSearchedOpen(true);
     };
 
-    // Función para cerrar el modal
     const handleCloseModalUser = () => {
-        setIsModalUserSearchedOpen(false); // Cerrar el modal
+        setIsModalUserSearchedOpen(false);
     };
 
 
@@ -308,7 +303,7 @@ export function RoomReservationPage() {
                 idUsuario: idExternalRef.current,
             }));
 
-            setIsModalUserSearchedOpen(false); // Cerrar el modal después de crear el usuario
+            setIsModalUserSearchedOpen(false);
             navigate('/reservationsRoom', { state: { selectedRoom } });
         } else {
             console.warn("Se intentó asignar un ID externo undefined.");

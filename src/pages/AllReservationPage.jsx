@@ -29,9 +29,9 @@ function AllReservationPage() {
     const [reservations, setReservations] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const [currentPage, setCurrentPage] = useState(1); // Página actual
-    const itemsPerPage = 10; // Cantidad de elementos por página
-    const [totalPages, setTotalPages] = useState(1); // Total de páginas
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+    const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
         fetchReservations();
@@ -99,7 +99,7 @@ function AllReservationPage() {
             icon: 'warning',
             showConfirmButton: true,
             confirmButtonText: 'Aceptar',
-        }).then(async (result) => {  // Usa async aquí
+        }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
                     await deleteReservation(idReservacion);
@@ -136,12 +136,9 @@ function AllReservationPage() {
         setIsModalOpen(true);
     };
 
-    // Función para cerrar el modal
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
-
-
 
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages) {

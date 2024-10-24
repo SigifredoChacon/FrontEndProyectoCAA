@@ -29,7 +29,7 @@ const CalendarRoomsNoEdit = ({ selectedRoomId, onReservationsChange, editable = 
                             day: userReservationDate,
                         });
 
-                        // Si existe una reservación del usuario, ajustamos la fecha seleccionada a la fecha de la reserva
+
                         setSelectedDate(userReservationDate);
                     }
                 }
@@ -41,9 +41,9 @@ const CalendarRoomsNoEdit = ({ selectedRoomId, onReservationsChange, editable = 
         fetchUserReservation();
     }, [reservationId]);
 
-    // Cálculo de la semana seleccionada basado en la fecha de la reserva
+
     const startOfSelectedWeek = startOfWeek(selectedDate, { weekStartsOn: 1 });
-    const daysOfWeek = Array.from({ length: 6 }, (_, i) => addDays(startOfSelectedWeek, i)); // Solo de lunes a sábado
+    const daysOfWeek = Array.from({ length: 6 }, (_, i) => addDays(startOfSelectedWeek, i));
 
     useEffect(() => {
         const fetchReservations = async () => {
@@ -72,16 +72,15 @@ const CalendarRoomsNoEdit = ({ selectedRoomId, onReservationsChange, editable = 
     const isReserved = (day, time) => {
         const currentTime = new Date(`1970-01-01T${time}:00`);
 
-        // Verificar si la reserva del usuario está en este día y hora
         if (userReservation && startOfDay(userReservation.day).getTime() === startOfDay(day).getTime()) {
             const startTime = new Date(`1970-01-01T${userReservation.HoraInicio}:00`);
             const endTime = new Date(`1970-01-01T${userReservation.HoraFin}:00`);
             if (currentTime >= startTime && currentTime < endTime) {
-                return 'userReserved'; // Retornar 'userReserved' si es la reserva del usuario
+                return 'userReserved';
             }
         }
 
-        // Verificar si hay alguna otra reserva en este día y hora
+
         const existingReservation = existingReservations.find((reservation) => {
             const reservationDay = new Date(reservation.Fecha);
             if (startOfDay(reservationDay).getTime() === startOfDay(day).getTime()) {
@@ -93,10 +92,10 @@ const CalendarRoomsNoEdit = ({ selectedRoomId, onReservationsChange, editable = 
         });
 
         if (existingReservation) {
-            return 'reserved'; // Si hay una reserva existente, mostrar como reservada
+            return 'reserved';
         }
 
-        return 'available'; // Si no está reservada, está disponible
+        return 'available';
     };
 
     return (

@@ -24,11 +24,11 @@ const Dashboard = ({ type }) => {
     const [timePeriod, setTimePeriod] = useState('week');
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
-    const [items, setItems] = useState([]); // Salas o cubículos
+    const [items, setItems] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [comments, setComments] = useState([]);
-    const [totalReservations, setTotalReservations] = useState(0); // Estado para el total de reservas
+    const [totalReservations, setTotalReservations] = useState(0);
     const dashboardRef = useRef();
     const navigate = useNavigate();
 
@@ -126,7 +126,6 @@ const Dashboard = ({ type }) => {
             el.style.display = 'none';
         });
 
-        // Genera la captura y el PDF
         const canvas = await html2canvas(dashboardElement);
         const imgWidth = 297;
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
@@ -140,7 +139,6 @@ const Dashboard = ({ type }) => {
         pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
         pdf.save(`reporte_de_${type === 'room' ? 'Salas' : 'Cubículos'}.pdf`);
 
-        // Restaura la visibilidad de los elementos no-print
         noPrintElements.forEach((el) => {
             el.style.display = '';
         });

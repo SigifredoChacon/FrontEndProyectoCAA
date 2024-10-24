@@ -37,10 +37,10 @@ const ShareReservationModal = ({ open, handleClose, handleShare, reservation }) 
                     transform: 'translate(-50%, -50%)',
                     width: 400,
                     bgcolor: 'background.paper',
-                    border: 'none', // Quitamos el borde sólido
+                    border: 'none',
                     boxShadow: 24,
                     p: 4,
-                    borderRadius: 2, // Bordes redondeados
+                    borderRadius: 2,
                 }}
             >
                 <Typography id="modal-title" variant="h6" component="h2" sx={{ mb: 2 }}>
@@ -54,21 +54,21 @@ const ShareReservationModal = ({ open, handleClose, handleShare, reservation }) 
                     onChange={handleChange}
                     helperText="Ingrese los correos separados por comas, además que sean correos validos ya que sino, no se enviara la reservación correctamente"
                     margin="normal"
-                    sx={{ mb: 3 }} // Margen inferior para separar del botón
+                    sx={{ mb: 3 }}
                 />
                 <Button
                     variant="contained"
                     color="primary"
                     onClick={handleSubmit}
                     sx={{
-                        width: '100%', // Botón ocupa el ancho completo
-                        py: 1.5, // Padding vertical para un botón más grande
-                        borderRadius: 1, // Bordes redondeados en el botón
-                        textTransform: 'none', // Evita que el texto del botón esté en mayúsculas
-                        fontWeight: 'bold', // Hace el texto del botón más destacado
-                        backgroundColor: '#002855', // Color personalizado
+                        width: '100%',
+                        py: 1.5,
+                        borderRadius: 1,
+                        textTransform: 'none',
+                        fontWeight: 'bold',
+                        backgroundColor: '#002855',
                         '&:hover': {
-                            backgroundColor: '#004080', // Color personalizado al pasar el mouse
+                            backgroundColor: '#004080',
                         },
                     }}
                 >

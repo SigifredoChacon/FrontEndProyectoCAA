@@ -64,7 +64,7 @@ function UserFormCreate({onUserCreated}) {
                 timerProgressBar: true,
                 showConfirmButton: false
             }).then(() => {
-                onUserCreated(); // Llamada para redirigir a la lista de usuarios después de la alerta
+                onUserCreated();
             });
 
         } catch (error) {

@@ -42,7 +42,7 @@ function RoomFormCreate({onRoomCreated}) {
                 timerProgressBar: true,
                 showConfirmButton: false
             }).then(() => {
-                onRoomCreated(); // Llamada para redirigir a la lista de usuarios después de la alerta
+                onRoomCreated();
             });
         } catch (error) {
             await Swal.fire({

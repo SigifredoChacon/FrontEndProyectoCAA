@@ -15,23 +15,22 @@ function ProfilePage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        // Solo llama a la API si 'user' tiene un valor válido
         const fetchUserData = async () => {
             try {
-                const data = await getUserById(user); // Llama a la API y espera la respuesta
+                const data = await getUserById(user);
                 setUserLog(data);
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
         };
 
-        if (user) { // Cambiado de userLog a user
+        if (user) {
             fetchUserData();
         }
-    }, [user]); // Dependencia actualizada a `user`
+    }, [user]);
 
     if (!userLog) {
-        return <div>Cargando...</div>; // Muestra un mensaje de carga mientras se obtienen los datos
+        return <div>Cargando...</div>;
     }
 
 
@@ -52,7 +51,7 @@ function ProfilePage() {
     };
 
     const handleEditProfile = () => {
-        navigate('/editProfile', { state: { userLog } }); // Pasar userLog en el estado de la navegación
+        navigate('/editProfile', { state: { userLog } });
     };
 
     const handleOpenModal = (reservation) => {

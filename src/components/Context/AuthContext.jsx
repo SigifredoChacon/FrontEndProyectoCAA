@@ -8,7 +8,7 @@ export const AuthContext = createContext();
 const authReducer = (state, action) => {
     switch (action.type) {
         case 'LOGIN':
-            if (!action.payload) return state;  // Si no hay token, devuelve el estado sin cambios
+            if (!action.payload) return state;
             const decodedToken = jwtDecode(action.payload);
             return {
                 ...state,
@@ -40,12 +40,12 @@ export const AuthContextProvider = ({ children }) => {
             }
         };
 
-        checkToken(); // Verifica el token al cargar
+        checkToken();
         setLoading(false);
 
-        window.addEventListener('storage', checkToken); // Escucha cambios en localStorage
+        window.addEventListener('storage', checkToken);
 
-        return () => window.removeEventListener('storage', checkToken); // Limpia el listener
+        return () => window.removeEventListener('storage', checkToken);
     }, []);
 
     return (

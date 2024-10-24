@@ -42,7 +42,7 @@ function ResourceList({ onEdit }) {
             icon: 'warning',
             showConfirmButton: true,
             confirmButtonText: 'Aceptar',
-        }).then(async (result) => {  // Usa async aquí
+        }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
                     await deleteResource(id);
