@@ -247,7 +247,7 @@ function HomePage() {
                             <button
                                 onClick={handleSubmitValoration}
                                 style={{
-                                    backgroundColor: '#0d6efd',
+                                    backgroundColor: '#004080',
                                     color: 'white',
                                     padding: '10px 20px',
                                     borderRadius: '5px',

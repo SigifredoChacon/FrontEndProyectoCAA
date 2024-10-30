@@ -325,7 +325,7 @@ export function AssetApplicationPage() {
                             {/* Botones de acción */}
                             <div className="mt-8 flex flex-col sm:flex-row justify-center sm:justify-end gap-4">
                                 <button type="button"
-                                        className="text-sm font-semibold text-gray-700 hover:text-gray-900"
+                                        className="inline-flex justify-center rounded-md border border-transparent bg-red-600 py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                                         onClick={() => navigate('/categoryAssets')}>Cancelar
                                 </button>
                                 <button type="button" onClick={handleCreateRequest}

@@ -447,7 +447,7 @@ export function RoomReservationPage() {
                         {(!(role === 'Estudiante') && role && !(role === 'Externo') && !(role === 'Profesor') && !(role==='AdministradorSolicitudes')) && (
                             <button
                                 onClick={handleCreateUserReservation}
-                                className="px-4 py-2 sm:px-5 sm:py-2.5 bg-blue-700 text-white rounded-md hover:bg-blue-800 transition-all w-full sm:w-auto"
+                                className="px-4 py-2 bg-[#004080] text-white border-none rounded cursor-pointer w-full md:w-auto hover:bg-[#003060]"
                             >
                                 Reservar por Usuario
                             </button>
@@ -455,7 +455,7 @@ export function RoomReservationPage() {
                         {(!(role === 'Estudiante') && role && !(role === 'Externo') && !(role === 'Profesor') && !(role==='AdministradorSolicitudes')) && (
                             <button
                                 onClick={handleCreateExternalReservation}
-                                className="px-4 py-2 sm:px-5 sm:py-2.5 bg-blue-700 text-white rounded-md hover:bg-blue-800 transition-all w-full sm:w-auto"
+                                className="px-4 py-2 bg-[#004080] text-white border-none rounded cursor-pointer w-full md:w-auto hover:bg-[#003060]"
                             >
                                 Reservar Externo
                             </button>
