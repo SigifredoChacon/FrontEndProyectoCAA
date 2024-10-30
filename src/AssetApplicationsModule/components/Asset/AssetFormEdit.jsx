@@ -300,7 +300,7 @@ function AssetFormEdit({ selectedAsset, onAssetUpdated }) {
                     {/* Botón para cancelar */}
                     <button
                         type="button"
-                        className="text-sm font-semibold text-gray-700 hover:text-gray-900"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-red-600 py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                         onClick={() => onAssetUpdated()}
                     >
                         Cancelar
@@ -308,7 +308,7 @@ function AssetFormEdit({ selectedAsset, onAssetUpdated }) {
                     {/* Botón para actualizar el activo */}
                     <button
                         type="submit"
-                        className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-[#004080] py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-[#003060] focus:outline-none focus:ring-2 focus:ring-[#004080] focus:ring-offset-2"
                     >
                         Actualizar
                     </button>
