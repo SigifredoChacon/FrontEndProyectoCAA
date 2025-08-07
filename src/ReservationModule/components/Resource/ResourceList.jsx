@@ -98,6 +98,9 @@ function ResourceList({ onEdit }) {
                         <TableHeaderCell >
                             Nombre
                         </TableHeaderCell>
+                        <TableHeaderCell >
+                            Acciones
+                        </TableHeaderCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
