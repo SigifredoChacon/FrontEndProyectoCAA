@@ -114,10 +114,10 @@ function CubicleList({ onEdit, reload }) {
                             <TableCell>{cubicle.idCubiculo}</TableCell>
                             <TableCell>{cubicle.Nombre}</TableCell>
                             <TableCell>
-                                {cubicle.Ventana === 1 ? 'Tiene ventana' : 'No tiene ventana'}
+                                {cubicle.Ventana === true ? 'Tiene ventana' : 'No tiene ventana'}
                             </TableCell>
                             <TableCell>
-                                {cubicle.Estado === 1 ? 'Activo' : 'Bloqueado'}
+                                {cubicle.Estado === true ? 'Activo' : 'Bloqueado'}
                             </TableCell>
                             <TableCell className="text-left">
                                 <button onClick={() => onEdit(cubicle)} >

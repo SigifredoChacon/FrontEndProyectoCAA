@@ -168,7 +168,7 @@ function AssetList({ onEdit }) {
                             <TableCell>{asset.NumeroSerie}</TableCell>
                             <TableCell>{asset.Marca}</TableCell>
                             <TableCell>{asset.NombreEstado}</TableCell>
-                            <TableCell>{asset.Condicion === 1 ? 'Prestado' : 'Disponible'}</TableCell>
+                            <TableCell>{asset.Condicion === true ? 'Prestado' : 'Disponible'}</TableCell>
                             <TableCell>{asset.NombreCategoria}</TableCell>
                             <TableCell className="text-left">
                                 {/* Botón para editar */}

@@ -6,8 +6,8 @@ import Swal from "sweetalert2";
 
 const initialCubicleState = {
     nombre: '',
-    ventana: 0,
-    estado: 1
+    ventana: false,
+    estado: true
 };
 
 function CubicleFormCreate({onCubicleCreated}) {
@@ -26,8 +26,8 @@ function CubicleFormCreate({onCubicleCreated}) {
             const cubicleToCreate = {
                 ...cubicle,
                 idCubiculo: parseInt(cubicle.idCubiculo, 10),
-                ventana: Boolean(parseInt(cubicle.ventana, 10)),
-                estado: Boolean(parseInt(cubicle.estado, 10)),
+                ventana: Boolean(cubicle.ventana),
+                estado: Boolean(cubicle.estado),
             };
 
             await createCubicle(cubicleToCreate);
@@ -92,8 +92,8 @@ function CubicleFormCreate({onCubicleCreated}) {
                             onChange={handleChange}
                             className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         >
-                            <option value="1">Tiene ventana</option>
-                            <option value="0">No tiene ventana</option>
+                            <option value="true">Tiene ventana</option>
+                            <option value="false">No tiene ventana</option>
                         </select>
                     </div>
                     <div>
@@ -107,8 +107,8 @@ function CubicleFormCreate({onCubicleCreated}) {
                             onChange={handleChange}
                             className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         >
-                            <option value="1">Activo</option>
-                            <option value="0">Bloqueado</option>
+                            <option value="true">Activo</option>
+                            <option value="false">Bloqueado</option>
                         </select>
                     </div>
                 </div>

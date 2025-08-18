@@ -47,7 +47,7 @@ function LockDayModal({ onCancel }) {
     const fetchCubicles = async () => {
         try {
             const data = await getCubicles();
-            const filteredData = data.filter(cubicle => cubicle.Estado === 1);
+            const filteredData = data.filter(cubicle => cubicle.Estado === true);
             setCubicles(filteredData);
         } catch (error) {
             console.error('Error al obtener los cubículos:', error);
@@ -57,7 +57,7 @@ function LockDayModal({ onCancel }) {
     const fetchRooms = async () => {
         try {
             const data = await getRooms();
-            const filteredData = data.filter(room => room.Estado === 1);
+            const filteredData = data.filter(room => room.Estado === true);
             setRooms(filteredData);
         } catch (error) {
             console.error('Error al obtener las salas:', error);

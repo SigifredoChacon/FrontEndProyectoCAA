@@ -37,7 +37,7 @@ function UserFormEdit({ selectedUser, onUserUpdated}) {
         if (name === 'Estado') {
             setUser((prevUser) => ({
                 ...prevUser,
-                [name]: value === '1' ? true : false
+                [name]: value === 'true' ? true : false
             }));
         }
         else {
@@ -136,12 +136,12 @@ function UserFormEdit({ selectedUser, onUserUpdated}) {
                         <select
                             name="Estado"
                             id="Estado"
-                            value={user.Estado ? '1' : '0'}
+                            value={user.Estado ? 'true' : 'false'}
                             onChange={handleChange}
                             className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         >
-                            <option value="0">Activo</option>
-                            <option value="1">Bloqueado</option>
+                            <option value="false">Activo</option>
+                            <option value="true">Bloqueado</option>
                         </select>
                     </div>
 
@@ -160,7 +160,7 @@ function UserFormEdit({ selectedUser, onUserUpdated}) {
                             <option value="">Seleccione un Rol</option>
                             {roles.map((rol) => (
                                 <option key={rol.idRol} value={rol.idRol}>
-                                    {rol.nombre}
+                                    {rol.Nombre}
                                 </option>
                             ))}
                         </select>

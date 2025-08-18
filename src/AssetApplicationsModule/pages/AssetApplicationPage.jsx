@@ -48,7 +48,7 @@ export function AssetApplicationPage() {
         const handleUnload = () => {
             const isCompleted = JSON.parse(localStorage.getItem("isRequestCompleted"));
             if (currentAssetId && !isCompleted) {
-                updateAsset(currentAssetId, { condicion: 0 }); // Restaura la condición del activo si no se completó la solicitud
+                updateAsset(currentAssetId, { condicion: false }); // Restaura la condición del activo si no se completó la solicitud
                 localStorage.setItem("isRequestCompleted", JSON.stringify(false));
             }
         };
@@ -59,7 +59,7 @@ export function AssetApplicationPage() {
             window.removeEventListener("beforeunload", handleUnload);
             const isCompleted = JSON.parse(localStorage.getItem("isRequestCompleted"));
             if (currentAssetId && !isCompleted) {
-                updateAsset(currentAssetId, { condicion: 0 });
+                updateAsset(currentAssetId, { condicion: false });
                 localStorage.setItem("isRequestCompleted", JSON.stringify(false));
             }
         };
@@ -148,7 +148,7 @@ export function AssetApplicationPage() {
 
             // Marca el activo como "en uso"
             if (assetData?.NumeroPlaca) {
-                await updateAsset(assetData.NumeroPlaca, {condicion: 1});
+                await updateAsset(assetData.NumeroPlaca, {condicion: true});
                 setCurrentAssetId(assetData.NumeroPlaca);
             }
         } catch (error) {
@@ -174,7 +174,7 @@ export function AssetApplicationPage() {
         setPdfPreview(null);
         setIsSubmitted(false);
         setFileUploaded(false);
-        await updateAsset(currentAssetId, { condicion: 0 });
+        await updateAsset(currentAssetId, { condicion: false });
     };
 
     // Maneja el envío final de la solicitud con el archivo firmado
