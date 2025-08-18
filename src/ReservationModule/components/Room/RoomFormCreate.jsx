@@ -8,7 +8,7 @@ const initialRoomState = {
     nombre: '',
     descripcion: '',
     restricciones: '',
-    estado: 1,
+    estado: true,
 };
 
 function RoomFormCreate({onRoomCreated}) {
@@ -141,8 +141,8 @@ function RoomFormCreate({onRoomCreated}) {
                             onChange={handleChange}
                             className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         >
-                            <option value="1">Activa</option>
-                            <option value="0">Bloqueada</option>
+                            <option value="true">Activa</option>
+                            <option value="false">Bloqueada</option>
                         </select>
                     </div>
                 </div>

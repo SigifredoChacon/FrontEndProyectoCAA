@@ -15,7 +15,7 @@ function AllRoomReservationPage() {
     const fetchActiveRooms = async () => {
         try {
             const data = await getRooms();
-            const activeRooms = data.filter(room => room.Estado === 1);
+            const activeRooms = data.filter(room => room.Estado === true);
 
             const roomsWithImageUrls = activeRooms.map((room) => {
                 if (room.Imagen) {

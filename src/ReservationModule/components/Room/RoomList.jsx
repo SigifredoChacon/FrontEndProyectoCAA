@@ -103,7 +103,7 @@ function RoomList({ onEdit, reload}) {
                              style={{width: '100%', height: '400px', objectFit: 'cover', borderRadius: '12px'}}/>
                         <h3 style={{marginTop: '12px', marginBottom: '8px', fontSize: '1.25rem'}}>{room.Nombre}</h3>
                         <p style={{marginBottom: '12px', color: '#666', textAlign: 'center'}}>
-                            {room.Estado === 1 ? 'Activa' : 'Bloqueada'}
+                            {room.Estado === true ? 'Activa' : 'Bloqueada'}
                         </p>
                         <div style={{display: 'flex', gap: '8px', justifyContent: 'center'}}>
                             <button onClick={() => onEdit(room)}

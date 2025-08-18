@@ -21,7 +21,7 @@ function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
         if (name === 'imagen') {
             setRoom((prevRoom) => ({ ...prevRoom, Imagen: files[0] }));
         } else if (name === 'Estado') {
-            setRoom((prevRoom) => ({ ...prevRoom, Estado: value === '1' }));
+            setRoom((prevRoom) => ({ ...prevRoom, Estado: value === 'true' }));
         } else {
             setRoom((prevRoom) => ({ ...prevRoom, [name]: value }));
         }
@@ -169,12 +169,12 @@ function RoomFormEdit({ selectedRoom, onRoomUpdated }) {
                         <select
                             name="Estado"
                             id="Estado"
-                            value={room.Estado ? '1' : '0'}
+                            value={room.Estado ? 'true' : 'false'}
                             onChange={handleChange}
                             className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         >
-                            <option value="1">Activa</option>
-                            <option value="0">Bloqueada</option>
+                            <option value="true">Activa</option>
+                            <option value="false">Bloqueada</option>
                         </select>
                     </div>
 
