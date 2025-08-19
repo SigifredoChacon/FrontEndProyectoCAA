@@ -7,12 +7,19 @@ const useReservationChecker = () => {
     const [expiredReservations, setExpiredReservations] = useState([]);
 
     useEffect(() => {
+
+        if (!user) {
+            // Si no hay usuario logeado, no llamamos a la API
+            setExpiredReservations([]);
+            return;
+        }
+
+
         const checkReservations = async () => {
             try {
 
                 const reservations = await getReservationByUserIdComplete(user);
 
-                console.log(reservations)
                 const now = new Date();
 
                 const expired = reservations.filter(reservation => {
