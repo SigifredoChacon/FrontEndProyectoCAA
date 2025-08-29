@@ -91,7 +91,7 @@ function UserFormEdit({ selectedUser, onUserUpdated}) {
 
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="min-h-screen flex items-center justify-center">
             <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
                 <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mb-6">Editar Usuario</h2>
 
@@ -160,7 +160,7 @@ function UserFormEdit({ selectedUser, onUserUpdated}) {
                             <option value="">Seleccione un Rol</option>
                             {roles.map((rol) => (
                                 <option key={rol.idRol} value={rol.idRol}>
-                                    {rol.Nombre}
+                                    {rol.nombre}
                                 </option>
                             ))}
                         </select>
@@ -189,9 +189,5 @@ function UserFormEdit({ selectedUser, onUserUpdated}) {
     );
 }
 
-UserFormEdit.propTypes = {
-    selectedUser: PropTypes.object,
-    onUserUpdated: PropTypes.func.isRequired,
-};
 
 export default UserFormEdit;

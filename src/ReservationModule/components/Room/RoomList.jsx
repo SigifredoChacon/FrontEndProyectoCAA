@@ -73,7 +73,7 @@ function RoomList({ onEdit, reload}) {
 
 
     return (
-        <div>
+        <div style={{marginBottom: '200px'}}>
             <Title>
                 Salas
                 <Badge style={{

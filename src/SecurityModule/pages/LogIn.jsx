@@ -15,6 +15,7 @@ function LogIn() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLocalError(null);
         await logIn(email, password);
     };
 
@@ -44,9 +45,11 @@ function LogIn() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="min-h-screen flex items-center justify-center">
             <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
-                <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mb-6">Iniciar Sesión</h2>
+                <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mb-6">
+                    Iniciar Sesión
+                </h2>
 
                 {/* Texto y enlace para crear una cuenta */}
                 <div className="text-center mb-4">
@@ -65,7 +68,10 @@ function LogIn() {
                             type="text"
                             name="email"
                             id="email"
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => {
+                                setEmail(e.target.value);
+                                if (localError) setLocalError(null);
+                            }}
                             value={email}
                             placeholder="Correo Electrónico"
                             required
@@ -81,23 +87,26 @@ function LogIn() {
                             type="password"
                             name="password"
                             id="password"
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                                if (localError) setLocalError(null);
+                            }}
                             value={password}
                             placeholder="Contraseña"
                             required
                             className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                     </div>
+
                     <div className="text-center mb-4">
                         <span className="text-gray-600">¿No recuerdas la Contraseña?</span>{' '}
                         <span
                             onClick={handleOpenModal}
                             className="text-blue-600 hover:underline cursor-pointer"
                         >
-        Recuperar Contraseña
-    </span>
+                            Recuperar Contraseña
+                        </span>
                     </div>
-
                 </div>
 
                 {localError && (
@@ -107,7 +116,7 @@ function LogIn() {
                 )}
 
                 <div className="mt-8 flex justify-end space-x-4">
-                <button
+                    <button
                         type="submit"
                         className="inline-flex justify-center rounded-md border border-transparent bg-[#004080] py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-[#003060] focus:outline-none focus:ring-2 focus:ring-[#004080] focus:ring-offset-2"
                     >
@@ -115,6 +124,7 @@ function LogIn() {
                     </button>
                 </div>
             </form>
+
             <RecoverPasswordModal
                 open={isModalOpen}
                 handleClose={handleCloseModal}

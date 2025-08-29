@@ -7,9 +7,13 @@ import {updateReservation} from "./ReservationModule/services/reservationService
 import {getUserById} from "./SecurityModule/services/userService.jsx";
 import Swal from "sweetalert2";
 import SalaDeReunion from "./assets/SalaDeReunion.jpeg";
+import TecAlajuela from "./assets/tecAlajuela.webp";
 import cubiculos from "./assets/cubiculos.jpg";
 import computadoras from "./assets/computadoras.png";
 import StarRating from "./ReservationModule/components/Reservations/StarRating.jsx";
+// Arriba de tu componente
+
+
 
 function HomePage() {
     // Hook para navegar entre rutas en la aplicación
@@ -106,169 +110,143 @@ function HomePage() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-100">
-            {/* Botón para navegar a la vista de reservas de salas */}
-            <button
-                onClick={() => navigate('/allRoomReservation')}
-                className="mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none relative w-full max-w-6xl h-48 md:h-56 lg:h-80 xl:h-96 lg:max-w-full"
-                style={{
-                    fontSize: 'clamp(2rem, 5vw, 8rem)',
-                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
-                    borderRadius: '50px',
-                }}
-            >
+        <div className="flex flex-col items-center w-full min-h-screen bg-gray-50">
+            {/* Hero Section */}
+            <section className="relative w-full bg-blue-900 text-white py-20 px-6 text-center">
+                <div className="absolute inset-0">
+                    <img
+                        src={TecAlajuela}
+                        alt="Coworking"
+                        className="w-full h-full object-cover opacity-40"
+                    />
+                </div>
+                <div className="relative z-10 max-w-3xl mx-auto">
+                    <h1 className="text-4xl md:text-6xl font-bold mb-4">Sistema de Reservaciones CAA</h1>
+                    <p className="text-lg md:text-xl">
+                        Reserva salas, cubículos y recursos de forma rápida y sencilla.
+                    </p>
+                </div>
+            </section>
+
+            {/* Introducción */}
+            <section className="max-w-5xl mx-auto py-12 px-6 text-center">
+                <p className="text-gray-700 text-lg md:text-xl">
+                    Este sistema está diseñado para estudiantes y profesores del TEC. Aquí puedes
+                    reservar salas para reuniones, cubículos para trabajo individual y solicitar
+                    recursos tecnológicos. Evita filas y asegura tu espacio al instante.
+                </p>
+            </section>
+
+            {/* Botones de reservación */}
+            <section className={`grid gap-8 max-w-6xl mx-auto px-6 pb-16 ${role !== 'Estudiante' && role ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-1 place-items-center'}`}>
+                {/* Salas */}
                 <div
-                    style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        backgroundImage: `url(${SalaDeReunion})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        filter: 'brightness(50%)',
-                        borderRadius: 'inherit',
-                    }}
-                ></div>
-                <span style={{ position: 'relative', zIndex: 1 }}>Salas</span>
-            </button>
-
-            {/* Botón condicional para navegar a reservas de cubículos (solo para usuarios no estudiantes) */}
-            {role !== 'Estudiante' && role && (
-                <button
-                    onClick={() => navigate('/reservationsCubicle')}
-                    className="mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none relative w-full max-w-6xl h-48 md:h-56 lg:h-80 xl:h-96 lg:max-w-full"
-                    style={{
-                        fontSize: 'clamp(2rem, 5vw, 8rem)',
-                        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
-                        borderRadius: '50px',
-                    }}
+                    onClick={() => navigate('/allRoomReservation')}
+                    className="relative group cursor-pointer rounded-2xl overflow-hidden shadow-lg"
                 >
+                    <img
+                        src={SalaDeReunion}
+                        alt="Salas"
+                        className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-50 transition" />
+                    <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center text-white text-center">
+                        <h3 className="text-3xl font-bold mb-2">Salas</h3>
+                        <p className="text-lg">Espacios para reuniones y presentaciones</p>
+                    </div>
+
+                </div>
+
+                {/* Cubículos (solo si role !== Estudiante) */}
+                {role !== 'Estudiante' && role && (
                     <div
-                        style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            backgroundImage: `url(${cubiculos})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            filter: 'brightness(50%)',
-                            borderRadius: 'inherit',
-                        }}
-                    ></div>
-                    <span style={{ position: 'relative', zIndex: 1 }}>Cubículos</span>
-                </button>
-            )}
-
-            {/* Botón condicional para navegar a la categoría de activos (solo para usuarios no estudiantes) */}
-            {role !== 'Estudiante' && role && (
-                <button
-                    onClick={handleClickAssets}
-                    className="mb-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none relative w-full max-w-6xl h-48 md:h-56 lg:h-80 xl:h-96 lg:max-w-full"
-                    style={{
-                        fontSize: 'clamp(2rem, 5vw, 8rem)',
-                        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
-                        borderRadius: '50px',
-                    }}
-                >
-                    <div
-                        style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            backgroundImage: `url(${computadoras})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            filter: 'brightness(50%)',
-                            borderRadius: 'inherit',
-                        }}
-                    ></div>
-                    <span style={{ position: 'relative', zIndex: 1 }}>Activos</span>
-                </button>
-            )}
-
-            {/* Modal condicional para mostrar el formulario de valoración */}
-            {isValorationOpen && (
-                <div style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: 'rgba(0,0,0,0.5)',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    zIndex: 1000
-                }}>
-                    <div style={{
-                        backgroundColor: 'white',
-                        padding: '20px',
-                        borderRadius: '8px',
-                        maxWidth: '400px',
-                        width: '100%'
-                    }}>
-                        <h2 style={{textAlign: 'center', fontWeight: 'bold'}}>Valorar Reservación</h2>
-                        <p style={{textAlign: 'center'}}>¿Cómo fue tu experiencia en {activeReservation.idSala ? 'la sala' : 'el cubículo'}?</p>
-
-                        {/* Componente de estrellas para la calificación */}
-                        <div style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            marginBottom: '20px',
-                            marginTop: '20px'
-                        }}>
-                            <StarRating rating={rating} onRating={setRating}/>
+                        onClick={() => navigate('/reservationsCubicle')}
+                        className="relative group cursor-pointer rounded-2xl overflow-hidden shadow-lg"
+                    >
+                        <img
+                            src={cubiculos}
+                            alt="Cubículos"
+                            className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-50 transition" />
+                        <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center text-white text-center">
+                            <h3 className="text-3xl font-bold mb-2">Cubículos</h3>
+                            <p className="text-lg">Áreas individuales para concentración</p>
                         </div>
-                        <h2 style={{marginBottom: '10px'}}>Observaciones:</h2>
-                        {/* Campo de observaciones */}
+
+                    </div>
+                )}
+
+                {/* Activos (solo si role !== Estudiante) */}
+                {role !== 'Estudiante' && role && (
+                    <div
+                        onClick={handleClickAssets}
+                        className="relative group cursor-pointer rounded-2xl overflow-hidden shadow-lg"
+                    >
+                        <img
+                            src={computadoras}
+                            alt="Activos"
+                            className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-50 transition" />
+                            <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center text-white text-center">
+                                <h3 className="text-3xl font-bold mb-2">Activos</h3>
+                                <p className="text-lg">Equipos y material académicos</p>
+                            </div>
+                    </div>
+                )}
+            </section>
+
+            {/* Cómo funciona */}
+            <section className="bg-white py-16 w-full">
+                <div className="max-w-6xl mx-auto px-6 text-center">
+                    <h2 className="text-3xl font-bold text-gray-800 mb-12">¿Cómo funciona?</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="p-6 shadow rounded-xl bg-gray-50">
+                            <h3 className="text-xl font-semibold mb-2">1. Inicia sesión</h3>
+                            <p className="text-gray-600">Accede con tu cuenta o crea una.</p>
+                        </div>
+                        <div className="p-6 shadow rounded-xl bg-gray-50">
+                            <h3 className="text-xl font-semibold mb-2">2. Selecciona</h3>
+                            <p className="text-gray-600">Elige el espacio o recurso que necesites.</p>
+                        </div>
+                        <div className="p-6 shadow rounded-xl bg-gray-50">
+                            <h3 className="text-xl font-semibold mb-2">3. Reserva</h3>
+                            <p className="text-gray-600">Confirma tu reservación y recibe confirmación.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Modal de valoración (se conserva como lo tenías) */}
+            {isValorationOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white rounded-xl p-6 max-w-md w-full shadow-lg">
+                        <h2 className="text-xl font-bold text-center mb-2">Valorar Reservación</h2>
+                        <p className="text-center mb-4">
+                            ¿Cómo fue tu experiencia en {activeReservation.idSala ? 'la sala' : 'el cubículo'}?
+                        </p>
+                        <div className="flex justify-center mb-4">
+                            <StarRating rating={rating} onRating={setRating} />
+                        </div>
                         <textarea
                             name="observaciones"
                             value={observaciones}
                             onChange={(e) => setObservaciones(e.target.value)}
-                            placeholder="Tu opinion nos ayuda a mejorar"
-                            style={{
-                                width: '100%',
-                                padding: '10px',
-                                borderRadius: '4px',
-                                border: '1px solid #ccc',
-                                marginBottom: '20px'
-                            }}
+                            placeholder="Tu opinión nos ayuda a mejorar"
+                            className="w-full border rounded-lg p-2 mb-4"
                             rows={4}
                         />
-
-                        {/* Botones Confirmar y Cancelar */}
-                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                        <div className="flex justify-between">
                             <button
                                 onClick={handleSubmitValoration}
-                                style={{
-                                    backgroundColor: '#004080',
-                                    color: 'white',
-                                    padding: '10px 20px',
-                                    borderRadius: '5px',
-                                    border: 'none',
-                                    fontSize: '16px',
-                                    cursor: 'pointer'
-                                }}
+                                className="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900"
                             >
                                 Confirmar
                             </button>
                             <button
                                 onClick={handleCloseValoration}
-                                style={{
-                                    backgroundColor: '#dc3545',
-                                    color: 'white',
-                                    padding: '10px 20px',
-                                    borderRadius: '5px',
-                                    border: 'none',
-                                    fontSize: '16px',
-                                    cursor: 'pointer'
-                                }}
+                                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
                             >
                                 Cancelar
                             </button>
@@ -278,6 +256,7 @@ function HomePage() {
             )}
         </div>
     );
+
 }
 
 export default HomePage;

@@ -288,7 +288,7 @@ function CubiclesReservationPage() {
 
 
     return (
-        <div className="max-w-screen-2xl mx-auto px-5">
+        <div className="max-w-screen-2xl mx-auto px-5" style={{ paddingTop: "50px" }}>
             <button
                 onClick={() => navigate('/')}
                 className="hidden sm:block bg-none border-none cursor-pointer absolute top-20 left-2 p-1"

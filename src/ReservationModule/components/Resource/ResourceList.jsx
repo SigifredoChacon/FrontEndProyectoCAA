@@ -76,7 +76,7 @@ function ResourceList({ onEdit }) {
 
 
     return (
-        <Card style={{ border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px'}}>
+        <Card style={{ border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px', marginBottom: '200px' }}>
             <Title>
                 Recursos
                 <Badge style={{

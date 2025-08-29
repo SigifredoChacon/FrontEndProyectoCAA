@@ -111,6 +111,7 @@ function LockDayModal({ onCancel }) {
                         try {
                             await sendAllEmail({ asunto, descripcion: newDescripcion });
                             alert('Se les ha informado a todos los usuarios via Email');
+
                         } catch (error) {
                             alert('Error al enviar email');
                         }

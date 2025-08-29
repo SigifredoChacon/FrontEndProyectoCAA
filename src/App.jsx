@@ -31,6 +31,7 @@ import AllPendingApplicationPage from "./AssetApplicationsModule/pages/AllPendin
 import AllToSignApplicationPage from "./AssetApplicationsModule/pages/AllToSignApplicationPage.jsx";
 import Navbar from "./Navbar.jsx";
 import HomePage from "./HomePage.jsx";
+import Footer from "./Footer.jsx";
 
 // Componente principal App que define la estructura general de navegación de la aplicación,
 // incluyendo el Navbar y las rutas principales que corresponden a diferentes páginas.
@@ -227,6 +228,8 @@ function App() {
                 {/* Ruta para la página de "No Autorizado" */}
                 <Route path="/not-authorized" element={<NotAuthorized/>}/>
             </Routes>
+
+            <Footer/>
         </>
     );
 }

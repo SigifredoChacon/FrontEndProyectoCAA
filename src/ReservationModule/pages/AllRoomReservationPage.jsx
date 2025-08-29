@@ -31,8 +31,8 @@ function AllRoomReservationPage() {
     };
 
     return (
-        <div>
-            <Title style={{textAlign: 'center', fontSize: '2.5rem', margin: '20px 0'}}>
+        <div style={{ paddingBottom: "200px" }} >
+            <Title style={{textAlign: 'center', fontSize: '2.5rem', margin: '40px 0'}}>
                 Salas
             </Title>
             <button

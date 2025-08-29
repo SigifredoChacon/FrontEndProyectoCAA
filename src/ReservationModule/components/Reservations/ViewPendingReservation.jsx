@@ -1,82 +1,104 @@
 import React from "react";
-import { Modal, Box, Typography, Button } from "@mui/material";
 
-function ViewPendingReservationModal({ open, onClose, selectedReservation, onReservationAccept, onReservationReject }) {
+function ViewPendingReservationModal({
+                                         open,
+                                         onClose,
+                                         selectedReservation,
+                                         onReservationAccept,
+                                         onReservationReject,
+                                     }) {
+    if (!open) return null;
 
     return (
-        <Modal
-            open={open}
-            onClose={onClose}
-            aria-labelledby="modal-title"
-            aria-describedby="modal-description"
+        <div
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+            onClick={onClose} // <- Cierra al dar click en el fondo
         >
-            <Box
-                sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 400,
-                    bgcolor: 'background.paper',
-                    boxShadow: 24,
-                    p: 4,
-                    borderRadius: 2
-                }}
+            <div
+                className="bg-white rounded-2xl shadow-xl w-[420px] p-6 relative"
+                onClick={(e) => e.stopPropagation()} // <- Evita cerrar si se da click dentro
             >
-                <Typography id="modal-title" variant="h6" component="h2" sx={{ mb: 2 }}>
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 text-gray-400 hover:text-red-600 text-lg"
+                >
+                    ✕
+                </button>
+
+                {/* Título */}
+                <h2 className="text-xl font-bold text-center mb-4 border-b pb-2">
                     Detalles de la Reservación
-                </Typography>
+                </h2>
 
-                <Typography variant="body1"><strong>Usuario:</strong> {selectedReservation.userName}</Typography>
-                <Typography variant="body1"><strong>Fecha:</strong> {new Date(selectedReservation.Fecha).toLocaleDateString('es-ES')} (Sábado)</Typography>
-                <Typography variant="body1"><strong>Hora Inicio:</strong> {selectedReservation.HoraInicio}</Typography>
-                <Typography variant="body1"><strong>Hora Fin:</strong> {selectedReservation.HoraFin}</Typography>
-                <Typography variant="body1"><strong>Lugar:</strong> {selectedReservation.placeName}</Typography>
-                {selectedReservation.Refrigerio === 1 && (
-                    <Typography variant="body1"><strong>Refrigerio:</strong> {selectedReservation.Refrigerio}</Typography>
-                )}
-                {selectedReservation.Observaciones && (
-                    <Typography variant="body1"><strong>Observaciones:</strong> {selectedReservation.Observaciones}</Typography>
-                )}
-                {Array.isArray(selectedReservation.recursos) && selectedReservation.recursos.length > 0 && (
-                    <Typography variant="body1">
-                        <strong>Recursos:</strong> {selectedReservation.recursos.map(recurso => recurso.NombreRecurso).join(', ')}
-                    </Typography>
-                )}
+                {/* Información */}
+                <div className="space-y-2 text-gray-700">
+                    <p>
+                        <span className="font-semibold">👤 Usuario:</span>{" "}
+                        {selectedReservation.userName}
+                    </p>
+                    <p>
+                        <span className="font-semibold">📅 Fecha:</span>{" "}
+                        {new Date(selectedReservation.Fecha).toLocaleDateString("es-ES", {
+                            weekday: "long",
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                        })}
+                    </p>
+                    <p>
+                        <span className="font-semibold">⏰ Hora Inicio:</span>{" "}
+                        {selectedReservation.HoraInicio}
+                    </p>
+                    <p>
+                        <span className="font-semibold">⏰ Hora Fin:</span>{" "}
+                        {selectedReservation.HoraFin}
+                    </p>
+                    <p>
+                        <span className="font-semibold">📍 Lugar:</span>{" "}
+                        {selectedReservation.placeName}
+                    </p>
 
-                {/* Botones de aceptar o rechazar */}
-                <Box sx={{ marginTop: 3, display: 'flex', justifyContent: 'space-around' }}>
-                    <Button
+                    {selectedReservation.Refrigerio === 1 && (
+                        <p>
+                            <span className="font-semibold">🍴 Refrigerio:</span> Sí
+                        </p>
+                    )}
+
+                    {selectedReservation.Observaciones && (
+                        <p>
+                            <span className="font-semibold">📝 Observaciones:</span>{" "}
+                            {selectedReservation.Observaciones}
+                        </p>
+                    )}
+
+                    {Array.isArray(selectedReservation.recursos) &&
+                        selectedReservation.recursos.length > 0 && (
+                            <p>
+                                <span className="font-semibold">🛠️ Recursos:</span>{" "}
+                                {selectedReservation.recursos
+                                    .map((recurso) => recurso.NombreRecurso)
+                                    .join(", ")}
+                            </p>
+                        )}
+                </div>
+
+                {/* Botones */}
+                <div className="mt-6 flex gap-3">
+                    <button
                         onClick={onReservationAccept}
-                        variant="contained"
-                        sx={{
-                            backgroundColor: 'green',
-                            color: 'white',
-                            borderRadius: '5px',
-                            '&:hover': {
-                                backgroundColor: '#006400',
-                            }
-                        }}
+                        className="flex-1 bg-green-500 hover:bg-green-700 text-white font-semibold py-2 rounded-lg shadow"
                     >
                         Aceptar
-                    </Button>
-                    <Button
+                    </button>
+                    <button
                         onClick={onReservationReject}
-                        variant="contained"
-                        sx={{
-                            backgroundColor: 'red',
-                            color: 'white',
-                            borderRadius: '5px',
-                            '&:hover': {
-                                backgroundColor: '#8B0000',
-                            }
-                        }}
+                        className="flex-1 bg-red-500 hover:bg-red-700 text-white font-semibold py-2 rounded-lg shadow"
                     >
                         Rechazar
-                    </Button>
-                </Box>
-            </Box>
-        </Modal>
+                    </button>
+                </div>
+            </div>
+        </div>
     );
 }
 

@@ -46,7 +46,7 @@ function ResourcesPage() {
 
             {!isOnCreateOrEditPage && (
                 <>
-                    <h1 style={{textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px'}}>
+                    <h1 style={{textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginTop: '50px'}}>
                         Gestión de Recursos
                     </h1>
 

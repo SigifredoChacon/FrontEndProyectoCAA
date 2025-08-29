@@ -15,7 +15,7 @@ function RegisterSelection() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="min-h-screen flex items-center justify-center ">
             <button
                 onClick={() => navigate('/login')}
                 className="hidden sm:block absolute top-20 left-2 p-1 cursor-pointer"

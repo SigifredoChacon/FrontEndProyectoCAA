@@ -85,7 +85,7 @@ function UserList({ onEdit }) {
 
 
     return (
-        <Card style={{border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px'}}>
+        <Card style={{border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px', marginBottom: '300px'}}>
             <Title>
                 Usuarios
                 <Badge style={{
@@ -158,7 +158,7 @@ function UserList({ onEdit }) {
                             <TableCell>{user.Telefono2}</TableCell>
                             <TableCell>{user.Direccion}</TableCell>
                             <TableCell>{user.NombreRol}</TableCell>
-                            <TableCell>{user.Estado === 0 ? 'Activo' : 'Bloqueado'}</TableCell>
+                            <TableCell>{user.Estado === false ? 'Activo' : 'Bloqueado'}</TableCell>
                             <TableCell className="text-left">
                                 <button onClick={() => onEdit(user)}>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

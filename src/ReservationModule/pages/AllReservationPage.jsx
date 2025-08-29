@@ -170,7 +170,7 @@ function AllReservationPage() {
             </Routes>
             {!isOnCreateOrEditPage && (
                 <>
-                    <h1 style={{textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px'}}>
+                    <h1 style={{textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginTop: '50px'}}>
                         Reservaciones Generales
                     </h1>
 
@@ -196,7 +196,7 @@ function AllReservationPage() {
                     </div>
                 </>
             )}
-            <Card style={{border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px'}}>
+            <Card style={{border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px', marginBottom: '200px'}}>
                 <Title>
                     Reservaciones Generales
                     <Badge style={{
@@ -222,7 +222,7 @@ function AllReservationPage() {
 
                 {!isOnCreateOrEditPage && (
                     <>
-                        <Table className="mt-8">
+                        <Table className="mt-8" >
                             <TableHead>
                                 <TableRow>
                                     <TableHeaderCell>Cedula/Carnet</TableHeaderCell>

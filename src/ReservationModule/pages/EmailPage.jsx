@@ -47,7 +47,7 @@ function EmailPage() {
                 </svg>
             </button>
 
-            <h1 style={{textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px'}}>
+            <h1 style={{textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px', marginTop: '100px'}}>
                 Enviar Email
             </h1>
 
@@ -101,6 +101,7 @@ function EmailPage() {
                     borderRadius: '5px',
                     cursor: 'pointer',
                     transition: 'background-color 0.3s ease',
+                    marginBottom: '200px',
                 }}
                 onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#004080'}
                 onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#002855'}

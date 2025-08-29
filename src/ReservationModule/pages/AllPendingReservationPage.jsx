@@ -156,7 +156,7 @@ function AllPendingReservationPage() {
     const isOnCreateOrEditPage = location.pathname.startsWith("/allReservations/edit/");
 
     return (
-        <div style={{maxWidth: '1800px', margin: '0 auto', padding: '0 20px'}}>
+        <div style={{maxWidth: '1800px', margin: '0 auto', padding: '0 20px', marginTop:'50px'}}>
             <button
                 onClick={() => navigate('/manageReservations')}
                 className="hidden sm:block absolute top-20 left-2 p-1 cursor-pointer"
@@ -185,7 +185,7 @@ function AllPendingReservationPage() {
                     Reservaciones Pendientes
                 </h1>
             )}
-            <Card style={{border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px'}}>
+            <Card style={{border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px', marginBottom: '200px'}}>
                 <Title>
                     Reservaciones Pendientes
                     <Badge style={{

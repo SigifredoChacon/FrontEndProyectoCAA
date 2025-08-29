@@ -37,7 +37,7 @@ function UsersPage() {
 
             <button
                 onClick={() => navigate('/manageReservations')}
-                className="hidden sm:block absolute top-4 left-[-50px] p-1 cursor-pointer"
+                className="hidden sm:block absolute top-3 left-[-40px] p-1 cursor-pointer"
                 style={{
                     background: 'none',
                     border: 'none',
@@ -53,7 +53,7 @@ function UsersPage() {
 
             {!isOnCreateOrEditPage && (
                 <>
-                    <h1 style={{textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px'}}>
+                    <h1 style={{textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px', marginTop: '50px'}}>
                         Gestión de Usuarios
                     </h1>
 
