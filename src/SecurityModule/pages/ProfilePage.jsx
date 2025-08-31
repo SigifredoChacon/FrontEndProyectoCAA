@@ -34,21 +34,7 @@ function ProfilePage() {
     }
 
 
-    const handleClick = async () => {
-        logout();
-        await Swal.fire({
-            title: '¡Sesión cerrada!',
-            text: 'Se ha cerrado la sesión con éxito',
-            icon: 'success',
-            timer: 1500,
-            timerProgressBar: true,
-            showConfirmButton: false
-        }).then(() => {
-            navigate('/', { replace: true });
-            window.location.reload();
-        });
 
-    };
 
     const handleEditProfile = () => {
         navigate('/editProfile', { state: { userLog } });
@@ -113,7 +99,7 @@ function ProfilePage() {
                     <div className="flex flex-col items-center space-y-4 mt-4">
                         <button onClick={handleOpenModal} className="w-full py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300">Cambiar contraseña</button>
                         <button onClick={handleEditProfile} className="w-full py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300">Editar perfil</button>
-                        <button onClick={handleClick} className="w-full py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300">Cerrar sesión</button>
+                        {/* Antiguo boton de cerrar sesion, se paso para el navbar <button onClick={handleClick} className="w-full py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300">Cerrar sesión</button>*/}
 
                         {/* Image with blur and margin */}
                         <div className="w-full flex justify-center mt-20">

@@ -1,9 +1,11 @@
 import {useAuthContext} from "./SecurityModule/hooks/useAuthContext.js";
 import {Disclosure, Menu, Transition} from "@headlessui/react";
 import {Bars3Icon, XMarkIcon} from "@heroicons/react/24/outline/index.js";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import RoleBasedComponent from "./SecurityModule/components/Context/RoleBasedComponent.jsx";
 import React from "react";
+import { useLogout } from "./SecurityModule/hooks/useLogout.js";
+import Swal from "sweetalert2";
 
 // Array que define la navegación de la barra, indicando las rutas disponibles
 // y los roles que tienen permiso para acceder a cada una.
@@ -25,6 +27,24 @@ function classNames(...classes) {
 function Navbar() {
     // Obtiene el usuario actual desde el contexto de autenticación
     const {user} = useAuthContext()
+    const navigate = useNavigate();
+    const { logout } = useLogout();
+
+    const handleClick = async () => {
+        logout();
+        await Swal.fire({
+            title: '¡Sesión cerrada!',
+            text: 'Se ha cerrado la sesión con éxito',
+            icon: 'success',
+            timer: 1500,
+            timerProgressBar: true,
+            showConfirmButton: false
+        }).then(() => {
+            navigate('/', { replace: true });
+            window.location.reload();
+        });
+
+    };
 
     return (
         // Disclosure crea un menú colapsable que actúa como contenedor de la barra de navegación
@@ -132,6 +152,7 @@ function Navbar() {
 
                                             {/* Condición para mostrar la opción de perfil si hay usuario */}
                                             {user && (
+                                                <>
                                                 <Menu.Item>
                                                     {({active}) => (
                                                         <a
@@ -145,7 +166,37 @@ function Navbar() {
                                                         </a>
                                                     )}
                                                 </Menu.Item>
+                                                    <Menu.Item>
+                                                        {({ active }) => (
+                                                            <button
+                                                                onClick={() => {
+                                                                    Swal.fire({
+                                                                        title: "¿Cerrar sesión?",
+                                                                        text: "Tu sesión se cerrará y tendrás que volver a iniciar sesión.",
+                                                                        icon: "warning",
+                                                                        showCancelButton: true,
+                                                                        confirmButtonColor: "#3085d6",
+                                                                        cancelButtonColor: "#d33",
+                                                                        confirmButtonText: "Sí, cerrar sesión",
+                                                                        cancelButtonText: "Cancelar"
+                                                                    }).then((result) => {
+                                                                        if (result.isConfirmed) {
+                                                                            handleClick();
+                                                                        }
+                                                                    });
+                                                                }}
+                                                                className={classNames(
+                                                                    active ? 'bg-gray-100' : '',
+                                                                    'block px-4 py-2 text-sm text-gray-700 w-full text-left'
+                                                                )}
+                                                            >
+                                                                Cerrar Sesión
+                                                            </button>
+                                                        )}
+                                                    </Menu.Item>
+                                                </>
                                             )}
+
                                         </Menu.Items>
                                     </Transition>
                                 </Menu>
