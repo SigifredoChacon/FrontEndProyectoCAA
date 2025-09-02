@@ -67,19 +67,29 @@ function ProfilePage() {
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
           <div className="bg-white w-full max-w-4xl p-8 rounded-lg shadow-md relative flex flex-col">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-3xl font-bold">Mi Perfil</h2>
-              <button
-                onClick={handleEditProfile}
-                className="py-2 px-4 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                                     stroke="currentColor" className="w-8 h-8">
-                                    <path strokeLinecap="round" strokeLinejoin="round"
-                                          d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                </svg>
-              </button>
-            </div>
+              <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-4xl font-bold">Mi Perfil</h2>
+                  <button
+                      onClick={handleEditProfile}
+                      className="p-2 rounded-lg hover:bg-gray-200"
+                      title="Editar perfil"
+                  >
+                      <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-8 h-8 text-gray-700"
+                      >
+                          <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                          />
+                      </svg>
+                  </button>
+              </div>
 
             {/* Datos en grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
@@ -141,13 +151,6 @@ function ProfilePage() {
         </div>
 
 
-            </div>
-            <ChangePasswordModal
-                open={isModalOpen}
-                handleClose={handleCloseModal}
-                user={user}
-                />
-        </div>
 
     );
 }

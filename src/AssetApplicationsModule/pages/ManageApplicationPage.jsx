@@ -41,9 +41,9 @@ export function ManageApplicationPage() {
                     >
                         {/* Contenedor de cada sección con estilo y animación */}
                         <div
-                            className="w-full sm:w-64 h-48 p-4 border border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer bg-gray-100 shadow-md hover:bg-gray-200 transition-colors duration-200">
-                            <img src={item.svg} alt={`${item.name} icon`} className="mb-4 w-10 h-10"/> {/* Ícono de la sección */}
-                            <div className="text-lg text-center text-gray-800">
+                            className="w-72 h-56 p-6 border border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer bg-gray-100 shadow-md hover:bg-gray-200 transition-colors duration-200">
+                            <img src={item.svg} alt={`${item.name} icon`} className="mb-4 w-16 h-16"/> {/* Ícono grande */}
+                            <div className="text-xl text-center text-gray-800">
                                 {item.name} {/* Nombre de la sección */}
                             </div>
                         </div>

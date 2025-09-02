@@ -20,9 +20,22 @@ function ViewPendingReservationModal({
             >
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 text-gray-400 hover:text-red-600 text-lg"
+                    className="absolute top-4 right-4 text-gray-400 hover:text-red-600 transition-transform duration-300 hover:rotate-90 hover:scale-125"
                 >
-                    ✕
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6 18 18 6M6 6l12 12"
+                        />
+                    </svg>
                 </button>
 
                 {/* Título */}
