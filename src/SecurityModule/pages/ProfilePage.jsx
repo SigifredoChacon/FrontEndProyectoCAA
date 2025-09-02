@@ -34,7 +34,21 @@ function ProfilePage() {
     }
 
 
+    const handleClick = async () => {
+        logout();
+        await Swal.fire({
+            title: '¡Sesión cerrada!',
+            text: 'Se ha cerrado la sesión con éxito',
+            icon: 'success',
+            timer: 1500,
+            timerProgressBar: true,
+            showConfirmButton: false
+        }).then(() => {
+            navigate('/', { replace: true });
+            window.location.reload();
+        });
 
+    };
 
     const handleEditProfile = () => {
         navigate('/editProfile', { state: { userLog } });
@@ -51,66 +65,81 @@ function ProfilePage() {
 
 
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col">
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
+          <div className="bg-white w-full max-w-4xl p-8 rounded-lg shadow-md relative flex flex-col">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-3xl font-bold">Mi Perfil</h2>
+              <button
+                onClick={handleEditProfile}
+                className="py-2 px-4 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                                     stroke="currentColor" className="w-8 h-8">
+                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                          d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                </svg>
+              </button>
+            </div>
 
-            <div className="flex flex-col lg:flex-row flex-1 p-6 space-y-6 lg:space-y-0 lg:space-x-6">
+            {/* Datos en grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
+              <div>
+                <label className="block text-lg font-medium text-gray-700">Nombre</label>
+                <p className="mt-2 bg-gray-200 p-3 rounded text-lg">{userLog.Nombre}</p>
+              </div>
+              <div>
+                <label className="block text-lg font-medium text-gray-700">Cédula/Carnet</label>
+                <p className="mt-2 bg-gray-200 p-3 rounded text-lg">{userLog.CedulaCarnet}</p>
+              </div>
+              <div>
+                <label className="block text-lg font-medium text-gray-700">Correo Electrónico</label>
+                <p className="mt-2 bg-gray-200 p-3 rounded text-lg">{userLog.CorreoEmail}</p>
+              </div>
+              <div>
+                <label className="block text-lg font-medium text-gray-700">Correo Institucional</label>
+                <p className="mt-2 bg-gray-200 p-3 rounded text-lg">
+                  {userLog?.CorreoInstitucional ? userLog.CorreoInstitucional : "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-lg font-medium text-gray-700">Teléfono</label>
+                <p className="mt-2 bg-gray-200 p-3 rounded text-lg">
+                  {userLog?.Telefono ? userLog.Telefono : "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-lg font-medium text-gray-700">Teléfono 2</label>
+                <p className="mt-2 bg-gray-200 p-3 rounded text-lg">
+                  {userLog?.Telefono2 ? userLog.Telefono2 : "N/A"}
+                </p>
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-lg font-medium text-gray-700">Dirección</label>
+                <p className="mt-2 bg-gray-200 p-3 rounded text-lg">
+                  {userLog?.Direccion ? userLog.Direccion : "N/A"}
+                </p>
+              </div>
+            </div>
 
-                {/* Profile Info Section */}
-                <div className="flex-1 bg-white p-6 rounded-lg shadow-md">
-                    <h2 className="text-2xl font-semibold mb-4">Mi Perfil</h2>
-                    <div className="space-y-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">Nombre</label>
-                            <p className="mt-1 bg-gray-200 p-2 rounded">{userLog.Nombre}</p>
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">Cédula/Carnet</label>
-                            <p className="mt-1 bg-gray-200 p-2 rounded">{userLog.CedulaCarnet}</p>
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">Correo Electrónico</label>
-                            <p className="mt-1 bg-gray-200 p-2 rounded">{userLog.CorreoEmail}</p>
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">Correo Institucional</label>
-                            <p className="mt-1 bg-gray-200 p-2 rounded">{userLog?.CorreoInstitucional ? userLog.CorreoInstitucional : "N/A"}</p>
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">Teléfono</label>
-                            <p className="mt-1 bg-gray-200 p-2 rounded">{userLog?.Telefono ? userLog.Telefono : "N/A"}</p>
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">Teléfono 2</label>
-                            <p className="mt-1 bg-gray-200 p-2 rounded">{userLog?.Telefono2 ? userLog.Telefono2 : "N/A"}</p>
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">Dirección</label>
-                            <p className="mt-1 bg-gray-200 p-2 rounded">{userLog?.Direccion ? userLog.Direccion : "N/A"}</p>
-                        </div>
-                    </div>
-                </div>
 
-                {/* Actions and Image Section */}
-                <div className="lg:w-1/3 bg-white rounded-lg shadow-md flex flex-col p-6">
-                    {/* Centered Title */}
-                    <h2 className="text-2xl font-semibold mb-6 text-center">Opciones</h2>
+            {/* Botón cambiar contraseña centrado abajo */}
+            <div className="flex justify-center mt-8">
+              <button
+                onClick={handleOpenModal}
+                className="py-3 px-6 bg-gray-200 rounded-lg text-lg text-gray-700 hover:bg-gray-300"
+              >
+                Cambiar contraseña
+              </button>
+            </div>
+          </div>
 
-                    {/* Buttons and Image centered */}
-                    <div className="flex flex-col items-center space-y-4 mt-4">
-                        <button onClick={handleOpenModal} className="w-full py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300">Cambiar contraseña</button>
-                        <button onClick={handleEditProfile} className="w-full py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300">Editar perfil</button>
-                        {/* Antiguo boton de cerrar sesion, se paso para el navbar <button onClick={handleClick} className="w-full py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300">Cerrar sesión</button>*/}
+          <ChangePasswordModal
+            open={isModalOpen}
+            handleClose={handleCloseModal}
+            user={user}
+          />
+        </div>
 
-                        {/* Image with blur and margin */}
-                        <div className="w-full flex justify-center mt-20">
-                            <img
-                                src="/src/assets/perfil.jpg"
-                                alt="Illustration"
-                                className="w-full max-w-md h-auto mt-10"
-                            />
-                        </div>
-                    </div>
-                </div>
 
             </div>
             <ChangePasswordModal
