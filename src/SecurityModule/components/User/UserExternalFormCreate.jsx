@@ -13,7 +13,7 @@ const initialUserState = {
     telefono2: '',
     direccion: '',
     estado: 0,
-    idRol: 5,
+    idRol: 0,
     correoInstitucional: ''
 };
 
@@ -37,6 +37,7 @@ function UserExternalFormCreate({onUserCreated, onCancel}) {
         try {
             const data = await getRoles();
             setRoles(data);
+            user.idRol = data.find(rol => rol.nombre === 'Externo')?.idRol || 0;
         } catch (error) {
             console.error('Error al obtener roles:', error);
         }

@@ -15,7 +15,8 @@ export const useLogIn = () => {
 
         try {
             const response = await login(JSON.stringify({ email, password }));
-            localStorage.setItem('token', JSON.stringify(response.data));
+            console.log("Respuesta del login:", response.data);
+            localStorage.setItem("token", response.data.token);
             dispatch({ type: 'LOGIN', payload: response.data });
             setLoading(false);
             setIsAuthenticated(true);

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createUser } from "../services/userService.jsx";
+import { registerUser } from "../services/userService.jsx";
 
 export const useRegister = () => {
     const [loading, setLoading] = useState(false);
@@ -12,7 +12,7 @@ export const useRegister = () => {
         setIsRegister(false);
 
         try {
-            await createUser(user);
+            await registerUser(user);
             setLoading(false);
             setIsRegister(true);
         } catch (err) {

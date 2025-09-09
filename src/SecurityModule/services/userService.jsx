@@ -10,6 +10,11 @@ export const createUser = async (user) => {
     return response;
 };
 
+export const registerUser = async (user) => {
+    const response = await api.post('/users/register', user);
+    return response;
+}
+
 export const login = async (user) => {
     const response = await api.post('/users/login', user);
     return response;
