@@ -240,7 +240,7 @@ function UserExternalFormCreate({onUserCreated, onCancel}) {
                 <div className="col-span-2 mt-6 flex justify-end space-x-4">
                     <button
                         type="button"
-                        className="inline-flex justify-center rounded-md border border-transparent bg-red-600 py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-pantone-red py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-pantone-red/80 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                         onClick={() => {
                             setUser(initialUserState);
                             onCancel();
@@ -250,7 +250,7 @@ function UserExternalFormCreate({onUserCreated, onCancel}) {
                     </button>
                     <button
                         type="submit"
-                        style={{backgroundColor: '#004080'}}
+                        style={{backgroundColor: '#002855'}}
                         className="inline-flex justify-center rounded-md border border-transparent py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2"
                     >
                         Agregar

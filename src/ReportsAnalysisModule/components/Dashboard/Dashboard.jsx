@@ -180,20 +180,20 @@ const Dashboard = ({ type }) => {
             {/* Botón de exportar y filtros */}
             <div
                 className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
-                <button className="px-4 py-2 bg-green-500 text-white rounded-md no-print w-full sm:w-auto"
+                <button className="px-4 py-2 bg-pantone-blue text-white rounded-md no-print w-full sm:w-auto hover:bg-pantone-blue/80"
                         onClick={exportToPDF}>
                     Exportar a PDF
                 </button>
                 <div className="flex justify-center space-x-2 sm:space-x-4 w-full sm:w-auto">
-                    <button className="px-4 py-2 bg-blue-500 text-white rounded-md w-full sm:w-auto"
+                    <button className="px-4 py-2 bg-pantone-blue text-white rounded-md w-full sm:w-auto hover:bg-pantone-blue/80"
                             onClick={() => setTimePeriod('week')}>
                         Semana
                     </button>
-                    <button className="px-4 py-2 bg-blue-500 text-white rounded-md w-full sm:w-auto"
+                    <button className="px-4 py-2 bg-pantone-blue text-white rounded-md w-full sm:w-auto hover:bg-pantone-blue/80"
                             onClick={() => setTimePeriod('month')}>
                         Mes
                     </button>
-                    <button className="px-4 py-2 bg-blue-500 text-white rounded-md w-full sm:w-auto"
+                    <button className="px-4 py-2 bg-pantone-blue text-white rounded-md w-full sm:w-auto hover:bg-pantone-blue/80"
                             onClick={() => setTimePeriod('year')}>
                         Año
                     </button>
@@ -271,7 +271,7 @@ const Dashboard = ({ type }) => {
                         Valoración de {type === 'room' ? 'Salas' : 'Cubículos'}
                     </h2>
                     <button
-                        className="absolute top-2 right-2 px-2 py-1 bg-blue-500 text-white rounded-md no-print"
+                        className="absolute top-2 right-2 px-2 py-1 bg-pantone-blue text-white rounded-md no-print hover:bg-pantone-blue/80"
                         onClick={openModal}
                     >
                         Ver Comentarios
@@ -321,7 +321,7 @@ const Dashboard = ({ type }) => {
                             )}
                         </div>
                         <button
-                            className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md w-full"
+                            className="mt-4 px-4 py-2 bg-pantone-red text-white rounded-md w-full hover:bg-pantone-red/80"
                             onClick={closeModal}
                         >
                             Cerrar

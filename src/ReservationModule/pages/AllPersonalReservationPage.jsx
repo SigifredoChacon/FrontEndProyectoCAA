@@ -290,7 +290,7 @@ function AllPersonalReservationPage() {
                             <button
                                 onClick={() => handlePageChange(currentPage - 1)}
                                 disabled={currentPage === 1}
-                                className={`px-3 py-1 rounded ${currentPage === 1 ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
+                                className={`px-3 py-1 rounded ${currentPage === 1 ? 'bg-gray-300' : 'bg-pantone-blue text-white'}`}
                             >
                                 Anterior
                             </button>
@@ -298,7 +298,7 @@ function AllPersonalReservationPage() {
                             <button
                                 onClick={() => handlePageChange(currentPage + 1)}
                                 disabled={currentPage === totalPages}
-                                className={`px-3 py-1 rounded ${currentPage === totalPages ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
+                                className={`px-3 py-1 rounded ${currentPage === totalPages ? 'bg-gray-300' : 'bg-pantone-blue text-white'}`}
                             >
                                 Siguiente
                             </button>

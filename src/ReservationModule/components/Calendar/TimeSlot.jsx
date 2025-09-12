@@ -14,6 +14,10 @@ const TimeSlot = ({ day, time, isReserved, onReserve, disabled }) => {
                 icon: 'warning',
                 showConfirmButton: true,
                 confirmButtonText: 'Aceptar',
+                customClass: {
+                    confirmButton: 'bg-pantone-blue text-white px-4 py-2 rounded hover:bg-pantone-blue/80 mr-2'
+                },
+                buttonsStyling: false
             });
             return;
         }
@@ -31,7 +35,7 @@ const TimeSlot = ({ day, time, isReserved, onReserve, disabled }) => {
         cursor: disabled ? 'not-allowed' : 'pointer',
         backgroundColor:
             isReserved === 'reserved'
-                ? '#ff4d4d'
+                ? '#EF3340'
                 : isReserved === 'selected'
                     ? '#4caf50'
                     : '#e0e0e0',

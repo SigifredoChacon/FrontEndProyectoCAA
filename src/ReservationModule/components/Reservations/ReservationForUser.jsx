@@ -119,7 +119,7 @@ function ReservationForUser({onUserSearched, onCancel }) {
                 <button
                     onClick={onCancel}
                     style={{
-                        backgroundColor: '#dc3545',
+                        backgroundColor: '#EF3340',
                         color: 'white',
                         border: 'none',
                         padding: '10px 20px',
@@ -129,8 +129,8 @@ function ReservationForUser({onUserSearched, onCancel }) {
                         transition: 'background-color 0.3s ease',
                         width: '48%',
                     }}
-                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#c82333'}
-                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#dc3545'}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#F16C63'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#EF3340'}
                 >
                     Cancelar
                 </button>

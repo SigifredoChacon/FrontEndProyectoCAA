@@ -131,7 +131,7 @@ function CubiclesPage() {
                         <button
                             onClick={handleBlockCubicle}
                             style={{
-                                backgroundColor: isCubicleLocked ? '#28a745' : '#fc1919',
+                                backgroundColor: isCubicleLocked ? '#28a745' : '#EF3340',
                                 color: 'white',
                                 border: 'none',
                                 padding: '10px 20px',
@@ -140,8 +140,8 @@ function CubiclesPage() {
                                 cursor: 'pointer',
                                 transition: 'background-color 0.3s ease'
                             }}
-                            onMouseOver={(e) => e.target.style.backgroundColor = isCubicleLocked ? '#4bd162' : '#fe5757'}
-                            onMouseOut={(e) => e.target.style.backgroundColor = isCubicleLocked ? '#28a745' : '#fc1919'}
+                            onMouseOver={(e) => e.target.style.backgroundColor = isCubicleLocked ? '#4bd162' : '#F16C63'}
+                            onMouseOut={(e) => e.target.style.backgroundColor = isCubicleLocked ? '#28a745' : '#EF3340'}
                         >
                             {isCubicleLocked ? 'Desbloquear Cubiculos' : 'Bloquear Cubiculos'}
                         </button>

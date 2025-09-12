@@ -135,7 +135,7 @@ const Calendar = ({ selectedCubicleId, onReservationsChange }) => {
                         {daysOfWeek.map((day, index) => (
                             <th
                                 key={index}
-                                className="p-3 border border-gray-200 bg-blue-900 text-white font-bold uppercase text-center"
+                                className="p-3 border border-gray-200 bg-pantone-blue text-white font-bold uppercase text-center"
                             >
                                 {format(day, 'EEEE dd/MM', { locale: es })}
                             </th>

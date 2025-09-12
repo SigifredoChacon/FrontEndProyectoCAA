@@ -7,7 +7,14 @@ export default {
     "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+        colors: {
+            pantone: {
+                blue: "#002855", // Azul oscuro (Pantone 295C)
+                red: "#EF3340",  // Rojo (Pantone 032C)
+            },
+        },
+    },
   },
   plugins: [],
 };

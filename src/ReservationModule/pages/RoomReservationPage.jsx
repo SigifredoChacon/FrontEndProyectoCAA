@@ -146,6 +146,10 @@ export function RoomReservationPage() {
                 icon: 'warning',
                 showConfirmButton: true,
                 confirmButtonText: 'Aceptar',
+                customClass: {
+                    confirmButton: 'bg-pantone-blue text-white px-4 py-2 rounded hover:bg-pantone-blue/80 mr-2'
+                },
+                buttonsStyling: false
             });
             return;
         }
@@ -191,6 +195,11 @@ export function RoomReservationPage() {
                 showCancelButton: true,
                 confirmButtonText: 'Aceptar',
                 cancelButtonText: 'Cancelar',
+                customClass: {
+                    confirmButton: 'bg-pantone-blue text-white px-4 py-2 rounded hover:bg-pantone-blue/80 mr-2',
+                    cancelButton: 'bg-pantone-red text-white px-4 py-2 rounded hover:bg-pantone-red/80 ml-2'
+                },
+                buttonsStyling: false
             }).then(async (result) => {
                 if (result.isConfirmed) {
 
@@ -418,7 +427,7 @@ export function RoomReservationPage() {
                                         <li key={recurso.idRecursos}>
                                             <button
                                                 onClick={() => handleRemoveResource(recurso)}
-                                                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 w-full sm:w-auto"
+                                                className="bg-pantone-red text-white px-4 py-2 rounded-md hover:red/80 w-full sm:w-auto"
                                             >
                                                 {recurso.Nombre} &times;
                                             </button>
@@ -447,7 +456,7 @@ export function RoomReservationPage() {
                         {(!(role === 'Estudiante') && role && !(role === 'Externo') && !(role === 'Profesor') && !(role==='AdministradorSolicitudes')) && (
                             <button
                                 onClick={handleCreateUserReservation}
-                                className="px-4 py-2 bg-[#004080] text-white border-none rounded cursor-pointer w-full md:w-auto hover:bg-[#003060]"
+                                className="px-4 py-2 bg-pantone-blue text-white border-none rounded cursor-pointer w-full md:w-auto hover:bg-pantone-blue/80"
                             >
                                 Reservar por Usuario
                             </button>
@@ -455,21 +464,21 @@ export function RoomReservationPage() {
                         {(!(role === 'Estudiante') && role && !(role === 'Externo') && !(role === 'Profesor') && !(role==='AdministradorSolicitudes')) && (
                             <button
                                 onClick={handleCreateExternalReservation}
-                                className="px-4 py-2 bg-[#004080] text-white border-none rounded cursor-pointer w-full md:w-auto hover:bg-[#003060]"
+                                className="px-4 py-2 bg-pantone-blue text-white border-none rounded cursor-pointer w-full md:w-auto hover:bg-pantone-blue/80"
                             >
                                 Reservar Externo
                             </button>
                         )}
                         <button
                             onClick={handleRoomReservationCreated}
-                            className="px-4 py-2 sm:px-5 sm:py-2.5 bg-red-500 text-white rounded-md hover:bg-red-600 transition-all w-full sm:w-auto"
+                            className="px-4 py-2 sm:px-5 sm:py-2.5 bg-pantone-red text-white rounded-md hover:bg-pantone-red/80 transition-all w-full sm:w-auto"
                         >
                             Cancelar
                         </button>
                         {user && (
                             <button
                                 onClick={handleCreateRoomReservation}
-                                className="px-4 py-2 sm:px-5 sm:py-2.5 bg-green-500 text-white rounded-md hover:bg-green-600 transition-all w-full sm:w-auto"
+                                className="px-4 py-2 sm:px-5 sm:py-2.5 bg-pantone-blue text-white rounded-md hover:bg-pantone-blue/80 transition-all w-full sm:w-auto"
                             >
                                 Reservar
                             </button>

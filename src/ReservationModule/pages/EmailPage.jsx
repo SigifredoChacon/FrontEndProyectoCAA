@@ -30,6 +30,10 @@ function EmailPage() {
                 icon: 'error',
                 showConfirmButton: true,
                 confirmButtonText: 'Aceptar',
+                customClass: {
+                    confirmButton: 'bg-pantone-blue text-white px-4 py-2 rounded hover:bg-pantone-blue/80 mr-2',
+                },
+                buttonsStyling: false
             })
         }
     };

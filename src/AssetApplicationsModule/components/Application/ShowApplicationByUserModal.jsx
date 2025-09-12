@@ -33,7 +33,7 @@ function ShowApplicationByUserModal({ open, handleClose, archivoSolicitud }) {
                     <a
                         href={pdfUrl}
                         download
-                        className="text-blue-500 underline hover:text-blue-600 mt-2 inline-block"
+                        className="bg-pantone-blue underline hover:bg-pantone-blue/80 mt-2 inline-block"
                     >
                         Descargar PDF
                     </a>
@@ -56,7 +56,7 @@ function ShowApplicationByUserModal({ open, handleClose, archivoSolicitud }) {
                 <div className="flex justify-end mt-4">
                     <button
                         onClick={handleClose}
-                        className="bg-[#004080] text-white rounded-full px-4 py-2 hover:bg-opacity-90 transition-colors"
+                        className="bg-pantone-blue text-white rounded-full px-4 py-2 hover:bg-pantone-blue/80 transition-colors"
                     >
                         Cerrar
                     </button>

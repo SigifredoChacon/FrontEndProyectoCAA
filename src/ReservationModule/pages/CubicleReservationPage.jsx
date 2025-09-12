@@ -130,6 +130,11 @@ function CubiclesReservationPage() {
                 showCancelButton: true,
                 confirmButtonText: 'Aceptar',
                 cancelButtonText: 'Cancelar',
+                customClass: {
+                    confirmButton: 'bg-pantone-blue text-white px-4 py-2 rounded hover:bg-pantone-blue/80 mr-2',
+                    cancelButton: 'bg-pantone-red text-white px-4 py-2 rounded hover:bg-pantone-red/80 ml-2'
+                },
+                buttonsStyling: false
             }).then(async (result) => {
                 if (result.isConfirmed) {
 
@@ -347,7 +352,7 @@ function CubiclesReservationPage() {
                             {(!(role === 'Estudiante' || role === 'Externo' || role === 'Profesor' || role === 'AdministradorSolicitudes')) && (
                                 <button
                                     onClick={handleCreateUserReservation}
-                                    className="px-4 py-2 bg-[#004080] text-white border-none rounded cursor-pointer w-full md:w-auto hover:bg-[#003060]"
+                                    className="px-4 py-2 bg-pantone-blue text-white border-none rounded cursor-pointer w-full md:w-auto hover:bg-pantone-blue/80"
                                 >
                                     Reservar por Usuario
                                 </button>
@@ -355,20 +360,20 @@ function CubiclesReservationPage() {
                             {(!(role === 'Estudiante' || role === 'Externo' || role === 'Profesor' || role === 'AdministradorSolicitudes')) && (
                                 <button
                                     onClick={handleCreateExternalReservation}
-                                    className="px-4 py-2 bg-[#004080] text-white border-none rounded cursor-pointer w-full md:w-auto hover:bg-[#003060]"
+                                    className="px-4 py-2 bg-pantone-blue text-white border-none rounded cursor-pointer w-full md:w-auto hover:bg-pantone-blue/80"
                                 >
                                     Reservar Externo
                                 </button>
                             )}
                             <button
                                 onClick={handleCubicleReservationCreated}
-                                className="px-4 py-2 bg-red-500 text-white border-none rounded cursor-pointer w-full md:w-auto"
+                                className="px-4 py-2 bg-pantone-red text-white border-none rounded cursor-pointer w-full md:w-auto hover:bg-pantone-red/80"
                             >
                                 Cancelar
                             </button>
                             <button
                                 onClick={handleSubmit}
-                                className="px-4 py-2 bg-green-600 text-white border-none rounded cursor-pointer w-full md:w-auto"
+                                className="px-4 py-2 bg-pantone-blue text-white border-none rounded cursor-pointer w-full md:w-auto hover:bg-pantone-blue/80"
                             >
                                 Reservar
                             </button>

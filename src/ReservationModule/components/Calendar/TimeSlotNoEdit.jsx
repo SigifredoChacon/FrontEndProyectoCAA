@@ -16,9 +16,9 @@ const TimeSlot = ({ day, time, isReserved, onReserve, disabled }) => {
         cursor: disabled ? 'not-allowed' : 'pointer',
         backgroundColor:
             isReserved === 'reserved'
-                ? '#ff4d4d'
+                ? '#EF3340'
                 : isReserved === 'userReserved'
-                    ? '#1E90FF'
+                    ? '#002855'
                     : isReserved === 'selected'
                         ? '#4caf50'
                         : '#e0e0e0',

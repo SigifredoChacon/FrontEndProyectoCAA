@@ -315,7 +315,7 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
                             Cancelar
                         </button>
                         <button onClick={handleUpdateRoomReservation}
-                                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-all w-full sm:w-auto">
+                                className="px-4 py-2 bg-pantone-blue text-white rounded-md hover:bg-pantone-blue/80 transition-all w-full sm:w-auto">
                             Actualizar Reservación
                         </button>
                     </div>

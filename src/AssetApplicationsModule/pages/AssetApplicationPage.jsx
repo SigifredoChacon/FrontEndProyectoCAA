@@ -236,7 +236,7 @@ export function AssetApplicationPage() {
                         </div>
 
                         <div className="mt-4 flex flex-col sm:flex-row justify-between">
-                            <button className="bg-gray-400 text-white py-2 px-4 rounded-md mb-4 sm:mb-0 sm:mr-2"
+                            <button className="bg-pantone-blue text-white py-2 px-4 rounded-md mb-4 sm:mb-0 sm:mr-2 hover:bg-pantone-blue/80"
                                     onClick={handleBackToEdit}>
                                 Volver a Editar
                             </button>
@@ -325,11 +325,11 @@ export function AssetApplicationPage() {
                             {/* Botones de acción */}
                             <div className="mt-8 flex flex-col sm:flex-row justify-center sm:justify-end gap-4">
                                 <button type="button"
-                                        className="inline-flex justify-center rounded-md border border-transparent bg-red-600 py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                                        className="inline-flex justify-center rounded-md border border-transparent bg-pantone-red py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-pantone-red/80 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                                         onClick={() => navigate('/categoryAssets')}>Cancelar
                                 </button>
                                 <button type="button" onClick={handleCreateRequest}
-                                        className="inline-flex justify-center rounded-md border border-transparent bg-[#004080] py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-[#003060] focus:outline-none focus:ring-2 focus:ring-offset-2">Generar PDF
+                                        className="inline-flex justify-center rounded-md border border-transparent bg-pantone-blue py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-pantone-blue/80 focus:outline-none focus:ring-2 focus:ring-offset-2">Generar PDF
                                 </button>
                             </div>
                         </>

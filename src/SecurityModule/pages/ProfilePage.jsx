@@ -136,7 +136,7 @@ function ProfilePage() {
             <div className="flex justify-center mt-8">
               <button
                 onClick={handleOpenModal}
-                className="py-3 px-6 bg-gray-200 rounded-lg text-lg text-gray-700 hover:bg-gray-300"
+                className="py-3 px-6 bg-pantone-blue rounded-lg text-lg text-white hover:bg-pantone-blue/80"
               >
                 Cambiar contraseña
               </button>

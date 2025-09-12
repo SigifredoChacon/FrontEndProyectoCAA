@@ -99,13 +99,13 @@ function ViewPendingReservationModal({
                 <div className="mt-6 flex gap-3">
                     <button
                         onClick={onReservationAccept}
-                        className="flex-1 bg-green-500 hover:bg-green-700 text-white font-semibold py-2 rounded-lg shadow"
+                        className="flex-1 bg-pantone-blue hover:bg-pantone-blue/80 text-white font-semibold py-2 rounded-lg shadow"
                     >
                         Aceptar
                     </button>
                     <button
                         onClick={onReservationReject}
-                        className="flex-1 bg-red-500 hover:bg-red-700 text-white font-semibold py-2 rounded-lg shadow"
+                        className="flex-1 bg-pantone-red hover:bg-pantone-red/80 text-white font-semibold py-2 rounded-lg shadow"
                     >
                         Rechazar
                     </button>

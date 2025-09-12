@@ -137,7 +137,7 @@ const CalendarRooms = ({ selectedRoomId, onReservationsChange }) => {
                         <th></th>
                         {daysOfWeek.map((day, index) => (
                             <th key={index}
-                                className="p-3 border border-gray-300 bg-blue-900 text-white text-sm font-bold uppercase text-center">
+                                className="p-3 border border-gray-300 bg-pantone-blue text-white text-sm font-bold uppercase text-center">
                                 {format(day, 'EEEE dd/MM', {locale: es})}
                             </th>
                         ))}

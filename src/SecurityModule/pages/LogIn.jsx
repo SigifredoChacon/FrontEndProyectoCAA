@@ -54,7 +54,7 @@ function LogIn() {
                 {/* Texto y enlace para crear una cuenta */}
                 <div className="text-center mb-4">
                     <span className="text-gray-600">¿No tienes cuenta?</span>{' '}
-                    <Link to="/register" className="text-blue-600 hover:underline">
+                    <Link to="/register" className="bg-pantone-blue hover:underline">
                         Regístrate
                     </Link>
                 </div>
@@ -102,7 +102,7 @@ function LogIn() {
                         <span className="text-gray-600">¿No recuerdas la Contraseña?</span>{' '}
                         <span
                             onClick={handleOpenModal}
-                            className="text-blue-600 hover:underline cursor-pointer"
+                            className="bg-pantone-blue hover:underline cursor-pointer"
                         >
                             Recuperar Contraseña
                         </span>
@@ -118,7 +118,7 @@ function LogIn() {
                 <div className="mt-8 flex justify-end space-x-4">
                     <button
                         type="submit"
-                        className="inline-flex justify-center rounded-md border border-transparent bg-[#004080] py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-[#003060] focus:outline-none focus:ring-2 focus:ring-[#004080] focus:ring-offset-2"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-pantone-blue py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-pantone-blue/80 focus:outline-none focus:ring-2 focus:ring-[#004080] focus:ring-offset-2"
                     >
                         Confirmar
                     </button>

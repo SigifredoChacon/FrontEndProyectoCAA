@@ -175,8 +175,8 @@ function Navbar() {
                                                                         text: "Tu sesión se cerrará y tendrás que volver a iniciar sesión.",
                                                                         icon: "warning",
                                                                         showCancelButton: true,
-                                                                        confirmButtonColor: "#3085d6",
-                                                                        cancelButtonColor: "#d33",
+                                                                        confirmButtonColor: "#002855",
+                                                                        cancelButtonColor: "#EF3340",
                                                                         confirmButtonText: "Sí, cerrar sesión",
                                                                         cancelButtonText: "Cancelar"
                                                                     }).then((result) => {

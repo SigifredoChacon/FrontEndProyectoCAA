@@ -96,19 +96,19 @@ function AcceptApplicationModal({ open, handleClose, archivoSolicitud, handleAcc
                     <div className="flex justify-center lg:justify-end gap-4">
                         <button
                             onClick={handleClose}
-                            className="bg-[#004080] text-white rounded-full px-4 py-2 hover:bg-opacity-90 transition-colors"
+                            className="bg-pantone-blue text-white rounded-full px-4 py-2 hover:bg-pantone-blue/80 transition-colors"
                         >
                             Cerrar
                         </button>
                         <button
                             onClick={handleRejectClick}
-                            className="bg-red-500 text-white rounded-full px-4 py-2 hover:bg-red-600 transition-colors"
+                            className="bg-pantone-red text-white rounded-full px-4 py-2 hover:bg-pantone-red/80 transition-colors"
                         >
                             Rechazar
                         </button>
                         <button
                             onClick={handleAcceptApplication}
-                            className="bg-green-500 text-white rounded-full px-4 py-2 hover:bg-green-600 transition-colors"
+                            className="bg-pantone-blue text-white rounded-full px-4 py-2 hover:bg-pantone-blue/80 transition-colors"
                         >
                             Aceptar
                         </button>
