@@ -182,12 +182,12 @@ function AllPersonalApplicationPage() {
 
             {/* Título de la página */}
             {!isOnCreateOrEditPage && (
-                <h1 style={{ textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px' }}>
+                <h1 style={{ textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px', marginTop: '50px' }}>
                     Mis Solicitudes
                 </h1>
             )}
 
-            <Card style={{ border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px' }}>
+            <Card style={{ border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px', marginBottom: '300px' }}>
                 <Title>
                     Mis Solicitudes
                     <Badge style={{

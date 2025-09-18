@@ -62,7 +62,7 @@ function AssetsPage() {
             {/* Encabezado y botón "Agregar Activo" solo visible en la lista de activos */}
             {!isOnCreateOrEditPage && (
                 <>
-                    <h1 style={{textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px'}}>
+                    <h1 style={{textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginBottom: '20px', marginTop: '50px'}}>
                         Gestión de Activos
                     </h1>
 

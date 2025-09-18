@@ -131,9 +131,9 @@ function HomePage() {
             {/* Introducción */}
             <section className="max-w-5xl mx-auto py-12 px-6 text-center">
                 <p className="text-gray-700 text-lg md:text-xl">
-                    Este sistema está diseñado para estudiantes y profesores del TEC. Aquí puedes
+                    Este sistema está diseñado para estudiantes y profesores del Centro Académico de Alajuela. Aquí puedes
                     reservar salas para reuniones, cubículos para trabajo individual y solicitar
-                    recursos tecnológicos. Evita filas y asegura tu espacio al instante.
+                    recursos tecnológicos. No te compliques y asegura tu espacio al instante.
                 </p>
             </section>
 

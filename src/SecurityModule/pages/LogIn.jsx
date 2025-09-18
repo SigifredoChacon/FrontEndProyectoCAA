@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLogIn } from "../hooks/useLogIn.js";
 import { useNavigate, Link } from "react-router-dom"; // Importar Link
 import Swal from 'sweetalert2';
-import SignApplicationModal from "../../AssetApplicationsModule/components/Application/SignApplicationModal.jsx";
+
 import RecoverPasswordModal from "../components/User/RecoverPasswordModal.jsx";
 
 function LogIn() {
@@ -54,7 +54,10 @@ function LogIn() {
                 {/* Texto y enlace para crear una cuenta */}
                 <div className="text-center mb-4">
                     <span className="text-gray-600">¿No tienes cuenta?</span>{' '}
-                    <Link to="/register" className="bg-pantone-blue hover:underline">
+                    <Link
+                        to="/register"
+                        className="text-[#002855] underline hover:font-semibold"
+                    >
                         Regístrate
                     </Link>
                 </div>
@@ -102,9 +105,9 @@ function LogIn() {
                         <span className="text-gray-600">¿No recuerdas la Contraseña?</span>{' '}
                         <span
                             onClick={handleOpenModal}
-                            className="bg-pantone-blue hover:underline cursor-pointer"
+                            className="text-[#002855] underline hover:font-semibold"
                         >
-                            Recuperar Contraseña
+                        Recuperar Contraseña
                         </span>
                     </div>
                 </div>

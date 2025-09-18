@@ -113,7 +113,7 @@ function AssetList({ onEdit }) {
     };
 
     return (
-        <Card style={{border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px'}}>
+        <Card style={{border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px', marginBottom: '300px'}}>
             {/* Título de la lista de activos */}
             <Title>
                 Activos
