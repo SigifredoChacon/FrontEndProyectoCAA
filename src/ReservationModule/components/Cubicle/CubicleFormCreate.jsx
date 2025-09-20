@@ -62,7 +62,7 @@ function CubicleFormCreate({onCubicleCreated}) {
 
     return (
         <div className="min-h-screen flex items-center justify-center ">
-            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg border-2 border-pantone-blue">
                 <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mb-6">Agregar Cubiculo</h2>
                 <div className="grid grid-cols-1 gap-y-6">
                     <div>

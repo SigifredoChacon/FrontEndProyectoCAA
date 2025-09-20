@@ -9,6 +9,7 @@ import {useAuthContext} from "../../SecurityModule/hooks/useAuthContext.js";
 import UserExternalFormCreate from "../../SecurityModule/components/User/UserExternalFormCreate.jsx";
 import Swal from "sweetalert2";
 import ReservationForUser from "../components/Reservations/ReservationForUser.jsx";
+import BackButton from "../../utils/BackButton.jsx";
 
 const initialCubicleReservationState = {
     fecha: '',
@@ -293,17 +294,9 @@ function CubiclesReservationPage() {
 
 
     return (
+        <>
+        <BackButton/>
         <div className="max-w-screen-2xl mx-auto px-5" style={{ paddingTop: "50px" }}>
-            <button
-                onClick={() => navigate('/')}
-                className="hidden sm:block bg-none border-none cursor-pointer absolute top-20 left-2 p-1"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                     stroke="currentColor" className="w-8 h-8">
-                    <path strokeLinecap="round" strokeLinejoin="round"
-                          d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                </svg>
-            </button>
 
 
             <div className="flex flex-col md:flex-row h-screen p-5">
@@ -411,6 +404,7 @@ function CubiclesReservationPage() {
                 )}
             </div>
         </div>
+        </>
     );
 
 

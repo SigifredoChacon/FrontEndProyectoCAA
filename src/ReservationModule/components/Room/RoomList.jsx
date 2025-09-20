@@ -93,7 +93,7 @@ function RoomList({ onEdit, reload}) {
                     <Card key={room.idSala} style={{
                         width: '380px',
                         padding: '16px',
-                        border: '1px solid #ccc',
+                        border: '2px solid #002855',
                         borderRadius: '12px',
                         display: 'flex',
                         flexDirection: 'column',

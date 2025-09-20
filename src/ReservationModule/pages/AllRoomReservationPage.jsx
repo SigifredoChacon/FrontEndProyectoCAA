@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {getRooms} from "../services/roomService.jsx";
 import {Badge, Card, Title} from "@tremor/react";
 import {Link, useNavigate} from 'react-router-dom';
+import BackButton from "../../utils/BackButton.jsx";
 
 function AllRoomReservationPage() {
     const [rooms, setRooms] = useState([]);
@@ -31,24 +32,12 @@ function AllRoomReservationPage() {
     };
 
     return (
+        <>
+        <BackButton/>
         <div style={{ paddingBottom: "200px" }} >
             <Title style={{textAlign: 'center', fontSize: '2.5rem', margin: '40px 0'}}>
                 Salas
             </Title>
-            <button
-                onClick={() => navigate('/')}
-                className="hidden sm:block absolute top-20 left-2 p-1 cursor-pointer"
-                style={{
-                    background: 'none',
-                    border: 'none',
-                }}
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                     stroke="currentColor" className="w-8 h-8">
-                    <path strokeLinecap="round" strokeLinejoin="round"
-                          d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                </svg>
-            </button>
 
             <div style={{
                 display: 'flex',
@@ -69,7 +58,7 @@ function AllRoomReservationPage() {
                         <Card style={{
                             width: '380px',
                             padding: '16px',
-                            border: '1px solid #ccc',
+                            border: '2px solid #002855',
                             borderRadius: '12px',
                             display: 'flex',
                             flexDirection: 'column',
@@ -93,6 +82,7 @@ function AllRoomReservationPage() {
                 ))}
             </div>
         </div>
+        </>
     );
 }
 

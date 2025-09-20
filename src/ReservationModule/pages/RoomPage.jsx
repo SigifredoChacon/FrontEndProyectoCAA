@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import RoomList from '../components/Room/RoomList.jsx';
 import RoomFormCreate from '../components/Room/RoomFormCreate.jsx';
@@ -6,6 +6,7 @@ import RoomFormEdit from '../components/Room/RoomFormEdit.jsx';
 import { useRoomEdit } from '../hooks/useRoomEdit.js';
 import {deleteRoom, lockRoom, unLockRoom} from '../services/roomService.jsx';
 import Swal from "sweetalert2";
+import BackButton from "../../utils/BackButton.jsx";
 
 function RoomsPage() {
     const { selectedRoom, handleEditRoom, handleRoomUpdated } = useRoomEdit();
@@ -91,21 +92,9 @@ function RoomsPage() {
     const isOnCreateOrEditPage = location.pathname === "/rooms/create" || location.pathname.startsWith("/rooms/edit");
 
     return (
+        <>
+        <BackButton />
         <div style={{maxWidth: '1800px', margin: '0 auto', padding: '0 20px'}}>
-            <button
-                onClick={() => navigate('/manageReservations')}
-                className="hidden sm:block absolute top-20 left-2 p-1 cursor-pointer"
-                style={{
-                    background: 'none',
-                    border: 'none',
-                }}
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                     stroke="currentColor" className="w-8 h-8">
-                    <path strokeLinecap="round" strokeLinejoin="round"
-                          d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                </svg>
-            </button>
 
             {!isOnCreateOrEditPage && (
                 <>
@@ -162,6 +151,7 @@ function RoomsPage() {
                        element={<RoomFormEdit selectedRoom={selectedRoom} onRoomUpdated={handleRoomCreated}/>}/>
             </Routes>
         </div>
+        </>
     );
 }
 

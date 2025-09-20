@@ -85,7 +85,7 @@ function UserList({ onEdit }) {
 
 
     return (
-        <Card style={{border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px', marginBottom: '300px'}}>
+        <Card style={{border: '2px solid #002855', borderRadius: '12px', padding: '16px', marginBottom: '300px'}}>
             <Title>
                 Usuarios
                 <Badge style={{

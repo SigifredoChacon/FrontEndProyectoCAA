@@ -6,6 +6,7 @@ import { useAuthContext } from "../hooks/useAuthContext.js";
 import EditProfilePage from "./EditProfilePage.jsx";
 import Swal from "sweetalert2";
 import ChangePasswordModal from "../components/User/ChangePasswordModal.jsx";
+import BackButton from "../../utils/BackButton.jsx";
 
 function ProfilePage() {
     const navigate = useNavigate();
@@ -65,8 +66,10 @@ function ProfilePage() {
 
 
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-          <div className="bg-white w-full max-w-4xl p-8 rounded-lg shadow-md relative flex flex-col">
+        <>
+        <BackButton/>
+        <div className="min-h-screen bg-gray-40 flex items-center justify-center p-6 mt-6">
+          <div className="bg-white w-full max-w-4xl p-8 rounded-lg shadow-md relative flex flex-col border-2 border-pantone-blue">
               <div className="flex justify-between items-center mb-8">
                   <h2 className="text-4xl font-bold">Mi Perfil</h2>
                   <button
@@ -201,7 +204,7 @@ function ProfilePage() {
           />
         </div>
 
-
+        </>
 
     );
 }

@@ -188,7 +188,7 @@ export function ReservationFormEdit({ selectedPersonalReservation, onReservation
     };
 
     return (
-        <div className="p-4 md:p-8 max-w-full mx-auto overflow-x-hidden">
+        <div className="p-4 md:p-8 max-w-full mx-auto overflow-x-hidden mt-8">
             <div className="flex flex-col md:flex-row items-start justify-start">
                 <div className="flex-shrink-0 w-full md:w-5/12 p-4 mt-8">
                     {roomDetails ? (

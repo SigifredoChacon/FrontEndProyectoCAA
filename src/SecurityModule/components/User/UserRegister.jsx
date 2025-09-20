@@ -1,9 +1,10 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {createUser, sendAdminEmails} from '../../services/userService.jsx';
 import {getByRoleName} from "../../services/roleService.jsx";
 import {useRegister} from "../../hooks/useRegister.js";
 import Swal from "sweetalert2";
 import {useNavigate} from "react-router-dom";
+import BackButton from "../../../utils/BackButton.jsx";
 
 const initialUserState = {
     cedulaCarnet: 0,
@@ -95,9 +96,11 @@ function UserRegister({role}) {
     };
 
     return (
+        <>
+        <BackButton/>
         <div className="min-h-screen flex items-center justify-center ">
 
-            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg border-2 border-pantone-blue">
                 <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mb-6">Registrarse</h2>
 
                 <div className="grid grid-cols-1 gap-y-6">
@@ -193,7 +196,7 @@ function UserRegister({role}) {
                 </div>
             </form>
         </div>
-
+        </>
     );
 }
 

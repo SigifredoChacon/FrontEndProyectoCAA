@@ -22,6 +22,7 @@ import {
 
 import ReservationFormEdit from '../components/Reservations/ReservationFormEdit.jsx';
 import Swal from "sweetalert2";
+import BackButton from "../../utils/BackButton.jsx";
 
 function AllReservationPage() {
     const {selectedReservation, handleEditReservation, handleReservationUpdated } = usePersonalReservation();
@@ -153,17 +154,9 @@ function AllReservationPage() {
 
 
     return (
+        <>
+        <BackButton/>
         <div style={{maxWidth: '1800px', margin: '0 auto', padding: '0 20px'}}>
-            <button
-                onClick={() => navigate('/manageReservations')}
-                className="hidden sm:block absolute top-20 left-2 p-1 cursor-pointer"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                     stroke="currentColor" className="w-8 h-8">
-                    <path strokeLinecap="round" strokeLinejoin="round"
-                          d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                </svg>
-            </button>
 
             <Routes>
                 <Route path="lockDayModal" element={<LockDayModal/>}/>
@@ -194,9 +187,9 @@ function AllReservationPage() {
                             Bloquear Fecha
                         </button>
                     </div>
-                </>
-            )}
-            <Card style={{border: '0.5px solid #00000085', borderRadius: '12px', padding: '16px', marginBottom: '200px'}}>
+
+
+            <Card style={{border: '2px solid #002855', borderRadius: '12px', padding: '16px', marginBottom: '200px'}}>
                 <Title>
                     Reservaciones Generales
                     <Badge style={{
@@ -212,13 +205,7 @@ function AllReservationPage() {
                     </Badge>
                 </Title>
 
-                <Routes>
-                    <Route
-                        path="edit/:id"
-                        element={<ReservationFormEdit selectedPersonalReservation={selectedReservation}
-                                                      onReservationUpdated={handleReservationCreated}/>}
-                    />
-                </Routes>
+
 
                 {!isOnCreateOrEditPage && (
                     <>
@@ -313,6 +300,17 @@ function AllReservationPage() {
                 )}
 
             </Card>
+                </>
+            )}
+
+            <Routes>
+                <Route
+                    path="edit/:id"
+                    element={<ReservationFormEdit selectedPersonalReservation={selectedReservation}
+                                                  onReservationUpdated={handleReservationCreated}/>}
+                />
+            </Routes>
+
             {isModalOpen && (
                 <div style={{
                     position: 'fixed',
@@ -331,6 +329,7 @@ function AllReservationPage() {
             )}
 
         </div>
+        </>
     );
 }
 

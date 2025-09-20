@@ -2,6 +2,7 @@ import React from 'react';
 import {Route, Routes, useNavigate} from 'react-router-dom';
 import UserList from "../components/User/UserList.jsx";
 import RegisterStudentPage from "./RegisterPage.jsx";
+import BackButton from "../../utils/BackButton.jsx";
 
 function RegisterSelection() {
     const navigate = useNavigate();
@@ -15,8 +16,9 @@ function RegisterSelection() {
     };
 
     return (
+        <>
+        <BackButton/>
         <div className="min-h-screen flex items-center justify-center bg-gray p-6">
-            <button onClick={() => navigate('/login')} className="hidden sm:block absolute top-20 left-2 p-1 cursor-pointer" style={{ background: 'none', border: 'none', }} > <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8"> <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/> </svg> </button>
             <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
                 {/* Header */}
                 <div className="bg-[#002855] text-white py-6 px-8 text-center">
@@ -49,6 +51,7 @@ function RegisterSelection() {
 
             </div>
         </div>
+        </>
 
     );
 }

@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {Routes, Route, useNavigate, useLocation} from 'react-router-dom';
 import AssetList from '../components/Asset/AssetList.jsx';
 import AssetFormCreate from '../components/Asset/AssetFormCreate.jsx';
 import AssetFormEdit from '../components/Asset/AssetFormEdit.jsx';
 import { useAssetEdit } from '../hooks/useAssetEdit.js';
+import BackButton from "../../utils/BackButton.jsx";
 
 function AssetsPage() {
     // Estado y funciones para gestionar la edición y creación de activos
@@ -41,23 +42,10 @@ function AssetsPage() {
     const isOnCreateOrEditPage = location.pathname === "/assets/create" || location.pathname.startsWith("/assets/edit"); // Verifica si está en una página de creación o edición
 
     return (
+        <>
+        <BackButton/>
         <div style={{maxWidth: '1800px', margin: '0 auto', padding: '0 20px'}}>
 
-            {/* Botón para navegar a la gestión de aplicaciones */}
-            <button
-                onClick={() => navigate('/manageApplications')}
-                className="hidden sm:block absolute top-20 left-2 p-1 cursor-pointer"
-                style={{
-                    background: 'none',
-                    border: 'none',
-                }}
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                     stroke="currentColor" className="w-8 h-8">
-                    <path strokeLinecap="round" strokeLinejoin="round"
-                          d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                </svg>
-            </button>
 
             {/* Encabezado y botón "Agregar Activo" solo visible en la lista de activos */}
             {!isOnCreateOrEditPage && (
@@ -98,6 +86,7 @@ function AssetsPage() {
                 />
             </Routes>
         </div>
+        </>
     );
 }
 

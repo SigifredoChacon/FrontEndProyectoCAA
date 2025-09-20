@@ -31,11 +31,8 @@ const Footer = () => {
                     </ul>
 
                     <div className="flex space-x-4 mt-4">
-                        <a href="#" aria-label="Facebook">
+                        <a href="https://www.facebook.com/caatec" aria-label="Facebook">
                             <Facebook className="w-6 h-6 hover:text-blue-500" />
-                        </a>
-                        <a href="#" aria-label="Instagram">
-                            <Instagram className="w-6 h-6 hover:text-pink-500" />
                         </a>
                     </div>
                 </div>

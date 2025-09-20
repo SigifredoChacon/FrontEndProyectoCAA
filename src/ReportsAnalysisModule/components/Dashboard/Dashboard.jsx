@@ -10,12 +10,15 @@ import { getCubicles } from '../../../ReservationModule/services/cubicleService.
 import { getAllValorations } from '../../../ReservationModule/services/valorationService.jsx';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import Chart from 'chart.js/auto';
 import ViewReviewStars from "./ViewReviewStars.jsx";
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import './dashboard.css';
 import {useNavigate} from "react-router-dom";
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import Chart from 'chart.js/auto';
+import autoTable from "jspdf-autotable";
+import tecIMG from '../../../assets/tec.png';
+import BackButton from "../../../utils/BackButton.jsx";
 
 
 // Componente principal Dashboard para mostrar datos de reservas y valoraciones de salas o cubículos
@@ -33,6 +36,7 @@ const Dashboard = ({ type }) => {
     const [totalReservations, setTotalReservations] = useState(0);
     const dashboardRef = useRef();
     const navigate = useNavigate();
+    const [reservationsRaw, setReservationsRaw] = useState([]);
 
     // Carga las salas o cubículos en función del tipo pasado como prop
     useEffect(() => {
@@ -61,12 +65,11 @@ const Dashboard = ({ type }) => {
         } else {
             reservations = await getReservationsByRange(startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0]);
         }
-
+        setReservationsRaw(reservations);
         // Calcula el uso de cada sala o cubículo en base a las reservas
         const usageData = calculateUsage(reservations);
         const total = usageData.reduce((sum, item) => sum + item.usage, 0); // Calcula el total de reservas
         setTotalReservations(total);
-
         setReservationsData(usageData);
     };
 
@@ -128,49 +131,270 @@ const Dashboard = ({ type }) => {
 
         setComments(itemComments);
     };
-
-    // Exporta la vista del dashboard a PDF utilizando html2canvas y jsPDF
-    const exportToPDF = async () => {
-        const dashboardElement = dashboardRef.current;
-
-        // Oculta los elementos con clase no-print antes de la exportación
-        const noPrintElements = document.querySelectorAll('.no-print');
-        noPrintElements.forEach((el) => {
-            el.style.display = 'none';
-        });
-
-        const canvas = await html2canvas(dashboardElement);
-        const imgWidth = 297;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        const pdf = new jsPDF({
-            orientation: 'landscape',
-            unit: 'mm',
-            format: 'a4',
-        });
-
-        const imgData = canvas.toDataURL('image/png');
-        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-        pdf.save(`reporte_de_${type === 'room' ? 'Salas' : 'Cubículos'}.pdf`);
-
-        // Restaura la visibilidad de los elementos ocultos después de la exportación
-        noPrintElements.forEach((el) => {
-            el.style.display = '';
-        });
+    const formatDate = (d) => {
+        if (!d) return '';
+        const date = new Date(d);
+        return date.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
     };
+
+    const formatRangeText = () => {
+        if (timePeriod === 'year') {
+            const y = startDate.getFullYear();
+            return `Año ${y}`;
+        }
+        if (timePeriod === 'month') {
+            const monthName = startDate.toLocaleString('es-ES', { month: 'long' });
+            const y = startDate.getFullYear();
+            return `Mes: ${monthName} ${y}`;
+        }
+        return `Desde ${formatDate(startDate)} hasta ${formatDate(endDate)}`;
+    };
+
+    const getMonthlyCounts = (reservations, tipo) => {
+        const monthNames = [
+            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+        ];
+
+        const months = monthNames.map((name) => ({ month: name, count: 0 }));
+
+        reservations.forEach((r) => {
+            const d = new Date(r.Fecha);
+
+                if (type === "room" && r.idCubiculo === null) {
+                    months[d.getMonth()].count += 1;
+                } else if (type === "cubicle" && r.idCubiculo !== null) {
+                    months[d.getMonth()].count += 1;
+                }
+
+        });
+
+        return months;
+    };
+
+
+
+
+    const getBusiestWeekday = (reservations) => {
+        if (!reservations || reservations.length === 0) return { dayIndex: null, count: 0 };
+        const counts = [0,0,0,0,0,0,0];
+        reservations.forEach((r) => {
+            if (type === "room" && r.idCubiculo !== null) return;
+            if (type === "cubicle" && r.idCubiculo === null) return;
+            const d = new Date(r.Fecha);
+            const idx = d.getDay();
+            counts[idx] += 1;
+        });
+        const maxCount = Math.max(...counts);
+        const dayIndex = counts.indexOf(maxCount);
+        const names = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+        return { dayIndex, dayName: names[dayIndex], count: maxCount };
+    };
+
+    const getAverageReservationsPerItem = (usageData) => {
+        if (!usageData || usageData.length === 0) return 0;
+        const total = usageData.reduce((s, it) => s + it.usage, 0);
+        return (total / usageData.length);
+    };
+
+    const getOverallAverageRating = (allValorations) => {
+        if (!allValorations || allValorations.length === 0) return 0;
+        const total = allValorations.reduce((s, v) => s + (v.Nota || 0), 0);
+        return total / allValorations.length;
+    };
+
+
+    const generateReportPDF = async () => {
+        const doc = new jsPDF('p', 'mm', 'a4'); // portrait
+        const title = `Reporte de ${type === 'room' ? 'Salas' : 'Cubículos'} del sistema de reservas`;
+
+        const barra = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAdkAAABOCAYAAABsU2xNAAAABHNCSVQICAgIfAhkiAAAABl0RVh0U29mdHdhcmUAZ25vbWUtc2NyZWVuc2hvdO8Dvz4AAAAqdEVYdENyZWF0aW9uIFRpbWUAc+FiIDIwIHNlcCAyMDI1IDAyOjEzOjAxIENTVLxTj9UAAAFSSURBVHic7dVBDcAgAMBAhhoMzb+UYYKGZLlT0F+fsd5vAADHzdsBAPBXJgsAEZMFgIjJAkDEZAEgYrIAEDFZAIiYLABETBYAIiYLABGTBYCIyQJAxGQBIGKyABAxWQCImCwAREwWACImCwARkwWAiMkCQMRkASBisgAQMVkAiJgsAERMFgAiJgsAEZMFgIjJAkDEZAEgYrIAEDFZAIiYLABETBYAIiYLABGTBYCIyQJAxGQBIGKyABAxWQCImCwAREwWACImCwARkwWAiMkCQMRkASBisgAQMVkAiJgsAERMFgAiJgsAEZMFgIjJAkDEZAEgYrIAEDFZAIiYLABETBYAIiYLABGTBYCIyQJAxGQBIGKyABAxWQCImCwAREwWACImCwARkwWAiMkCQMRkASBisgAQMVkAiJgsAERMFgAiJgsAEZMFgIjJAkDEZAEgsgFaTQIYXWegHwAAAABJRU5ErkJggg=='
+        doc.addImage(barra, "PNG", 13,12, 100, 15);
+        doc.addImage(tecIMG, "PNG", 118,12, 80, 15);
+
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(16);
+        doc.text(title, 14, 37);
+        doc.setFont('helvetica', 'normal');
+
+        doc.setFontSize(11);
+        doc.text(`Periodo: ${formatRangeText()}`, 14, 45);
+        doc.text(`Fecha de generación: ${formatDate(new Date())}`, 14, 51);
+
+        let y = 59;
+
+        // 1) Tabla: uso por sala ordenado desc
+        const usageSorted = [...reservationsData].sort((a,b) => b.usage - a.usage);
+        const usageTableBody = usageSorted.map((u, idx) => [idx+1, u.item, String(u.usage)]);
+        if (usageTableBody.length > 0) {
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(13);
+            doc.text(type === 'room'?'Desglose de reservas por sala (mayor a menor):': 'Desglose de reservas por cubículo (mayor a menor):', 14, y);
+            doc.setFont('helvetica', 'normal');
+            y += 4;
+            autoTable(doc, {
+                startY: y,
+                head: [['#','Nombre','Reservas']],
+                body: usageTableBody,
+                styles: { fontSize: 9, textColor: 20 },
+                headStyles: { fillColor: [0, 40, 85], textColor: 255},
+                bodyStyles: { fillColor: [245, 249, 255] },
+                alternateRowStyles: { fillColor: [235, 242, 255] },
+                theme: 'striped',
+                margin: { left: 14, right: 14 }
+            });
+            y = doc.lastAutoTable ? doc.lastAutoTable.finalY + 6 : y + 60;
+        } else {
+            doc.text('No hay reservas en el periodo seleccionado.', 14, y);
+            y += 10;
+        }
+
+        // Promedio de reservas por sala
+        const avgReservations = getAverageReservationsPerItem(reservationsData);
+        doc.setFontSize(11);
+        doc.text(`Promedio de reservas por ${type === 'room' ? 'sala' : 'cubículo'}: ${avgReservations.toFixed(2)}`, 14, y);
+        y += 8;
+
+        // Si es año -> reservas por mes
+        if (timePeriod === 'year' && reservationsRaw.length > 0) {
+            const months = getMonthlyCounts(reservationsRaw);
+            const monthBody = months.map(m => [m.month, String(m.count)]);
+            doc.setFontSize(13);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Reservas por mes:', 14, y);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(11);
+            y += 4;
+            autoTable(doc,{
+                startY: y,
+                head: [['Mes','Reservas']],
+                body: monthBody,
+                styles: { fontSize: 9, textColor: 20 },
+                headStyles: { fillColor: [0, 40, 85], textColor: 255},
+                bodyStyles: { fillColor: [245, 249, 255] },
+                alternateRowStyles: { fillColor: [235, 242, 255] },
+                theme: 'grid',
+                margin: { left: 14, right: 14 }
+            });
+            y = doc.lastAutoTable ? doc.lastAutoTable.finalY + 6 : y + 60;
+
+            // 📌 Agregar promedio mensual aquí
+            const totalYear = months.reduce((sum, m) => sum + m.count, 0);
+            const avgMonthly = totalYear / months.length;
+            console.log(months.length);
+            doc.setFontSize(11);
+            doc.text(`Promedio de reservas por mes: ${avgMonthly.toFixed(2)}`, 14, y);
+            y += 8;
+        }
+
+        // Día de la semana con más reservas
+        const busiest = getBusiestWeekday(reservationsRaw);
+
+
+        // Tabla: promedio de valoraciones por sala/cubículo
+        const ratingsSorted = [...valorationsData].sort((a,b) => b.averageRating - a.averageRating);
+        const ratingsBody = ratingsSorted.map((r, idx) => [idx+1, r.name, r.averageRating ? r.averageRating.toFixed(2) : '0.00']);
+        doc.setFontSize(13);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`Promedio de valoraciones por ${type === 'room'? 'sala' : 'cubículo'} (mayor a menor):`, 14, y);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(11);
+        y += 4;
+        if (ratingsBody.length > 0) {
+            autoTable(doc,{
+                startY: y,
+                head: [['#','Nombre','Promedio valoración']],
+                body: ratingsBody,
+                styles: { fontSize: 9, textColor: 20 },
+                headStyles: { fillColor: [0, 40, 85], textColor: 255},
+                bodyStyles: { fillColor: [245, 249, 255] },
+                alternateRowStyles: { fillColor: [235, 242, 255] },
+                theme: 'striped',
+                margin: { left: 14, right: 14 }
+            });
+            y = doc.lastAutoTable ? doc.lastAutoTable.finalY + 6 : y + 60;
+        } else {
+            doc.text('No hay valoraciones registradas.', 14, y);
+            y += 12;
+        }
+
+        const avgOfAverages = (valorationsData.length > 0)
+            ? (valorationsData.reduce((s, v) => s + (v.averageRating || 0), 0) / valorationsData.length)
+            : 0;
+
+        doc.text(`Promedio global de las valoraciones: ${avgOfAverages.toFixed(2)}`, 14, y);
+        y += 10;
+
+        doc.setFontSize(11);
+        doc.text('Observaciones y recomendaciones:', 14, y);
+        y += 6;
+
+        const notes = [];
+
+        // 1) Día con más reservas
+        if (busiest && busiest.dayName) {
+            notes.push(`El día con más actividad fue ${busiest.dayName} (${busiest.count} reservas).`);
+        }
+
+        // 2) Sala/cubículo con mayor uso relativo
+        const totalReservations = reservationsRaw.length;
+        if (usageSorted.length > 0 && totalReservations > 0) {
+            const topUsed = usageSorted[0];
+            const pct = (topUsed.usage / totalReservations * 100).toFixed(1);
+            notes.push(`La ${type === 'room' ? 'sala' : 'cubículo'} más usada concentró el ${pct}% de las reservas (${topUsed.usage}).`);
+        }
+
+        // 3) Sala/cubículo mejor valorada considerando uso
+        if (valorationsData.length > 0) {
+            const weightedRatings = valorationsData.map(v => {
+                const usage = usageSorted.find(u => u.item === v.name)?.usage || 0;
+                return { ...v, usage };
+            }).filter(v => v.usage > 0);
+
+            if (weightedRatings.length > 0) {
+                const best = weightedRatings.sort((a,b) => b.averageRating - a.averageRating)[0];
+                notes.push(`La ${type === 'room' ? 'sala' : 'cubículo'} mejor valorada con uso significativo fue ${best.name} (promedio ${best.averageRating.toFixed(2)}).`);
+            }
+        }
+
+        // 4) Ratio de valoraciones por reserva
+        if (reservationsRaw.length > 0) {
+            const ratio = (await getAllValorations()).length / reservationsRaw.length;
+            notes.push(`El ${Math.round(ratio * 100)}% de las reservas recibieron una valoración.`);
+        }
+
+        // 5) Variabilidad mensual (desviación estándar)
+        if (timePeriod === 'year' && reservationsRaw.length > 0) {
+            const months = getMonthlyCounts(reservationsRaw);
+            const counts = months.map(m => m.count);
+            const avg = counts.reduce((s,c) => s+c,0) / counts.length;
+            const variance = counts.reduce((s,c) => s + Math.pow(c-avg,2),0) / counts.length;
+            const stddev = Math.sqrt(variance).toFixed(2);
+            notes.push(`La variabilidad mensual en las reservas (desviación estándar) fue de ${stddev}, indicando ${stddev > avg/2 ? 'altas fluctuaciones.' : 'uso relativamente estable.'}`);
+        }
+
+        // imprimir notas
+        let lineY = y;
+        notes.forEach((n) => {
+            doc.text(`- ${n}`, 16, lineY);
+            lineY += 6;
+            if (lineY > 280) {
+                doc.addPage();
+                lineY = 20;
+            }
+        });
+
+        // Guardar
+        const filename = `reporte_de_${type === 'room' ? 'salas' : 'cubiculos'}_${Date.now()}.pdf`;
+        doc.save(filename);
+    };
+
 
     return (
         <div className="container mx-auto px-4 sm:px-10 py-6" ref={dashboardRef}>
             {/* Botón de regreso */}
-            <button
-                onClick={() => navigate('/dashboard')}
-                className="hidden sm:block absolute no-print top-17 left-2 p-1 cursor-pointer"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                     stroke="currentColor" className="w-8 h-8">
-                    <path strokeLinecap="round" strokeLinejoin="round"
-                          d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                </svg>
-            </button>
+            <BackButton />
 
             {/* Título */}
             <h1 className="text-center text-xl sm:text-2xl font-bold my-4">
@@ -181,8 +405,8 @@ const Dashboard = ({ type }) => {
             <div
                 className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
                 <button className="px-4 py-2 bg-pantone-blue text-white rounded-md no-print w-full sm:w-auto hover:bg-pantone-blue/80"
-                        onClick={exportToPDF}>
-                    Exportar a PDF
+                        onClick={generateReportPDF}>
+                    Generar reporte PDF
                 </button>
                 <div className="flex justify-center space-x-2 sm:space-x-4 w-full sm:w-auto">
                     <button className="px-4 py-2 bg-pantone-blue text-white rounded-md w-full sm:w-auto hover:bg-pantone-blue/80"

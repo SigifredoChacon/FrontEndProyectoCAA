@@ -10,6 +10,7 @@ import { useAuthContext } from "../../SecurityModule/hooks/useAuthContext.js";
 import { getUserById } from "../../SecurityModule/services/userService.jsx";
 import { getFirstAvailableAsset, updateAsset } from "../services/assetService.jsx";
 import Swal from "sweetalert2";
+import BackButton from "../../utils/BackButton.jsx";
 
 registerLocale("es", es); // Registra el idioma español para el selector de fechas
 
@@ -212,6 +213,8 @@ export function AssetApplicationPage() {
 
     // Interfaz de usuario
     return (
+        <>
+        <BackButton/>
         <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100 p-4">
             <div className="flex-1 flex flex-col items-center justify-center space-y-4 lg:space-y-6 p-4">
                 <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800">{getTitle()}</h1>
@@ -250,14 +253,14 @@ export function AssetApplicationPage() {
             </div>
 
             {/* Formulario de solicitud */}
-            <div className="flex-1 flex flex-col items-center justify-center bg-gray-50 p-4 lg:p-8 space-y-4 lg:space-y-6">
-                <form onSubmit={handleSubmit} className="bg-white p-4 lg:p-8 rounded-lg shadow-lg w-full max-w-lg">
+            <div className="flex-1 flex flex-col items-center justify-center bg-gray-50 p-4 lg:p-8 space-y-4 lg:space-y-6 ">
+                <form onSubmit={handleSubmit} className="bg-white p-4 lg:p-8 rounded-lg shadow-lg w-full max-w-lg border-2 border-pantone-blue">
                     <h2 className="text-lg lg:text-xl font-semibold leading-7 text-gray-900 text-center mb-4">Formulario de Solicitud</h2>
 
                     {!pdfPreview ? (
                         <>
                             {/* Campos del formulario */}
-                            <div className="grid grid-cols-1 gap-y-4 lg:gap-y-6">
+                            <div className="grid grid-cols-1 gap-y-4 lg:gap-y-6 ">
                                 {/* Uso del Bien */}
                                 <div>
                                     <label htmlFor="usoBien" className="block text-sm font-medium text-gray-700">Uso del Bien</label>
@@ -310,15 +313,17 @@ export function AssetApplicationPage() {
 
                                 {/* Selección de fechas */}
                                 Fecha de uso:
-                                <div className="flex flex-col sm:flex-row justify-center gap-4 mb-4">
+                                <div className="flex flex-col sm:flex-row justify-center gap-4 mb-4 relative">
                                     <DatePicker selected={startDate} onChange={(date) => setStartDate(date)}
                                                 selectsStart startDate={startDate} endDate={endDate}
                                                 placeholderText="Fecha de inicio" locale="es"
-                                                className="border border-gray-300 rounded-md p-2 w-full sm:w-auto"/>
+                                                className="w-full sm:w-auto border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                    />
                                     <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} selectsEnd
                                                 startDate={startDate} endDate={endDate} placeholderText="Fecha de fin"
                                                 locale="es"
-                                                className="border border-gray-300 rounded-md p-2 w-full sm:w-auto"/>
+                                                className="w-full sm:w-auto border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                    />
                                 </div>
                             </div>
 
@@ -361,5 +366,6 @@ export function AssetApplicationPage() {
                 )}
             </div>
         </div>
+        </>
     );
 }

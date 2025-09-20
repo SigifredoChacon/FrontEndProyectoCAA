@@ -8,6 +8,7 @@ import {getResources} from "../services/resourceService.jsx";
 import UserExternalFormCreate from "../../SecurityModule/components/User/UserExternalFormCreate.jsx";
 import Swal from "sweetalert2";
 import ReservationForUser from "../components/Reservations/ReservationForUser.jsx";
+import BackButton from "../../utils/BackButton.jsx";
 
 const initialRoomReservationState = {
     fecha: '',
@@ -320,21 +321,13 @@ export function RoomReservationPage() {
     };
 
     return (
-        <div className="p-4 md:p-8 max-w-full mx-auto overflow-x-hidden">
+        <>
+        <BackButton/>
+        <div className="p-4 md:p-8 max-w-full mx-auto overflow-x-hidden mt-8">
             <Routes>
                 <Route path="createExternalUser" element={<UserExternalFormCreate onUserCreated={handleUserCreated} />} />
                 <Route path="reserveUser" element={<ReservationForUser onUserSearched={handleUserSearched} />} />
             </Routes>
-            <button
-                onClick={() => navigate('/allRoomReservation')}
-                className="hidden sm:block absolute top-20 left-2 p-2 cursor-pointer"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                     stroke="currentColor" className="w-8 h-8">
-                    <path strokeLinecap="round" strokeLinejoin="round"
-                          d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                </svg>
-            </button>
 
 
             <div className="flex flex-col md:flex-row items-start justify-start">
@@ -523,5 +516,6 @@ export function RoomReservationPage() {
                 )}
             </div>
         </div>
+        </>
     );
 }

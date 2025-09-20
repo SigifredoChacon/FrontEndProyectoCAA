@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom"; // Importar Link
 import Swal from 'sweetalert2';
 
 import RecoverPasswordModal from "../components/User/RecoverPasswordModal.jsx";
+import BackButton from "../../utils/BackButton.jsx";
 
 function LogIn() {
     const [email, setEmail] = useState('');
@@ -45,8 +46,10 @@ function LogIn() {
     }
 
     return (
+        <>
+        <BackButton/>
         <div className="min-h-screen flex items-center justify-center">
-            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg border-2 border-pantone-blue">
                 <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mb-6">
                     Iniciar Sesión
                 </h2>
@@ -133,6 +136,7 @@ function LogIn() {
                 handleClose={handleCloseModal}
             />
         </div>
+        </>
     );
 }
 

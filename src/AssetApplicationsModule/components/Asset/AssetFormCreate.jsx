@@ -108,9 +108,9 @@ function AssetFormCreate({onAssetCreated}) {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="min-h-screen flex items-center justify-center mt-16 mb-32">
             {/* Formulario de creación de activo */}
-            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg border-2 border-pantone-blue">
                 <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mb-6">Agregar Activo</h2>
 
                 <div className="grid grid-cols-1 gap-y-6">
