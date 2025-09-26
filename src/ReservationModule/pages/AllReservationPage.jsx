@@ -38,48 +38,62 @@ function AllReservationPage() {
         fetchReservations();
     }, [isModalOpen]);
 
-    const fetchReservations = async (page=1) => {
+    const parseReservationDate = (reservation) => {
+        const [hours, minutes] = reservation.HoraInicio.split(":").map(Number);
+        const date = new Date(reservation.Fecha);
+        date.setHours(hours, minutes, 0, 0);
+        return date;
+    };
+
+    const fetchReservations = async (page = 1) => {
         try {
             const data = await getReservation(page, itemsPerPage);
-            const reservationsWithDetails = await Promise.all(data.reservations.map(async (reservation) => {
 
-                let placeName = '';
-                let userName = '';
+            const reservationsWithDetails = await Promise.all(
+                data.reservations.map(async (reservation) => {
+                    let placeName = '';
+                    let userName = '';
 
-                if (reservation.idCubiculo) {
-                    const cubicle = await getCubicleById(reservation.idCubiculo);
-                    placeName = cubicle.Nombre;
-                } else if (reservation.idSala) {
-                    const room = await getNameRoomById(reservation.idSala);
-                    placeName = room.Nombre;
-                }
+                    if (reservation.idCubiculo) {
+                        const cubicle = await getCubicleById(reservation.idCubiculo);
+                        placeName = cubicle.Nombre;
+                    } else if (reservation.idSala) {
+                        const room = await getNameRoomById(reservation.idSala);
+                        placeName = room.Nombre;
+                    }
 
-                const user = await getUserById(reservation.idUsuario);
-                userName = user.Nombre;
-                return { ...reservation, placeName, userName };
-            }));
+                    const user = await getUserById(reservation.idUsuario);
+                    userName = user.Nombre;
 
+                    return { ...reservation, placeName, userName };
+                })
+            );
 
-            const today = new Date();
+            const now = new Date();
 
+            const futureReservations = reservationsWithDetails.filter(
+                (reservation) => parseReservationDate(reservation) >= now
+            );
 
-            const futureReservations = reservationsWithDetails.filter(reservation => new Date(reservation.Fecha) >= today);
-            const pastReservations = reservationsWithDetails.filter(reservation => new Date(reservation.Fecha) < today);
+            const pastReservations = reservationsWithDetails.filter(
+                (reservation) => parseReservationDate(reservation) < now
+            );
 
+            futureReservations.sort(
+                (a, b) => parseReservationDate(a) - parseReservationDate(b)
+            );
 
-            futureReservations.sort((a, b) => new Date(a.Fecha) - new Date(b.Fecha));
+            pastReservations.sort(
+                (a, b) => parseReservationDate(b) - parseReservationDate(a)
+            );
 
-
-            pastReservations.sort((a, b) => new Date(b.Fecha) - new Date(a.Fecha));
-
-            const sortedReservations = [...futureReservations, ...pastReservations];
-
-            setReservations(sortedReservations);
+            setReservations([...futureReservations, ...pastReservations]);
             setTotalPages(data.totalPages);
         } catch (error) {
             console.error('Error al obtener las reservaciones:', error);
         }
     };
+
 
 
     const handleEditPersonalReservation = (reservation) => {
@@ -98,8 +112,11 @@ function AllReservationPage() {
             title: '¡Eliminar!',
             text: '¿Estás seguro de que deseas eliminar este cubículo?',
             icon: 'warning',
-            showConfirmButton: true,
-            confirmButtonText: 'Aceptar',
+            showCancelButton: true,
+            confirmButtonColor: "#002855",
+            cancelButtonColor: "#EF3340",
+            confirmButtonText: "Eliminar",
+            cancelButtonText: "Cancelar"
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {

@@ -1,80 +1,87 @@
-import React, { useEffect, useState } from 'react';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import { getReservationByUserId, deleteReservation } from '../services/reservationService.jsx';
-import {getNameRoomById, getRoomById} from '../services/roomService.jsx';
-import {getCubicleById, lockCubicle} from '../services/cubicleService.jsx';
-import { useAuthContext } from '../../SecurityModule/hooks/useAuthContext.js';
-import { usePersonalReservation } from '../hooks/usePersonalReservation.js';
-import { getUserById } from '../../SecurityModule/services/userService.jsx';
-import { shareReservation } from '../services/reservationService.jsx';
-import {
-    Card,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeaderCell,
-    TableRow,
-    Title,
-    Badge,
-} from '@tremor/react';
-import ReservationFormEdit from '../components/Reservations/ReservationFormEdit.jsx';
-import ShareReservationModal from '../components/Reservations/ShareReservationModal.jsx';
+import React, { useEffect, useState } from "react";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { getReservationByUserId, deleteReservation, shareReservation } from "../services/reservationService.jsx";
+import { getNameRoomById } from "../services/roomService.jsx";
+import { getCubicleById } from "../services/cubicleService.jsx";
+import { useAuthContext } from "../../SecurityModule/hooks/useAuthContext.js";
+import { usePersonalReservation } from "../hooks/usePersonalReservation.js";
+import { getUserById } from "../../SecurityModule/services/userService.jsx";
+import ReservationFormEdit from "../components/Reservations/ReservationFormEdit.jsx";
+import ShareReservationModal from "../components/Reservations/ShareReservationModal.jsx";
 import Swal from "sweetalert2";
 import BackButton from "../../utils/BackButton.jsx";
+import {
+    PencilSquareIcon,
+    TrashIcon,
+    ShareIcon,
+} from "@heroicons/react/24/outline";
 
 function AllPersonalReservationPage() {
     const { user } = useAuthContext();
-    const { selectedReservation, handleEditReservation, handleReservationUpdated } = usePersonalReservation();
+    const { selectedReservation, handleEditReservation, handleReservationUpdated } =
+        usePersonalReservation();
     const navigate = useNavigate();
     const [reservations, setReservations] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [reservationToShare, setReservationToShare] = useState(null);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
+    const itemsPerPage = 6;
     const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
         fetchReservations(currentPage);
     }, [currentPage]);
 
-    const fetchReservations = async (page=1 ) => {
-        try {
-            const data = await getReservationByUserId(user, page, itemsPerPage);
-            console.log(data)
-            console.log(page, itemsPerPage)
-            const reservationsWithDetails = await Promise.all(data.reservations.map(async (reservation) => {
-                let placeName = '';
 
-                if (reservation.idCubiculo) {
-                    const cubicle = await getCubicleById(reservation.idCubiculo);
-                    placeName = cubicle.Nombre;
-                } else if (reservation.idSala) {
-                    const room = await getNameRoomById(reservation.idSala);
-                    placeName = room.Nombre;
-                }
-                return { ...reservation, placeName };
-            }));
+    const parseReservationDate = (reservation) => {
+        const [hours, minutes] = reservation.HoraInicio.split(":").map(Number);
+        const dateObj = new Date(reservation.Fecha);
+        const year = dateObj.getUTCFullYear();
+        const month = dateObj.getUTCMonth(); // 0-indexed
+        const day = dateObj.getUTCDate();
 
-            const today = new Date();
-
-
-            const upcomingReservations = reservationsWithDetails.filter(reservation => new Date(reservation.Fecha) >= today);
-            const pastReservations = reservationsWithDetails.filter(reservation => new Date(reservation.Fecha) < today);
-
-            upcomingReservations.sort((a, b) => new Date(a.Fecha) - new Date(b.Fecha));
-            pastReservations.sort((a, b) => new Date(b.Fecha) - new Date(a.Fecha));
-
-            const sortedReservations = [...upcomingReservations, ...pastReservations];
-
-            setReservations(sortedReservations);
-            setTotalPages(data.totalPages);
-        } catch (error) {
-            console.error('Error al obtener las reservaciones:', error);
-        }
+        return new Date(year, month, day, hours, minutes, 0, 0); // hora local correcta
     };
 
+
+    const fetchReservations = async (page = 1) => {
+        try {
+            const data = await getReservationByUserId(user, page, itemsPerPage);
+
+            const reservationsWithDetails = await Promise.all(
+                data.reservations.map(async (reservation) => {
+                    let placeName = "";
+                    if (reservation.idCubiculo) {
+                        const cubicle = await getCubicleById(reservation.idCubiculo);
+                        placeName = cubicle.Nombre;
+                    } else if (reservation.idSala) {
+                        const room = await getNameRoomById(reservation.idSala);
+                        placeName = room.Nombre;
+                    }
+                    return { ...reservation, placeName };
+                })
+            );
+
+            const now = new Date();
+            console.log("Current Date and Time:", now);
+
+            const upcoming = reservationsWithDetails.filter(
+                (r) => parseReservationDate(r) >= now
+            );
+            const past = reservationsWithDetails.filter(
+                (r) => parseReservationDate(r) < now
+            );
+
+            upcoming.sort((a, b) => parseReservationDate(a) - parseReservationDate(b));
+            past.sort((a, b) => parseReservationDate(b) - parseReservationDate(a));
+
+            setReservations([...upcoming, ...past]);
+            setTotalPages(data.totalPages);
+        } catch (error) {
+            console.error("Error al obtener las reservaciones:", error);
+        }
+    };
 
 
     const handleEditPersonalReservation = (reservation) => {
@@ -84,35 +91,27 @@ function AllPersonalReservationPage() {
 
     const handleReservationCreated = () => {
         handleReservationUpdated();
-        navigate('/personalReservations');
+        navigate("/personalReservations");
     };
 
     const handleDeleteReservation = async (idReservacion) => {
         Swal.fire({
-            title: '¡Eliminar!',
-            text: '¿Estás seguro de que deseas eliminar esta reserva?',
-            icon: 'warning',
-            showConfirmButton: true,
-            confirmButtonText: 'Aceptar',
+            title: "¿Eliminar reserva?",
+            text: "Esta acción no se puede deshacer",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#002855",
+            cancelButtonColor: "#EF3340",
+            confirmButtonText: "Eliminar",
+            cancelButtonText: "Cancelar",
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
                     await deleteReservation(idReservacion);
-                    setReservations(reservations.filter((reservation) => reservation.idReservacion !== idReservacion));
-
-                    await Swal.fire({
-                        title: '¡Eliminado!',
-                        text: 'Se ha eliminado la reservación con éxito',
-                        icon: 'success',
-                        timer: 1000,
-                        timerProgressBar: true,
-                        showConfirmButton: false,
-                        willClose: () => {
-                            navigate('/personalReservations');
-                        }
-                    });
-
-                    navigate('/personalReservations');
+                    setReservations(
+                        reservations.filter((r) => r.idReservacion !== idReservacion)
+                    );
+                    Swal.fire("Eliminada", "La reservación ha sido eliminada.", "success");
                 } catch (error) {
                     console.error("Error al eliminar la reservación:", error);
                 }
@@ -132,7 +131,6 @@ function AllPersonalReservationPage() {
 
     const handleShareReservation = async (emails) => {
         if (!reservationToShare) return;
-
         try {
             const userData = await getUserById(user);
             const userName = userData.Nombre;
@@ -149,22 +147,10 @@ function AllPersonalReservationPage() {
 
             await shareReservation(reservationData);
 
-            Swal.fire({
-                title: '¡Se compartió la reservación de manera exitosa!',
-                icon: 'success',
-                showConfirmButton: false,
-                timer: 1500,
-                timerProgressBar: true,
-            });
+            Swal.fire("¡Compartida!", "La reservación se envió con éxito.", "success");
             handleCloseModal();
         } catch (error) {
-            Swal.fire({
-                title: '¡Error!',
-                text: 'No se digitaron los correos a los que compartir la reservación',
-                icon: 'error',
-                showConfirmButton: true,
-                confirmButtonText: 'Aceptar',
-            });
+            Swal.fire("Error", "No se ingresaron correos válidos.", "error");
         }
     };
 
@@ -176,140 +162,159 @@ function AllPersonalReservationPage() {
     };
 
     const location = useLocation();
-    const isOnCreateOrEditPage = location.pathname.startsWith("/personalReservations/edit/");
+    const isOnCreateOrEditPage = location.pathname.startsWith(
+        "/personalReservations/edit/"
+    );
 
     return (
         <>
-        <BackButton/>
-        <div style={{ maxWidth: '1800px', margin: '0 auto', padding: '0 20px' }}>
-
-            {!isOnCreateOrEditPage && (
-                <>
-                <h1 style={{ textAlign: 'center', fontSize: '32px', fontWeight: 'bold', marginTop: '50px', marginBottom: '60px' }}>
-                    Mis Reservaciones
-                </h1>
-
-            <Card style={{ border: '2px solid #002855', borderRadius: '12px', padding: '16px', marginBottom: '200px' }}>
-                <Title>
-                    Mis Reservaciones
-                    <Badge style={{
-                        marginLeft: '8px',
-                        backgroundColor: '#00000010',
-                        color: '#327aff',
-                        borderRadius: '17px',
-                        padding: '3px 7px',
-                        fontWeight: 'bold',
-                        fontSize: '1rem',
-                    }}>
-                        {reservations.length}
-                    </Badge>
-                </Title>
-
-
+            <BackButton />
+            <div className="max-w-7xl mx-auto px-4">
                 {!isOnCreateOrEditPage && (
                     <>
-                        <Table className="mt-8">
-                            <TableHead>
-                                <TableRow>
-                                    <TableHeaderCell>Fecha</TableHeaderCell>
-                                    <TableHeaderCell>Hora Inicio</TableHeaderCell>
-                                    <TableHeaderCell>Hora Fin</TableHeaderCell>
-                                    <TableHeaderCell>Lugar</TableHeaderCell>
-                                    <TableHeaderCell>Observaciones</TableHeaderCell>
-                                    <TableHeaderCell>Refrigerio</TableHeaderCell>
-                                    <TableHeaderCell>Recursos</TableHeaderCell>
-                                    <TableHeaderCell>Acciones</TableHeaderCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {reservations.map((reservation) => (
-                                    <TableRow key={reservation.idReservacion}>
-                                        <TableCell>{new Date(reservation.Fecha).toLocaleDateString('es-ES', {
-                                            day: 'numeric',
-                                            month: 'long',
-                                            year: 'numeric'
-                                        })}</TableCell>
-                                        <TableCell>{reservation.HoraInicio}</TableCell>
-                                        <TableCell>{reservation.HoraFin}</TableCell>
-                                        <TableCell>{reservation.placeName}</TableCell>
-                                        <TableCell>{reservation.idCubiculo ? 'N/A' : reservation.Observaciones}</TableCell>
-                                        <TableCell>{reservation.idCubiculo ? 'N/A' : (reservation.Refrigerio ? 'Sí' : 'No')}</TableCell>
-                                        <TableCell>{reservation.idCubiculo ? 'N/A' : reservation.recursos?.map(recurso => recurso.NombreRecurso).join(', ')}</TableCell>
-                                        <TableCell>
-                                            {new Date(reservation.Fecha) > new Date() ||
-                                            (new Date(reservation.Fecha).toDateString() === new Date().toDateString() &&
-                                                new Date().getHours() < parseInt(reservation.HoraInicio.split(':')[0])) ? (
+                        <h1 className="text-center text-3xl font-bold mt-12 mb-12 text-gray-800">
+                            Mis Reservaciones
+                        </h1>
+
+                        {/* Grid de tarjetas */}
+                        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-12">
+                            {reservations.map((reservation) => {
+                                const isUpcoming =
+                                    new Date(reservation.Fecha) > new Date() ||
+                                    (new Date(reservation.Fecha).toDateString() ===
+                                        new Date().toDateString() &&
+                                        new Date().getHours() <
+                                        parseInt(reservation.HoraInicio.split(":")[0]));
+
+                                return (
+                                    <div
+                                        key={reservation.idReservacion}
+                                        className="bg-white shadow-md hover:shadow-lg transition rounded-xl p-6 border border-gray-200 flex flex-col justify-between"
+                                    >
+                                        <div>
+                                            <h2 className="text-lg font-semibold text-pantone-blue mb-2">
+                                                {reservation.placeName}
+                                            </h2>
+                                            <p className="text-gray-600">
+                                                📅{" "}
+                                                {new Date(reservation.Fecha).toLocaleDateString("es-ES", {
+                                                    day: "numeric",
+                                                    month: "long",
+                                                    year: "numeric",
+                                                })}
+                                            </p>
+                                            <p className="text-gray-600">
+                                                🕒 {reservation.HoraInicio} - {reservation.HoraFin}
+                                            </p>
+                                            <p className="mt-2 text-sm text-gray-500">
+                                                {reservation.idCubiculo
+                                                    ? "Cubículo reservado"
+                                                    : reservation.Observaciones || "Sin observaciones"}
+                                            </p>
+                                            {!reservation.idCubiculo && (
+                                                <div className="mt-2 text-sm">
+                                                    <p>
+                                                        <span className="font-medium">Refrigerio: </span>
+                                                        {reservation.Refrigerio ? "Sí" : "No"}
+                                                    </p>
+                                                    <p>
+                                                        <span className="font-medium">Recursos: </span>
+                                                        {reservation.recursos?.length > 0
+                                                            ? reservation.recursos
+                                                                .map((r) => r.NombreRecurso)
+                                                                .join(", ")
+                                                            : "N/A"}
+                                                    </p>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Acciones */}
+                                        <div className="flex justify-end gap-3 mt-4">
+                                            {isUpcoming ? (
                                                 <>
                                                     {reservation.idSala && (
-                                                        <button onClick={() => handleEditPersonalReservation(reservation)} style={{ marginRight: '8px' }}>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-                                                                <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712Z" />
-                                                                <path d="M19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
-                                                                <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
-                                                            </svg>
+                                                        <button
+                                                            onClick={() => handleEditPersonalReservation(reservation)}
+                                                            className="text-blue-600 hover:scale-150 transition-transform"
+                                                        >
+                                                            <PencilSquareIcon className="h-5 w-5" />
                                                         </button>
                                                     )}
-                                                    <button onClick={() => handleDeleteReservation(reservation.idReservacion)} style={{ marginRight: '8px' }}>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                             viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
-                                                             className="size-6">
-                                                            <path strokeLinecap="round" strokeLinejoin="round"
-                                                                  d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
-                                                        </svg>
+                                                    <button
+                                                        onClick={() => handleDeleteReservation(reservation.idReservacion)}
+                                                        className="text-red-600 hover:scale-150 transition-transform"
+                                                    >
+                                                        <TrashIcon className="h-5 w-5" />
                                                     </button>
-                                                    <button onClick={() => handleOpenModal(reservation)}>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                             fill="currentColor" className="size-6">
-                                                            <path fillRule="evenodd"
-                                                                  d="M15.75 4.5a3 3 0 1 1 .825 2.066l-8.421 4.679a3.002 3.002 0 0 1 0 1.51l8.421 4.679a3 3 0 1 1-.729 1.31l-8.421-4.678a3 3 0 1 1 0-4.132l8.421-4.679a3 3 0 0 1-.096-.755Z"
-                                                                  clipRule="evenodd"/>
-                                                        </svg>
+                                                    <button
+                                                        onClick={() => handleOpenModal(reservation)}
+                                                        className="text-green-600 hover:scale-150 transition-transform"
+                                                    >
+                                                        <ShareIcon className="h-5 w-5" />
                                                     </button>
                                                 </>
                                             ) : (
-                                                <span>Acciones no disponibles</span>
+                                                <span className="text-xs text-gray-400">
+      Acciones no disponibles
+    </span>
                                             )}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
 
-                        {/* Paginador */}
-                        <div className="flex justify-center items-center mt-4 space-x-2">
+                        {/* Paginación */}
+                        <div className="flex justify-center items-center mt-8 space-x-2 mb-32">
                             <button
                                 onClick={() => handlePageChange(currentPage - 1)}
                                 disabled={currentPage === 1}
-                                className={`px-3 py-1 rounded ${currentPage === 1 ? 'bg-gray-300' : 'bg-pantone-blue text-white'}`}
+                                className={`px-4 py-2 rounded-lg ${
+                                    currentPage === 1
+                                        ? "bg-gray-300 text-gray-600"
+                                        : "bg-pantone-blue text-white hover:bg-blue-800"
+                                }`}
                             >
                                 Anterior
                             </button>
-                            <span>Página {currentPage} de {totalPages}</span>
+                            <span className="text-gray-700">
+                Página {currentPage} de {totalPages}
+              </span>
                             <button
                                 onClick={() => handlePageChange(currentPage + 1)}
                                 disabled={currentPage === totalPages}
-                                className={`px-3 py-1 rounded ${currentPage === totalPages ? 'bg-gray-300' : 'bg-pantone-blue text-white'}`}
+                                className={`px-4 py-2 rounded-lg ${
+                                    currentPage === totalPages
+                                        ? "bg-gray-300 text-gray-600"
+                                        : "bg-pantone-blue text-white hover:bg-blue-800"
+                                }`}
                             >
                                 Siguiente
                             </button>
                         </div>
                     </>
                 )}
-            </Card>
-                </>
-            )}
-            <Routes>
-                <Route
-                    path="edit/:id"
-                    element={<ReservationFormEdit selectedPersonalReservation={selectedReservation} onReservationUpdated={handleReservationCreated} />}
+
+
+                <Routes>
+                    <Route
+                        path="edit/:id"
+                        element={
+                            <ReservationFormEdit
+                                selectedPersonalReservation={selectedReservation}
+                                onReservationUpdated={handleReservationCreated}
+                            />
+                        }
+                    />
+                </Routes>
+
+                <ShareReservationModal
+                    open={isModalOpen}
+                    handleClose={handleCloseModal}
+                    handleShare={handleShareReservation}
                 />
-            </Routes>
-            <ShareReservationModal
-                open={isModalOpen}
-                handleClose={handleCloseModal}
-                handleShare={handleShareReservation}
-            />
-        </div>
+            </div>
         </>
     );
 }
