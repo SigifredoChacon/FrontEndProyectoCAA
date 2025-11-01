@@ -64,7 +64,6 @@ function AllPersonalReservationPage() {
             );
 
             const now = new Date();
-            console.log("Current Date and Time:", now);
 
             const upcoming = reservationsWithDetails.filter(
                 (r) => parseReservationDate(r) >= now

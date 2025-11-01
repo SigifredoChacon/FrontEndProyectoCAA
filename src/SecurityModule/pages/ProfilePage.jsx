@@ -158,7 +158,7 @@ function ProfilePage() {
                                 </p>
                             </div>
                             <div>
-                                <label className="block text-lg font-medium text-gray-700">Teléfono 2</label>
+                                <label className="block text-lg font-medium text-gray-700">Teléfono secundario</label>
                                 <p className="mt-2 bg-gray-100 p-3 rounded text-lg">
                                     {userLog?.Telefono2 ? userLog.Telefono2 : "N/A"}
                                 </p>

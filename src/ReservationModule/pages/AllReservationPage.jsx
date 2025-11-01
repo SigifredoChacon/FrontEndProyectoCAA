@@ -33,6 +33,7 @@ function AllReservationPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
     const [totalPages, setTotalPages] = useState(1);
+    const [totalReservations, setTotalReservations] = useState(0);
 
     useEffect(() => {
         fetchReservations();
@@ -89,6 +90,7 @@ function AllReservationPage() {
 
             setReservations([...futureReservations, ...pastReservations]);
             setTotalPages(data.totalPages);
+            setTotalReservations(data.totalReservations)
         } catch (error) {
             console.error('Error al obtener las reservaciones:', error);
         }
@@ -208,7 +210,7 @@ function AllReservationPage() {
 
             <Card style={{border: '2px solid #002855', borderRadius: '12px', padding: '16px', marginBottom: '200px'}}>
                 <Title>
-                    Reservaciones Generales
+                    Reservaciones:
                     <Badge style={{
                         marginLeft: '8px',
                         backgroundColor: '#00000010',
@@ -218,7 +220,7 @@ function AllReservationPage() {
                         fontWeight: 'bold',
                         fontSize: '1rem',
                     }}>
-                        {reservations.length}
+                        {totalReservations}
                     </Badge>
                 </Title>
 

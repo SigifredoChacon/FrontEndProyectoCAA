@@ -133,7 +133,7 @@ function HomePage() {
                 <p className="text-gray-700 text-lg md:text-xl">
                     Este sistema está diseñado para estudiantes y profesores del Centro Académico de Alajuela. Aquí puedes
                     reservar salas para reuniones, cubículos para trabajo individual y solicitar
-                    recursos tecnológicos. No te compliques y asegura tu espacio al instante.
+                    recursos de la institución. No te compliques y asegura tu espacio al instante.
                 </p>
             </section>
 
@@ -212,7 +212,7 @@ function HomePage() {
                         </div>
                         <div className="p-6 shadow rounded-xl bg-gray-50">
                             <h3 className="text-xl font-semibold mb-2">3. Reserva</h3>
-                            <p className="text-gray-600">Confirma tu reservación y recibe confirmación.</p>
+                            <p className="text-gray-600">Haz tu reservación y recibe confirmación.</p>
                         </div>
                     </div>
                 </div>
@@ -248,7 +248,7 @@ function HomePage() {
                                 onClick={handleCloseValoration}
                                 className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
                             >
-                                Cancelar
+                                No responder
                             </button>
                         </div>
                     </div>
