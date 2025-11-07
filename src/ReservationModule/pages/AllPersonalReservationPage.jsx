@@ -168,7 +168,7 @@ function AllPersonalReservationPage() {
     return (
         <>
             <BackButton />
-            <div style={{maxWidth: '1800px', margin: '0 auto', padding: '0 20px'}}>
+            <div className="max-w-7xl mx-auto px-4">
                 {!isOnCreateOrEditPage && (
                     <>
                         <h1 className="text-center text-3xl font-bold mt-12 mb-12 text-gray-800">
@@ -296,17 +296,7 @@ function AllPersonalReservationPage() {
                 )}
 
 
-                <Routes>
-                    <Route
-                        path="edit/:id"
-                        element={
-                            <ReservationFormEdit
-                                selectedPersonalReservation={selectedReservation}
-                                onReservationUpdated={handleReservationCreated}
-                            />
-                        }
-                    />
-                </Routes>
+
 
                 <ShareReservationModal
                     open={isModalOpen}
@@ -314,6 +304,18 @@ function AllPersonalReservationPage() {
                     handleShare={handleShareReservation}
                 />
             </div>
+
+            <Routes>
+                <Route
+                    path="edit/:id"
+                    element={
+                        <ReservationFormEdit
+                            selectedPersonalReservation={selectedReservation}
+                            onReservationUpdated={handleReservationCreated}
+                        />
+                    }
+                />
+            </Routes>
         </>
     );
 }

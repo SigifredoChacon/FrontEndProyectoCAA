@@ -193,7 +193,7 @@ function CubiclesReservationPage() {
             timerProgressBar: true,
             showConfirmButton: false,
             willClose: () => {
-                navigate('/');
+                navigate('/personalReservations');
             }
         });
 
@@ -251,7 +251,6 @@ function CubiclesReservationPage() {
     const handleUserCreated = (idExternal) => {
         if (idExternal !== undefined) {
             idExternalRef.current = parseInt(idExternal, 10);
-            console.log("ID externo recibido y almacenado en la referencia:", idExternalRef.current);
 
             setReservation(prevReservation => ({
                 ...prevReservation,
@@ -295,115 +294,203 @@ function CubiclesReservationPage() {
 
     return (
         <>
-        <BackButton/>
-        <div className="max-w-screen-2xl mx-auto px-5" style={{ paddingTop: "50px" }}>
+            <BackButton />
 
 
-            <div className="flex flex-col md:flex-row h-screen p-5">
+            <div className="mx-auto w-full max-w-screen-2xl px-4 sm:px-6 lg:px-8 mt-12 mb-28">
+
+
                 <Routes>
-                    <Route path="createExternalUser"
-                           element={<UserExternalFormCreate onUserCreated={handleUserCreated}/>}/>
-                    <Route path="reserveUser" element={<ReservationForUser onUserSearched={handleUserSearched}/>}/>
+                    <Route path="createExternalUser" element={<UserExternalFormCreate onUserCreated={handleUserCreated} />} />
+                    <Route path="reserveUser" element={<ReservationForUser onUserSearched={handleUserSearched} />} />
                 </Routes>
 
 
-                <div
-                    className="w-full md:w-1/5 md:mr-5 bg-gray-100 p-3 rounded-lg shadow-lg flex flex-col overflow-hidden md:h-[90vh]">
-                    <h3 className="text-center text-lg mb-5 md:text-left whitespace-nowrap sticky top-0 bg-gray-100 z-10">
-                        Cubículos Disponibles
-                    </h3>
-                    <ul className="flex flex-row md:flex-col list-none p-0 m-0 space-x-3 md:space-x-0 md:space-y-2 overflow-y-auto">
-                        {cubicles.map((cubicle) => {
-                            return (
-                                <li
-                                    key={cubicle.idCubiculo}
-                                    onClick={() => handleCubicleSelect(cubicle)}
-                                    className={`relative p-3 cursor-pointer rounded h-28 md:h-24 ${selectedCubicleR?.idCubiculo === cubicle.idCubiculo ? 'bg-gray-300 shadow-inner' : 'bg-white'}`}
-                                >
-                    <span className="block text-center font-medium mb-2 md:mb-0.5">
-                        {cubicle.Nombre}
-                    </span>
-                                    <span
-                                        className="absolute bottom-0 left-0 right-0 text-xs md:text-sm text-gray-600 px-2 py-1 text-center w-full">
-                        {cubicle.Ventana ? 'Con ventana' : 'Sin ventana'}
-                    </span>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
-
-
-                {/* Contenedor del calendario */}
-                <div className="w-full md:w-4/5 flex flex-col bg-white p-5 rounded-lg shadow-lg flex-grow min-h-min">
-                    <div
-                        className="flex flex-col md:flex-row justify-between items-center mb-5 space-y-2 md:space-y-0 md:space-x-2">
-                        <h2 className="text-xl m-0 flex-grow">
-                            {selectedCubicleR ? `Reservar Cubículo: ${selectedCubicleR.Nombre}` : 'Seleccionar Cubículo'}
+                <div className="xl:hidden mb-6">
+                    <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-4">
+                        <h2 className="text-lg font-bold text-pantone-blue mb-4 text-center">
+                            Cubículos Disponibles
                         </h2>
-                        <div className="flex flex-col md:flex-row w-full md:w-auto space-y-2 md:space-y-0 md:space-x-2">
-                            {(!(role === 'Estudiante' || role === 'Externo' || role === 'Profesor' || role === 'AdministradorSolicitudes')) && (
-                                <button
-                                    onClick={handleCreateUserReservation}
-                                    className="px-4 py-2 bg-pantone-blue text-white border-none rounded cursor-pointer w-full md:w-auto hover:bg-pantone-blue/80"
-                                >
-                                    Reservar por Usuario
-                                </button>
-                            )}
-                            {(!(role === 'Estudiante' || role === 'Externo' || role === 'Profesor' || role === 'AdministradorSolicitudes')) && (
-                                <button
-                                    onClick={handleCreateExternalReservation}
-                                    className="px-4 py-2 bg-pantone-blue text-white border-none rounded cursor-pointer w-full md:w-auto hover:bg-pantone-blue/80"
-                                >
-                                    Reservar Externo
-                                </button>
-                            )}
-                            <button
-                                onClick={handleCubicleReservationCreated}
-                                className="px-4 py-2 bg-pantone-red text-white border-none rounded cursor-pointer w-full md:w-auto hover:bg-pantone-red/80"
-                            >
-                                Cancelar
-                            </button>
-                            <button
-                                onClick={handleSubmit}
-                                className="px-4 py-2 bg-pantone-blue text-white border-none rounded cursor-pointer w-full md:w-auto hover:bg-pantone-blue/80"
-                            >
-                                Reservar
-                            </button>
+
+
+                        <div className="overflow-x-auto -mx-4 px-4">
+                            <div className="flex gap-3 pb-2" style={{ minWidth: 'min-content' }}>
+                                {cubicles.map((cubicle) => (
+                                    <button
+                                        key={cubicle.idCubiculo}
+                                        onClick={() => handleCubicleSelect(cubicle)}
+                                        className={`
+                                    flex-shrink-0 w-28 p-3 rounded-xl border-2 transition-all duration-200
+                                    ${selectedCubicleR?.idCubiculo === cubicle.idCubiculo
+                                            ? 'border-pantone-blue bg-pantone-blue/10 shadow-md'
+                                            : 'border-slate-200 bg-white hover:border-pantone-blue/50'
+                                        }
+                                `}
+                                    >
+                                        <div className="flex flex-col items-center gap-2">
+                                    <span className="font-semibold text-pantone-blue text-sm text-center">
+                                        {cubicle.Nombre}
+                                    </span>
+                                            <span className="text-xs text-slate-600 text-center">
+                                        {cubicle.Ventana ? 'Con ventana' : 'Sin ventana'}
+                                    </span>
+                                        </div>
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </div>
-
-                    {/* Contenido del calendario */}
-                    <div className="flex-grow mt-5 md:mt-0">
-                        {selectedCubicleR ? (
-                            <Calendar
-                                key={calendarKey}
-                                onReservationsChange={handleReservationsChange}
-                                selectedCubicleId={selectedCubicleR.idCubiculo}
-                            />
-                        ) : (
-                            <p>Por favor, selecciona un cubículo para continuar.</p>
-                        )}
-                    </div>
                 </div>
 
-                {/* Modal de creación de usuario externo */}
-                {isModalOpen && (
-                    <div
-                        className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <UserExternalFormCreate onUserCreated={handleUserCreated} onCancel={handleCloseModal}/>
-                    </div>
-                )}
 
-                {/* Modal de búsqueda de usuario */}
-                {isModalUserSearchedOpen && (
-                    <div
-                        className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <ReservationForUser onUserSearched={handleUserSearched} onCancel={handleCloseModalUser}/>
-                    </div>
-                )}
+                <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+
+
+                    <aside className="hidden xl:block xl:col-span-4">
+                        <div className="sticky top-20 rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+
+                            <div className="bg-gradient-to-r from-pantone-blue to-pantone-blue/90 px-5 py-4">
+                                <h2 className="text-xl sm:text-2xl font-bold text-white">
+                                    Cubículos Disponibles
+                                </h2>
+                            </div>
+
+
+                            <div className="p-4 max-h-[600px] overflow-y-auto">
+                                <div className="space-y-3">
+                                    {cubicles.map((cubicle) => (
+                                        <button
+                                            key={cubicle.idCubiculo}
+                                            onClick={() => handleCubicleSelect(cubicle)}
+                                            className={`
+                                        w-full p-4 rounded-xl border-2 transition-all duration-200
+                                        ${selectedCubicleR?.idCubiculo === cubicle.idCubiculo
+                                                ? 'border-pantone-blue bg-pantone-blue/10 shadow-md'
+                                                : 'border-slate-200 bg-white hover:border-pantone-blue/50 hover:shadow-sm'
+                                            }
+                                    `}
+                                        >
+                                            <div className="flex flex-col items-center gap-2">
+                                        <span className="font-semibold text-pantone-blue text-lg">
+                                            {cubicle.Nombre}
+                                        </span>
+                                                <span className={`
+                                            inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium
+                                            ${cubicle.Ventana
+                                                    ? 'bg-green-100 text-green-700'
+                                                    : 'bg-slate-100 text-slate-600'
+                                                }
+                                        `}>
+                                            {cubicle.Ventana ? (
+                                                <>
+                                                    <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
+                                                    </svg>
+                                                    Con ventana
+                                                </>
+                                            ) : (
+                                                'Sin ventana'
+                                            )}
+                                        </span>
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+
+
+                    <section className="xl:col-span-8">
+                        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-4 sm:p-6">
+
+
+                            <div className="mb-6">
+                                <h1 className="text-2xl sm:text-3xl font-extrabold text-pantone-blue">
+                                    {selectedCubicleR
+                                        ? `Reservar: ${selectedCubicleR.Nombre}`
+                                        : 'Seleccionar Cubículo'
+                                    }
+                                </h1>
+                            </div>
+
+
+                            {selectedCubicleR ? (
+                                <div className="mb-6">
+                                    <Calendar
+                                        key={calendarKey}
+                                        onReservationsChange={handleReservationsChange}
+                                        selectedCubicleId={selectedCubicleR.idCubiculo}
+                                    />
+                                </div>
+                            ) : (
+                                <div className="flex items-center justify-center py-20">
+                                    <div className="text-center">
+                                        <svg className="w-16 h-16 mx-auto text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        </svg>
+                                        <p className="text-slate-500 text-lg">
+                                            Por favor, selecciona un cubículo para continuar
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+
+
+                            <div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-6 border-t border-slate-200">
+                                {!(role === 'Estudiante' || role === 'Externo' || role === 'Profesor' || role === 'AdministradorSolicitudes') && (
+                                    <>
+                                        <button
+                                            onClick={handleCreateUserReservation}
+                                            className="w-full sm:w-auto rounded-lg bg-pantone-blue px-4 py-2.5 text-white hover:bg-pantone-blue/90 transition font-medium"
+                                        >
+                                            Reservar por Usuario
+                                        </button>
+                                        <button
+                                            onClick={handleCreateExternalReservation}
+                                            className="w-full sm:w-auto rounded-lg bg-pantone-blue px-4 py-2.5 text-white hover:bg-pantone-blue/90 transition font-medium"
+                                        >
+                                            Reservar Externo
+                                        </button>
+                                    </>
+                                )}
+
+                                <button
+                                    onClick={handleCubicleReservationCreated}
+                                    className="w-full sm:w-auto rounded-lg bg-pantone-red px-4 py-2.5 text-white hover:bg-pantone-red/90 transition font-medium"
+                                >
+                                    Cancelar
+                                </button>
+
+                                <button
+                                    onClick={handleSubmit}
+                                    disabled={!selectedCubicleR}
+                                    className="w-full sm:w-auto rounded-lg bg-pantone-blue px-4 py-2.5 text-white hover:bg-pantone-blue/90 transition font-medium disabled:bg-slate-300 disabled:cursor-not-allowed"
+                                >
+                                    Reservar
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
-        </div>
+
+
+            {isModalOpen && (
+                <div className="fixed inset-0 z-[1000] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div className="w-full max-w-2xl">
+                        <UserExternalFormCreate onUserCreated={handleUserCreated} onCancel={handleCloseModal} />
+                    </div>
+                </div>
+            )}
+
+            {isModalUserSearchedOpen && (
+                <div className="fixed inset-0 z-[1000] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div className="w-full max-w-2xl">
+                        <ReservationForUser onUserSearched={handleUserSearched} onCancel={handleCloseModalUser} />
+                    </div>
+                </div>
+            )}
         </>
     );
 

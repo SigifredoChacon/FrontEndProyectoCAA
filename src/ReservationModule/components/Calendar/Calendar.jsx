@@ -112,52 +112,86 @@ const Calendar = ({ selectedCubicleId, onReservationsChange }) => {
     };
 
     return (
-        <div className="calendar max-w-full p-4">
-            <div className="mb-5 flex flex-col items-center">
-                <label className="text-lg mb-2 font-bold text-gray-800">
-                    Selecciona una fecha:
-                </label>
+        <div className="calendar w-full">
+
+            <div className="flex justify-center mb-5">
                 <input
                     type="date"
                     value={format(selectedDate, 'yyyy-MM-dd')}
                     onChange={handleDateChange}
                     min={format(new Date(), 'yyyy-MM-dd')}
-                    className="p-2 text-base rounded border border-gray-300 bg-white text-gray-800 focus:border-green-500 focus:outline-none"
+                    className="
+                inline-flex items-center rounded-lg border border-slate-300 bg-white
+                px-3 py-2 text-sm shadow-sm
+                focus:border-pantone-blue focus:ring-pantone-blue
+            "
                     disabled={reservations.length > 0 && selectedDay !== null}
                 />
             </div>
 
-            <div className="overflow-x-auto">
-                <table className="w-full min-w-[600px] border-collapse bg-gray-100 rounded-lg shadow-md mt-5 text-xs sm:text-sm lg:text-base">
-                    <thead>
+
+            <div className="w-full overflow-hidden">
+                <table className="w-full border-separate border-spacing-0 rounded-2xl overflow-hidden bg-white shadow-sm text-[10px] sm:text-xs">
+                    <thead className="sticky top-0 z-10">
                     <tr>
-                        <th></th>
+
+                        <th className="w-12 sm:w-14 bg-white" />
                         {daysOfWeek.map((day, index) => (
                             <th
                                 key={index}
-                                className="p-3 border border-gray-200 bg-pantone-blue text-white font-bold uppercase text-center"
+                                className="
+                                px-1 py-2 sm:px-2 sm:py-3
+                                border border-pantone-blue/70
+                                bg-pantone-blue text-white font-bold uppercase text-center
+                                first:rounded-tl-2xl last:rounded-tr-2xl align-middle
+                            "
                             >
-                                {format(day, 'EEEE dd/MM', { locale: es })}
+                                {/* Solo día y fecha numérica para ahorrar espacio */}
+                                <div className="flex flex-col gap-0.5">
+                                <span className="text-[9px] sm:text-[10px] opacity-90">
+                                    {format(day, 'EEE', { locale: es })}
+                                </span>
+                                    <span className="text-xs sm:text-sm font-bold">
+                                    {format(day, 'dd/MM', { locale: es })}
+                                </span>
+                                </div>
                             </th>
                         ))}
                     </tr>
                     </thead>
+
                     <tbody>
                     {timeSlots.map((time, rowIndex) => (
-                        <tr key={rowIndex}>
-                            <td className="p-3 border border-gray-200 font-bold bg-gray-200 text-center">
+                        <tr key={rowIndex} className="even:bg-slate-50">
+
+                            <td className="
+                            sticky left-0 z-10 bg-white even:bg-slate-50
+                            text-center font-semibold text-slate-700
+                            px-1 py-1.5 sm:px-2 sm:py-2 border border-slate-200
+                            text-[10px] sm:text-xs
+                        ">
                                 {time}
                             </td>
+
                             {daysOfWeek.map((day, colIndex) => {
                                 const isPastDate = day < startOfDay(new Date());
+                                const state = isReserved(day, time);
+
                                 return (
-                                    <td key={colIndex} className="p-3 border border-gray-200 text-center">
+                                    <td
+                                        key={colIndex}
+                                        className="px-0.5 py-1 sm:px-1 sm:py-1.5 text-center align-middle border border-slate-200"
+                                    >
                                         <TimeSlot
                                             day={day}
                                             time={time}
-                                            isReserved={isReserved(day, time)}
+                                            isReserved={state}
                                             onReserve={handleReserve}
-                                            disabled={isReserved(day, time) === 'reserved' || isPastDate || (selectedDay && selectedDay.getTime() !== day.getTime())}
+                                            disabled={
+                                                state === 'reserved' ||
+                                                isPastDate ||
+                                                (selectedDay && selectedDay.getTime() !== day.getTime())
+                                            }
                                         />
                                     </td>
                                 );

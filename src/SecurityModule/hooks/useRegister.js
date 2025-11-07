@@ -21,11 +21,12 @@ export const useRegister = () => {
 
             const errorData = err.response?.data?.message;
             if (errorData && Array.isArray(errorData)) {
-                const tooBigError = errorData.find(
-                    (msg) => msg.code === "too_big" && msg.path.includes("cedulaCarnet")
+
+                const invalidID = errorData.find(
+                    (msg) => msg.code === "too_small" && msg.path.includes("cedulaCarnet")
                 );
-                if (tooBigError) {
-                    setError("El número de cédula es demasiado grande.");
+                if (invalidID) {
+                    setError("El número de cédula es invalido");
                 } else {
                     setError("Ocurrió un error al registrar el usuario.");
                 }

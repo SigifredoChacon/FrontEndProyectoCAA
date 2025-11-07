@@ -47,95 +47,113 @@ function LogIn() {
 
     return (
         <>
-        <BackButton/>
-        <div className="min-h-screen flex items-center justify-center">
-            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg border-2 border-pantone-blue">
-                <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mb-6">
-                    Iniciar Sesión
-                </h2>
+            <BackButton/>
+            <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+                <div className="w-full max-w-md">
 
-                {/* Texto y enlace para crear una cuenta */}
-                <div className="text-center mb-4">
-                    <span className="text-gray-600">¿No tienes cuenta?</span>{' '}
-                    <Link
-                        to="/register"
-                        className="text-[#002855] underline hover:font-semibold"
-                    >
-                        Regístrate
-                    </Link>
-                </div>
+                    <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
 
-                <div className="grid grid-cols-1 gap-y-6">
-                    <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                            Correo Electrónico
-                        </label>
-                        <input
-                            type="text"
-                            name="email"
-                            id="email"
-                            onChange={(e) => {
-                                setEmail(e.target.value);
-                                if (localError) setLocalError(null);
-                            }}
-                            value={email}
-                            placeholder="Correo Electrónico"
-                            required
-                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        />
+                        <div className="bg-gradient-to-r from-pantone-blue to-pantone-blue/90 px-6 py-8 sm:px-8">
+                            <h2 className="text-3xl font-extrabold text-white text-center">
+                                Iniciar Sesión
+                            </h2>
+                            <p className="mt-2 text-center text-blue-100 text-sm">
+                                Accede a tu cuenta
+                            </p>
+                        </div>
+
+
+                        <form onSubmit={handleSubmit} className="px-6 py-8 sm:px-8">
+                            <div className="space-y-6">
+
+                                <div>
+                                    <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-2">
+                                        Correo Electrónico <span className="text-pantone-red">*</span>
+                                    </label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        id="email"
+                                        value={email}
+                                        onChange={(e) => {
+                                            setEmail(e.target.value);
+                                            if (localError) setLocalError(null);
+                                        }}
+                                        placeholder="ejemplo@correo.com"
+                                        required
+                                        className="block w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 shadow-sm focus:border-pantone-blue focus:ring-2 focus:ring-pantone-blue/20 transition"
+                                    />
+                                </div>
+
+
+                                <div>
+                                    <label htmlFor="password" className="block text-sm font-semibold text-slate-700 mb-2">
+                                        Contraseña <span className="text-pantone-red">*</span>
+                                    </label>
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        id="password"
+                                        value={password}
+                                        onChange={(e) => {
+                                            setPassword(e.target.value);
+                                            if (localError) setLocalError(null);
+                                        }}
+                                        placeholder="Ingresa tu contraseña"
+                                        required
+                                        className="block w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 shadow-sm focus:border-pantone-blue focus:ring-2 focus:ring-pantone-blue/20 transition"
+                                    />
+                                </div>
+
+
+                                <div className="text-center">
+                                    <button
+                                        type="button"
+                                        onClick={handleOpenModal}
+                                        className="text-sm font-semibold text-pantone-blue hover:text-pantone-blue/80 transition"
+                                    >
+                                        ¿Olvidaste tu contraseña?
+                                    </button>
+                                </div>
+                            </div>
+
+
+                            {localError && (
+                                <div className="mt-6 flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 px-4 py-3">
+                                    <svg className="w-5 h-5 text-red-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                    </svg>
+                                    <p className="text-sm text-red-700 font-medium">{localError}</p>
+                                </div>
+                            )}
+
+                            <div className="mt-8">
+                                <button
+                                    type="submit"
+                                    className="w-full rounded-lg bg-pantone-blue px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-pantone-blue/90 transition"
+                                >
+                                    Iniciar Sesión
+                                </button>
+                            </div>
+                        </form>
                     </div>
 
-                    <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                            Contraseña
-                        </label>
-                        <input
-                            type="password"
-                            name="password"
-                            id="password"
-                            onChange={(e) => {
-                                setPassword(e.target.value);
-                                if (localError) setLocalError(null);
-                            }}
-                            value={password}
-                            placeholder="Contraseña"
-                            required
-                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        />
-                    </div>
-
-                    <div className="text-center mb-4">
-                        <span className="text-gray-600">¿No recuerdas la Contraseña?</span>{' '}
-                        <span
-                            onClick={handleOpenModal}
-                            className="text-[#002855] underline hover:font-semibold"
+                    <p className="mt-6 text-center text-sm text-slate-600">
+                        ¿No tienes una cuenta?{' '}
+                        <Link
+                            to="/register"
+                            className="font-semibold text-pantone-blue hover:text-pantone-blue/80 transition"
                         >
-                        Recuperar Contraseña
-                        </span>
-                    </div>
+                            Regístrate aquí
+                        </Link>
+                    </p>
                 </div>
-
-                {localError && (
-                    <div className="mt-4 text-red-700 bg-red-100 border border-red-400 text-sm p-2 rounded">
-                        {localError}
-                    </div>
-                )}
-
-                <div className="mt-8 flex justify-end space-x-4">
-                    <button
-                        type="submit"
-                        className="inline-flex justify-center rounded-md border border-transparent bg-pantone-blue py-2 px-4 text-sm font-semibold text-white shadow-sm hover:bg-pantone-blue/80 focus:outline-none focus:ring-2 focus:ring-[#004080] focus:ring-offset-2"
-                    >
-                        Confirmar
-                    </button>
-                </div>
-            </form>
+            </div>
 
             <RecoverPasswordModal
                 open={isModalOpen}
                 handleClose={handleCloseModal}
             />
-        </div>
         </>
     );
 }

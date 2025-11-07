@@ -27,31 +27,35 @@ const TimeSlot = ({ day, time, isReserved, onReserve, disabled }) => {
     };
 
 
-    const buttonStyle = {
-        width: '100%',
-        height: '40px',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: disabled ? 'not-allowed' : 'pointer',
-        backgroundColor:
-            isReserved === 'reserved'
-                ? '#EF3340'
-                : isReserved === 'selected'
-                    ? '#4caf50'
-                    : '#e0e0e0',
-        color: '#ffffff',
-        fontWeight: 'bold',
-        transition: 'background-color 0.3s ease',
-    };
-
     return (
         <button
-            style={buttonStyle}
             onClick={handleClick}
             disabled={disabled || isReserved === 'reserved'}
+            className={[
+                "w-full min-h-8 sm:min-h-9 rounded px-1 py-1 sm:px-2 sm:py-1.5",
+                "text-[9px] sm:text-[10px] md:text-xs font-semibold transition shadow-sm",
+                "focus:outline-none focus-visible:ring-1 focus-visible:ring-pantone-blue",
+                "disabled:cursor-not-allowed",
+                isReserved === 'reserved'
+                    ? "bg-pantone-red text-white"
+                    : isReserved === 'selected'
+                        ? "bg-pantone-blue text-white"
+                        : "bg-white text-pantone-blue border border-pantone-blue/30 hover:bg-pantone-blue-50",
+                disabled && isReserved !== 'reserved'
+                    ? "bg-slate-200 text-slate-500 border border-slate-300 hover:bg-slate-200"
+                    : ""
+            ].join(' ')}
         >
-            {isReserved === 'reserved' ? 'Reservado' : isReserved === 'selected' ? 'Seleccionado' : 'Disponible'}
+
+            <span className="hidden sm:inline">
+        {isReserved === 'reserved' ? 'Reservado' : isReserved === 'selected' ? 'Seleccionado' : 'Disponible'}
+    </span>
+            <span className="sm:hidden">
+        {isReserved === 'reserved' ? 'Res.' : isReserved === 'selected' ? 'Sel.' : 'Disp.'}
+    </span>
         </button>
+
+
     );
 };
 
