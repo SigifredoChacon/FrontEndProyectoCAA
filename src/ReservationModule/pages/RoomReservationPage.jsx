@@ -73,6 +73,7 @@ export function RoomReservationPage() {
     const idExternalRef = useRef(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalUserSearchedOpen, setIsModalUserSearchedOpen] = useState(false);
+    const [calendarClearSignal, setCalendarClearSignal] = useState(0);
 
     useEffect(() => {
         fetchResources();
@@ -181,10 +182,6 @@ export function RoomReservationPage() {
 
         const isSaturday = selectedDay.getDay() === 6;
 
-        selectedDay.setDate(selectedDay.getDate() + 1);
-
-
-
 
         if (isSaturday) {
 
@@ -230,10 +227,6 @@ export function RoomReservationPage() {
                 const day = String(selectedDay.getDate()).padStart(2, '0');
                 const fechaReserva = `${year}-${month}-${day}`;
 
-                console.log("Fecha a enviar:", fechaReserva);
-                console.log("Hora inicio:", horaInicio);
-                console.log("Hora fin:", horaFinIncremented);
-
                 const RoomReservationToCreate = {
                     ...reservation,
                     fecha: fechaReserva,
@@ -245,24 +238,35 @@ export function RoomReservationPage() {
                     estado: estado,
                 };
 
-                console.log(RoomReservationToCreate);
-
                 await createReservation(RoomReservationToCreate);
+
+                await Swal.fire({
+                    title: '¡Reservado!',
+                    text: 'Se ha realizado la reserva de tu sala con exito',
+                    icon: 'success',
+                    timer: 2500,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    willClose: () => {
+                        navigate('/personalReservations');
+                    }
+                });
             } catch (error) {
-                console.error('Error al crear Reservación:', error);
+                setReservation(initialRoomReservationState)
+                setReservations([])
+                setCalendarClearSignal((s) => s + 1)
+                await Swal.fire({
+                    title: '¡Error!',
+                    text: error.response.data.message,
+                    icon: 'error',
+                    timer: 2500,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+
+                });
             }
         }
-        await Swal.fire({
-            title: '¡Reservado!',
-            text: 'Se ha realizado la reserva de tu sala con exito',
-            icon: 'success',
-            timer: 2500,
-            timerProgressBar: true,
-            showConfirmButton: false,
-            willClose: () => {
-                navigate('/personalReservations');
-            }
-        });
+
         handleRoomReservationCreated();
         setReservation(initialRoomReservationState);
     };
@@ -386,6 +390,7 @@ export function RoomReservationPage() {
                                     <CalendarRooms
                                         selectedRoomId={selectedRoom.idSala}
                                         onReservationsChange={handleReservationsChange}
+                                        clearSignal={calendarClearSignal}
                                     />
                                 </div>
 

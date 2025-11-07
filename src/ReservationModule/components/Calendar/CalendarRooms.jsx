@@ -7,7 +7,7 @@ import {getReservationsByRoomIdAndWeek} from "../../services/reservationService.
 
 const timeSlots = ['07:30', '08:30', '09:30', '10:30', '11:30', '12:30', '13:30', '14:30', '15:30'];
 
-const CalendarRooms = ({ selectedRoomId, onReservationsChange }) => {
+const CalendarRooms = ({ selectedRoomId, onReservationsChange,  clearSignal = 0 }) => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [reservations, setReservations] = useState([]);
     const [existingReservations, setExistingReservations] = useState([]);
@@ -15,6 +15,14 @@ const CalendarRooms = ({ selectedRoomId, onReservationsChange }) => {
 
     const startOfSelectedWeek = startOfWeek(selectedDate, { weekStartsOn: 1 });
     const daysOfWeek = Array.from({ length: 6 }, (_, i) => addDays(startOfSelectedWeek, i));
+
+
+
+    useEffect(() => {
+        setReservations([]);
+        setSelectedDay(null);
+        onReservationsChange([]);
+    }, [clearSignal]);
 
     useEffect(() => {
         const fetchReservations = async () => {
@@ -215,6 +223,8 @@ const CalendarRooms = ({ selectedRoomId, onReservationsChange }) => {
 CalendarRooms.propTypes = {
     selectedRoomId: PropTypes.number.isRequired,
     onReservationsChange: PropTypes.func.isRequired,
+    clearSignal: PropTypes.number,
+
 };
 
 export default CalendarRooms;

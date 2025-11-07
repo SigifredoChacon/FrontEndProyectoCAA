@@ -68,6 +68,7 @@ function CubiclesReservationPage() {
     const idExternalRef = useRef(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalUserSearchedOpen, setIsModalUserSearchedOpen] = useState(false);
+    const [calendarClearSignal, setCalendarClearSignal] = useState(0);
 
     const navigate = useNavigate();
 
@@ -119,8 +120,6 @@ function CubiclesReservationPage() {
         const selectedDay = new Date(reservations[0].day);
 
         const isSaturday = selectedDay.getDay() === 6;
-
-        selectedDay.setDate(selectedDay.getDate() + 1);
 
 
         if (isSaturday) {
@@ -180,22 +179,33 @@ function CubiclesReservationPage() {
                 };
 
                 await createReservation(cubicleReservationToCreate);
+
+                await Swal.fire({
+                    title: '¡Reservado!',
+                    text: 'Se ha realizado la reserva de tu cubículo con éxito',
+                    icon: 'success',
+                    timer: 2500,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    willClose: () => {
+                        navigate('/personalReservations');
+                    }
+                });
             } catch (error) {
-                console.error('Error al crear Reservación:', error);
+                setReservation(initialCubicleReservationState)
+                setReservations([])
+                setCalendarClearSignal((s) => s + 1)
+                await Swal.fire({
+                    title: '¡Error!',
+                    text: error.response.data.message,
+                    icon: 'error',
+                    timer: 2500,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+
+                });
             }
         }
-
-        await Swal.fire({
-            title: '¡Reservado!',
-            text: 'Se ha realizado la reserva de tu cubículo con éxito',
-            icon: 'success',
-            timer: 2500,
-            timerProgressBar: true,
-            showConfirmButton: false,
-            willClose: () => {
-                navigate('/personalReservations');
-            }
-        });
 
         handleCubicleReservationCreated();
         setReservation(initialCubicleReservationState);
@@ -421,6 +431,7 @@ function CubiclesReservationPage() {
                                         key={calendarKey}
                                         onReservationsChange={handleReservationsChange}
                                         selectedCubicleId={selectedCubicleR.idCubiculo}
+                                        clearSignal={calendarClearSignal}
                                     />
                                 </div>
                             ) : (

@@ -7,7 +7,7 @@ import { getReservationsByCubicleIdAndWeek } from "../../services/reservationSer
 
 const timeSlots = ['07:30', '08:30', '09:30', '10:30', '11:30', '12:30', '13:30', '14:30', '15:30'];
 
-const Calendar = ({ selectedCubicleId, onReservationsChange }) => {
+const Calendar = ({ selectedCubicleId, onReservationsChange, clearSignal = 0 }) => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [reservations, setReservations] = useState([]);
     const [existingReservations, setExistingReservations] = useState([]);
@@ -15,6 +15,13 @@ const Calendar = ({ selectedCubicleId, onReservationsChange }) => {
 
     const startOfSelectedWeek = startOfWeek(selectedDate, { weekStartsOn: 1 });
     const daysOfWeek = Array.from({ length: 6 }, (_, i) => addDays(startOfSelectedWeek, i));
+
+    useEffect(() => {
+        setReservations([]);
+        setSelectedDay(null);
+        onReservationsChange([]);
+    }, [clearSignal]);
+
 
     useEffect(() => {
         const fetchReservations = async () => {
