@@ -25,28 +25,28 @@ const CalendarRooms = ({ selectedRoomId, onReservationsChange,  clearSignal = 0 
     }, [clearSignal]);
 
     useEffect(() => {
-        const fetchReservations = async () => {
+        if (!selectedRoomId) return;
+
+        let alive = true;
+
+        const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 });
+        const startDate = format(weekStart, 'yyyy-MM-dd');
+        const endDate   = format(addDays(weekStart, 6), 'yyyy-MM-dd');
+
+        (async () => {
             try {
-                const startDate = format(startOfSelectedWeek, 'yyyy-MM-dd');
-                const endDate = format(addDays(startOfSelectedWeek, 6), 'yyyy-MM-dd');
-
                 const response = await getReservationsByRoomIdAndWeek(selectedRoomId, startDate, endDate);
-
-                const formattedReservations = response.map(reservation => ({
-                    ...reservation,
-                    day: new Date(reservation.Fecha),
-                }));
-
-                setExistingReservations(formattedReservations);
-            } catch (error) {
-                console.error("Error fetching reservations:", error);
+                const formatted = response.map(r => ({ ...r, day: new Date(r.Fecha) }));
+                if (alive) setExistingReservations(formatted);
+            } catch (e) {
+                if (alive) console.error('Error fetching reservations:', e);
             }
-        };
+        })();
 
-        if (selectedRoomId) {
-            fetchReservations();
-        }
-    }, [selectedRoomId, startOfSelectedWeek]);
+        return () => { alive = false };
+    }, [selectedRoomId, selectedDate, clearSignal]);
+
+
 
     const handleDateChange = (event) => {
         const newDate = new Date(event.target.value + 'T00:00:00');

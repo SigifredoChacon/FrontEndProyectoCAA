@@ -5,24 +5,33 @@ import { updatePassword } from "../../services/userService.jsx";
 
 const ResetPasswordModal = ({ open, handleClose }) => {
     const [cedulaCarnet, setCedulaCarnet] = useState('');
+    const [email, setEmail] = useState('');
     const [error, setError] = useState('');
 
     const handlePasswordReset = async () => {
         if (!cedulaCarnet) {
-            setError('Por favor ingrese su cédula o carnet');
+            setError('Por favor ingrese el cédula o carnet');
+            return;
+        }
+
+        if (!email) {
+            setError('Por favor ingrese el Email');
             return;
         }
 
         try {
 
-            await updatePassword(cedulaCarnet);
+            const response = await updatePassword(cedulaCarnet, email);
 
             Swal.fire({
-                title: '¡Contraseña restablecida!',
-                text: 'Se ha enviado una contraseña temporal a su correo electrónico, por favor revise su bandeja de entrada',
-                icon: 'success',
-                timer: 2500,
-                showConfirmButton: false,
+                title: 'Restablecimiento de contraseña',
+                text: response.message,
+                icon: 'info',
+                showConfirmButton: true,
+                confirmButtonText: 'Aceptar',
+                customClass: {
+                    confirmButton: 'bg-pantone-blue text-white px-4 py-2 rounded hover:bg-pantone-blue/80 mr-2'
+                }
             });
 
             handleModalClose();
@@ -33,6 +42,7 @@ const ResetPasswordModal = ({ open, handleClose }) => {
 
     const handleModalClose = () => {
         setCedulaCarnet('');
+        setEmail('');
         setError('');
         handleClose();
     };
@@ -67,6 +77,16 @@ const ResetPasswordModal = ({ open, handleClose }) => {
                     variant="outlined"
                     value={cedulaCarnet}
                     onChange={(e) => setCedulaCarnet(e.target.value)}
+                    margin="normal"
+                    sx={{ mb: 1 }}
+                />
+
+                <TextField
+                    fullWidth
+                    label="Correo Electrónico"
+                    variant="outlined"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     margin="normal"
                     sx={{ mb: 3 }}
                 />

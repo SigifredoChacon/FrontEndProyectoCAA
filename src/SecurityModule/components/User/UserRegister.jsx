@@ -5,6 +5,7 @@ import {useRegister} from "../../hooks/useRegister.js";
 import Swal from "sweetalert2";
 import {useNavigate} from "react-router-dom";
 import BackButton from "../../../utils/BackButton.jsx";
+import EmailVerificationModal from "./EmailVerificationModal.jsx";
 
 const initialUserState = {
     cedulaCarnet: 0,
@@ -23,6 +24,7 @@ function UserRegister({role}) {
     const {register, loading, error, isRegister} = useRegister();
     const [localError, setLocalError] = useState(null);
     const [showPasswordRequirements, setShowPasswordRequirements] = useState(false);
+    const [showVerificationModal, setShowVerificationModal] = useState(false);
     const navigate = useNavigate();
 
     // Estado para los requerimientos de contraseña
@@ -71,10 +73,36 @@ function UserRegister({role}) {
     useEffect(() => {
         if (error) {
             setLocalError(error);
-        } else if (!loading && isRegister && role === 'Estudiante') {
+        } else if (!loading && isRegister) {
+
+            setShowVerificationModal(true);
+        }
+    }, [error, loading, isRegister]);
+
+    const handleEmailVerified = () => {
+        setShowVerificationModal(false);
+
+        if (role === 'Profesor') {
             Swal.fire({
-                title: '¡Registro exitoso!',
-                text: 'Ahora puedes iniciar sesión',
+                title: '¡Correo verificado!',
+                text: 'Tu cuenta ha sido verificada. Ahora un administrador debe aprobar tu rol de profesor. Mientras tanto puedes reservar salas.',
+                icon: 'info',
+                showConfirmButton: true,
+                confirmButtonText: 'Aceptar',
+                allowOutsideClick: false,
+                customClass: {
+                    confirmButton: 'bg-pantone-blue text-white px-4 py-2 rounded hover:bg-pantone-blue/80 mr-2'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    sendAdminEmails(user.cedulaCarnet, user.nombre, user.correoEmail);
+                    navigate('/login');
+                }
+            });
+        } else {
+            Swal.fire({
+                title: '¡Correo verificado!',
+                text: 'Tu cuenta ha sido activada, ahora puedes iniciar sesión',
                 icon: 'success',
                 timer: 2000,
                 timerProgressBar: true,
@@ -84,22 +112,9 @@ function UserRegister({role}) {
                 }
             });
         }
-        else if (!loading && isRegister && role === 'Profesor') {
-            Swal.fire({
-                title: '¡Registro exitoso!',
-                text: 'Para poder acceder a todas las funcionalidades de la plataforma, por favor, espera a que un administrador te apruebe , por el momento puedes reservar salas 🤗',
-                icon: 'info',
-                showConfirmButton: true,
-                confirmButtonText: 'Aceptar',
-                allowOutsideClick: false,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    sendAdminEmails(user.cedulaCarnet, user.nombre, user.correoEmail);
-                    navigate('/login');
-                }
-            });
-        }
-    }, [error, loading, isRegister, navigate]);
+    };
+
+
 
     const fetchRoles = async () => {
         try {
@@ -350,6 +365,15 @@ function UserRegister({role}) {
                     </p>
                 </div>
             </div>
+
+            <EmailVerificationModal
+                isOpen={showVerificationModal}
+                onClose={() => setShowVerificationModal(false)}
+                cedulaCarnet={user.cedulaCarnet}
+                correoEmail={user.correoEmail}
+                onVerified={handleEmailVerified}
+            />
+
         </>
     );
 }

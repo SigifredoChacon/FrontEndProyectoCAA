@@ -111,7 +111,11 @@ function CubiclesReservationPage() {
             Swal.fire({
                 title: 'Error',
                 text: 'No hay horarios seleccionados.',
+                confirmButtonText: 'Aceptar',
                 icon: 'error',
+                customClass: {
+                    confirmButton: 'bg-pantone-blue text-white px-4 py-2 rounded hover:bg-pantone-blue/80 mr-2',
+                },
             });
             return;
         }
@@ -164,10 +168,6 @@ function CubiclesReservationPage() {
                 const day = String(selectedDay.getDate()).padStart(2, '0');
                 const fechaReserva = `${year}-${month}-${day}`;
 
-                console.log("Fecha a enviar:", fechaReserva);
-                console.log("Hora inicio:", horaInicio);
-                console.log("Hora fin:", horaFinIncremented);
-
 
                 const cubicleReservationToCreate = {
                     ...reservation,
@@ -191,6 +191,10 @@ function CubiclesReservationPage() {
                         navigate('/personalReservations');
                     }
                 });
+
+                handleCubicleReservationCreated();
+                setReservation(initialCubicleReservationState);
+
             } catch (error) {
                 setReservation(initialCubicleReservationState)
                 setReservations([])
@@ -207,15 +211,13 @@ function CubiclesReservationPage() {
             }
         }
 
-        handleCubicleReservationCreated();
-        setReservation(initialCubicleReservationState);
     }
 
     const handleSubmit = (e) => {
         if(!user) {
             Swal.fire({
                 title: '¡Tienes que estar registrado!',
-                text: 'Para poder realizar una reservación, por favor, inicia sesión 🤗',
+                text: 'Para poder realizar una reservación, por favor, inicia sesión.',
                 icon: 'warning',
                 showConfirmButton: true,
                 confirmButtonText: 'Aceptar',
@@ -416,10 +418,10 @@ function CubiclesReservationPage() {
 
 
                             <div className="mb-6">
-                                <h1 className="text-2xl sm:text-3xl font-extrabold text-pantone-blue">
+                                <h1 className="text-2xl sm:text-3xl text-center font-extrabold text-pantone-blue">
                                     {selectedCubicleR
-                                        ? `Reservar: ${selectedCubicleR.Nombre}`
-                                        : 'Seleccionar Cubículo'
+                                        ? `Cubículo: ${selectedCubicleR.Nombre}`
+                                        : ''
                                     }
                                 </h1>
                             </div>

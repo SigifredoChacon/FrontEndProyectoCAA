@@ -15,15 +15,33 @@ export const useLogIn = () => {
 
         try {
             const response = await login(JSON.stringify({ email, password }));
-            console.log("Respuesta del login:", response.data);
+
             localStorage.setItem("token", response.data.token);
             dispatch({ type: 'LOGIN', payload: response.data });
+
             setLoading(false);
             setIsAuthenticated(true);
 
+            return { success: true };
         } catch (err) {
             setLoading(false);
-            setError(err.response.data.message);
+
+            const data = err?.response?.data;
+
+
+            if (data?.requiresVerification) {
+                setError(data.message);
+                return {
+                    success: false,
+                    requiresVerification: true,
+                    cedulaCarnet: data.cedulaCarnet,
+                    correoEmail: data.correoEmail,
+                    message: data.message,
+                };
+            }
+
+            setError(data?.message || 'Error al iniciar sesión');
+            return { success: false };
         }
     };
 

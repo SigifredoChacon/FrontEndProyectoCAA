@@ -3,7 +3,7 @@ import { format, startOfWeek, addDays, isSameWeek, startOfDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 import TimeSlot from './TimeSlot.jsx';
 import PropTypes from 'prop-types';
-import { getReservationsByCubicleIdAndWeek } from "../../services/reservationService.jsx";
+import {getReservationsByCubicleIdAndWeek, getReservationsByRoomIdAndWeek} from "../../services/reservationService.jsx";
 
 const timeSlots = ['07:30', '08:30', '09:30', '10:30', '11:30', '12:30', '13:30', '14:30', '15:30'];
 
@@ -24,28 +24,26 @@ const Calendar = ({ selectedCubicleId, onReservationsChange, clearSignal = 0 }) 
 
 
     useEffect(() => {
-        const fetchReservations = async () => {
+        if (!selectedCubicleId) return;
+
+        let alive = true;
+
+        const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 });
+        const startDate = format(weekStart, 'yyyy-MM-dd');
+        const endDate   = format(addDays(weekStart, 6), 'yyyy-MM-dd');
+
+        (async () => {
             try {
-                const startDate = format(startOfSelectedWeek, 'yyyy-MM-dd');
-                const endDate = format(addDays(startOfSelectedWeek, 6), 'yyyy-MM-dd');
                 const response = await getReservationsByCubicleIdAndWeek(selectedCubicleId, startDate, endDate);
-
-                const formattedReservations = response.map(reservation => ({
-                    ...reservation,
-                    day: new Date(reservation.Fecha),
-                }));
-
-                setExistingReservations(formattedReservations);
-            } catch (error) {
-                console.error("Error fetching reservations:", error);
+                const formatted = response.map(r => ({ ...r, day: new Date(r.Fecha) }));
+                if (alive) setExistingReservations(formatted);
+            } catch (e) {
+                if (alive) console.error('Error fetching reservations:', e);
             }
-        };
+        })();
 
-        if (selectedCubicleId) {
-            fetchReservations();
-        }
-
-    }, [selectedCubicleId, startOfSelectedWeek]);
+        return () => { alive = false };
+    }, [selectedCubicleId, selectedDate, clearSignal]);
 
     const handleDateChange = (event) => {
         const newDate = new Date(event.target.value + 'T00:00:00');

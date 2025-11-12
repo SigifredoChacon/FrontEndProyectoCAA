@@ -20,6 +20,15 @@ export const login = async (user) => {
     return response;
 };
 
+export const verifyEmailCode = async (cedulaCarnet, codigo) => {
+    const { data } = await api.post('/users/verify-email', { cedulaCarnet, codigo });
+    return data;
+};
+
+export const resendVerificationCode = async (cedulaCarnet) => {
+    const { data } = await api.post('/users/resend-verification', { cedulaCarnet });
+    return data;
+};
 
 export const updateUser = async (id, user) => {
     const response = await api.patch(`/users/${id}`, user);
@@ -39,8 +48,12 @@ export const sendAllEmail = async (email) => {
     const response = await api.post('/users/generalEmails', email);
     return response.data;
 };
-export const updatePassword = async (id) => {
-    const response = await api.post(`/users/updatePassword/${id}`);
+export const updatePassword = async (id, email) => {
+    const response = await api.post(`/users/updatePassword/${id}`,{
+
+        email
+
+    });
     return response.data;
 };
 export const sendAdminEmails = async (cedulaCarnet, nombre, correoEmail) => {
