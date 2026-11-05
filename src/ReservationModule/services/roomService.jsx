@@ -1,63 +1,53 @@
-import api from '../../utils/api.js';
+import api from "../../utils/api.js";
 
 export const getRooms = async () => {
-    const response = await api.get('/rooms');
-    return response.data;
+  const response = await api.get("/rooms");
+  return response.data;
 };
 
 export const createRoom = async (formData) => {
-    const response = await api.post('/rooms', formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
-    });
+  const response = await api.post("/rooms", formData);
 
-    return response.data;
+  return response.data;
 };
-
 
 export const updateRoom = async (id, formData) => {
-    let response;
+  let response;
 
-    if (formData instanceof FormData) {
-        response = await api.patch(`/rooms/${id}`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
-    } else {
-        response = await api.patch(`/rooms/${id}`, formData, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-    }
+  if (formData instanceof FormData) {
+    response = await api.patch(`/rooms/${id}`, formData);
+  } else {
+    response = await api.patch(`/rooms/${id}`, formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
 
-    return response.data;
+  return response.data;
 };
 
-
 export const deleteRoom = async (id) => {
-    const response = await api.delete(`/rooms/${id}`);
-    return response.data;
+  const response = await api.delete(`/rooms/${id}`);
+  return response.data;
 };
 
 export const getRoomById = async (id) => {
-    const response = await api.get(`/rooms/${id}`);
-    return response.data;
-}
+  const response = await api.get(`/rooms/${id}`);
+  return response.data;
+};
 
 export const getNameRoomById = async (id) => {
-    const response = await api.get(`/rooms/getName/${id}`);
-    return response.data;
-}
+  const response = await api.get(`/rooms/getName/${id}`);
+  return response.data;
+};
 
 export const lockRoom = async () => {
-    const response = await api.patch(`/rooms/roomLock`);
-    return response.data;
-}
+  const response = await api.patch(`/rooms/roomLock`);
+  return response.data;
+};
 
 export const unLockRoom = async () => {
-    const response = await api.patch(`/rooms/roomUnLock`);
-    return response.data;
-}
+  const response = await api.patch(`/rooms/roomUnLock`);
+  return response.data;
+};
